@@ -34,6 +34,7 @@
 
 ## Aspectos legales
 - Términos de uso, privacidad, datos personales, licencias, contrato: 
+  - **C-001 (prioridad n.º 1): riesgo legal del motor de medición** → [riesgo-legal-motor.md](riesgo-legal-motor.md). Propuesta: opción C (API de OpenAI + Google Modo IA vía proveedor SERP + muestra manual de Gemini). Pendiente de la decisión del Director (ADR-002).
 
 ## ✅ Puerta de aprobación
 - Aprobado por el Director el: 
