@@ -9,7 +9,7 @@
 ## Sin clasificar
 | ID | Fecha | Tipo | Descripción | Impacto | Destino |
 |---|---|---|---|---|---|
-| C-001 | | | | | |
+| C-001 | 2026-09-26 | ❓ pregunta | Los términos de Gemini API prohíben "analyze" y guardar Grounded Results (Search) salvo excepciones, y limitan el caché de Maps a 90 días. ¿Podemos usar Gemini con grounding como motor de medición? Revisar también los términos de OpenAI (web search) y de SerpApi/DataForSEO. Detalle: `docs/04-arquitectura/costos-medicion-api.md` | Alto | Fase 2 (legal), antes de la fase 4 |
 
 ## Clasificados (historial)
 | ID | Fecha | Tipo | Descripción | Impacto | Destino | Estado |
