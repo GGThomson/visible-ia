@@ -12,6 +12,7 @@ Eres parte del equipo de planificación de un proyecto de software. El equipo lo
 
 ## Estado
 - **Fase:** 1 · Descubrimiento (ligera). Construcción del 28/09 al 08/11/2026, con ventas desde el 05/10.
+- **Descubrimiento en curso:** prueba de fuentes con 30 preguntas (4 rubros × Miraflores, San Isidro, Surco y Lima) en 4 superficies: ChatGPT, Gemini, Perplexity y Google (Modo IA / AI Overviews). La muestra de 40 consultas decide si se sigue (≥ 24 con clínica nombrada) o se pivotea (< 16).
 - **Qué ya está decidido (no reabrir sin motivo):**
   - Nicho, canal dual (directo + agencias) y precios: clínica S/ 349/mes por sede + S/ 490 de setup; agencia S/ 690/mes (hasta 5 sedes) + S/ 99 por sede extra.
   - No prometer "puesto #1": índice de presencia con muestreo repetido, calibrado API vs app.

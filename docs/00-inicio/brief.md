@@ -10,7 +10,7 @@
 - **Repositorio:** https://github.com/GGThomson/visible-ia
 
 ## Propósito
-- **Problema que resuelve (en una frase):** un negocio local no sabe si ChatGPT, Gemini o Perplexity lo recomiendan a él o a su competencia, ni qué hacer para aparecer.
+- **Problema que resuelve (en una frase):** un negocio local no sabe si ChatGPT, Gemini o Google (Modo IA) lo recomiendan a él o a su competencia, ni qué hacer para aparecer.
 - **Para quién:**
   - **Clínicas (venta directa, laboratorio de producto):** salud electiva de ticket alto en Lima Top (Miraflores, San Isidro, Surco): implantología y estética dental, clínicas estéticas y dermatológicas.
   - **Agencias de marketing (canal de escala):** marca blanca para sus clientes.
@@ -20,7 +20,7 @@
 
 ## Éxito
 - **Se considera exitoso si…** (medible):
-  1. **Prueba de fuentes** completada: ~30 preguntas × 3 IAs × 3 repeticiones (~270 consultas), con clínicas mencionadas y fuentes citadas registradas.
+  1. **Prueba de fuentes** completada: ~30 preguntas × 3 superficies (ChatGPT, Gemini y Google Modo IA) × 3 repeticiones (~270 consultas). Perplexity queda fuera del MVP ([ADR-001](../decisiones/ADR-001-excluir-perplexity.md)), con clínicas mencionadas y fuentes citadas registradas.
   2. **Interés:** > 25 % de respuesta a los informes gratis (40 enviados → 10 interesados).
   3. **Pago:** 3 clínicas (setup + primer mes) o 2 agencias con piloto pagado. **Meta: S/ 2,500 en preventas o pilotos.**
 - **Criterio de replanteo:** si tras contactar 50 clínicas y 10 agencias con el informe nadie paga por adelantado → se reevalúa (rubro, canal o descarte).
@@ -66,7 +66,7 @@
 ## Puertas de aprobación
 <!-- Momentos en los que el Director debe decir "sí, avanzamos". -->
 - [x] Brief aprobado (2026-09-25)
-- [ ] Descubrimiento → ¿vale la pena seguir? (resultado de la prueba de fuentes)
+- [x] Descubrimiento → ¿vale la pena seguir? Sí (2026-09-26, muestra: 30/30 respuestas nombran clínicas)
 - [ ] Especificación aprobada → se congela el alcance de la v1
 - [ ] Plan aprobado → empieza la construcción
 - [ ] Listo para lanzar
