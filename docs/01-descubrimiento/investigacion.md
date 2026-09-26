@@ -6,7 +6,7 @@
 | # | Creemos que… | Lo sabremos cuando… | Estado |
 |---|---|---|---|
 | H1 | Las IAs nombran **clínicas concretas** de Lima Top al preguntarles por un rubro y un distrito, en vez de dar respuestas genéricas | En la prueba de fuentes, ≥ 60 % de las respuestas nombra al menos 1 clínica | ✅ muestra: 30/30 (100 %) |
-| H2 | Las IAs se apoyan en **fuentes distintas de Google Maps** (Doctoralia, directorios, webs, reseñas) y esas fuentes se pueden trabajar | Las fuentes citadas se concentran en ≤ 10 dominios, y al menos 3 son accionables (perfil editable) | 🟡 accionables sí (≥ 4); pero la fuente n.º 1 **es** Google Maps → reformular |
+| H2 | Las IAs se apoyan sobre todo en la **ficha de Google Maps** (Business Profile) y, después, en **Doctoralia, la web propia y las redes**. Todas esas fuentes se pueden trabajar | Las fuentes citadas se concentran en ≤ 10 dominios, y al menos 3 son accionables (perfil editable) | 🟡 muestra: se cumple (≥ 4 accionables); confirmar con la prueba completa. *Reformulada el 26/09: antes decía "fuentes distintas de Google Maps"* |
 | H3 | Las respuestas **varían** entre repeticiones y entre IAs, lo que justifica un índice con muestreo repetido | Menos del 70 % de las clínicas mencionadas se repite en las 3 repeticiones de una misma pregunta | 🟡 indicio: alta variación entre IAs; repeticiones → prueba completa |
 | H4 | Hay **brecha Maps vs IA**: clínicas fuertes en Google Maps no aparecen en la IA (ese es el gancho de venta) | ≥ 5 de las 40 clínicas de la lista tienen ≥ 4.5★ y ≥ 100 reseñas en Maps, pero presencia IA ≈ 0 | ⚪ |
 | H5 | Los dueños o gerentes de clínica **responden** a un informe gratis personalizado | > 25 % de respuesta (40 enviados → 10 interesados) | ⚪ |
@@ -28,16 +28,16 @@ H1–H4 se prueban con la **prueba de fuentes** (sin clientes). H5–H8 se prueb
 **Objetivo:** probar H1–H4 y obtener datos reales para el primer informe PDF y para calibrar el extractor y el puntaje.
 
 ### Protocolo
-- **Superficies (4):** ChatGPT, Gemini y Perplexity en sus **apps web gratuitas**, más **Google (Modo IA / AI Overviews)**, que es la IA que más pacientes ven en Lima (añadida por el Director el 25/09). Por la restricción de presupuesto no se usan APIs de pago (ver brief).
+- **Superficies (3):** ChatGPT y Gemini en sus **apps web gratuitas**, más **Google (Modo IA / AI Overviews)**, que es la IA que más pacientes ven en Lima (añadida por el Director el 25/09). **Perplexity queda fuera** de la prueba completa y del MVP ([ADR-001](../decisiones/ADR-001-excluir-perplexity.md)). Por la restricción de presupuesto no se usan APIs de pago (ver brief).
 - **Cómo consultar Google:** hacer la búsqueda normal en google.com.pe. Si aparece un AI Overview, registrar ese texto con `modo` = `google-ai-overview`. Si no aparece, repetir la pregunta en **Modo IA** y registrarla con `modo` = `google-modo-ia`. Cuando no hay AI Overview, anotar en `notas` "sin AI Overview": ese dato también sirve.
 - **Repeticiones:** 3 por pregunta y por IA, cada una en un **chat nuevo**.
 - **Sesión:** sin iniciar sesión o en ventana de incógnito cuando la IA lo permita. Si exige cuenta, usar una cuenta **sin memoria ni historial** (desactivar "memoria" y "personalización"). Registrar en el campo `modo` cómo se hizo.
 - **Ubicación:** desde Lima, sin VPN.
 - **Registro:** copiar la respuesta **completa** y las fuentes citadas en [prueba-fuentes/registro.csv](prueba-fuentes/registro.csv): una fila por consulta.
-  - `ia`: `chatgpt`, `gemini`, `perplexity` o `google`.
+  - `ia`: `chatgpt`, `gemini` o `google`.
   - `busco_web`: `si` si la IA muestra que buscó en internet (indicador de búsqueda, enlaces o fuentes); `no` si respondió solo con lo que sabe.
   - `fuentes_citadas`: dominios separados por `;`. Si no muestra ninguna, escribir exactamente `sin fuentes visibles`.
-- **Volumen de la prueba completa:** 30 preguntas × 4 superficies × 3 repeticiones = **360 consultas**, unas **12 h** de trabajo manual (~2 min por consulta). ⏳ Si Google se mantiene en la prueba completa o solo en la muestra se decide con los resultados de la muestra (con Google fuera: 270 consultas, ~9–10 h).
+- **Volumen de la prueba completa:** 30 preguntas × 3 superficies × 3 repeticiones = **270 consultas**, unas **9–10 h** de trabajo manual (~2 min por consulta). Google se mantiene y Perplexity sale (decidido el 26/09). Antes de hacerlas a mano, se prueba si la API de Gemini puede automatizar las repeticiones ([propuesta](prueba-fuentes/propuesta-api-gemini.md)).
 - **Análisis:** un script (módulo "extractor" de la semana 1) lee el CSV y saca las clínicas mencionadas, las fuentes y la frecuencia. Mientras tanto, conteo manual en una hoja.
 
 ### Muestra rápida (26/09) → puerta de la fase 1
@@ -74,7 +74,7 @@ Datos en [prueba-fuentes/registro.csv](prueba-fuentes/registro.csv). Conteo manu
 **H4 (brecha Maps vs IA), indicio:** las IAs no ordenan solo por ★. Gemini puso primera en Q24 a una clínica con 3.4★ y en Q19 a otra con 3.8★. La lista de 40 clínicas (semana 1) medirá la brecha.
 
 **Otros datos:**
-- El **Modo IA de Google** respondió siempre. Si hubo AI Overview en la búsqueda normal no quedó registrado de forma sistemática.
+- Todas las consultas de Google se hicieron en **Modo IA**: el Director lo confirmó para Q22–Q30 y está anotado en Q01–Q16. Q19 quedó sin anotar. No se registró si hubo AI Overview en la búsqueda normal.
 - **Gemini y Google** usan casi los mismos datos (fichas de Maps). **ChatGPT** es la superficie más distinta.
 - Perplexity (Q01) nombró clínicas: Dr. Teixeira y Odontologists.
 
@@ -156,15 +156,16 @@ Estimaciones **a validar**. No hay censos confiables por rubro y distrito. La li
 | Términos de uso de las IAs | Media | Alto | Consultas manuales, sin automatizar las apps de consumo. APIs oficiales cuando haya presupuesto |
 | **Bloqueo de WhatsApp personal** por mensajes en frío | Media | Alto | Mensajes uno por uno y pocos por día. Priorizar Instagram DM y correo para el primer contacto; WhatsApp cuando la clínica responde |
 | Cancelaciones por falta de atribución | Media | Alto | Intake "¿Cómo nos conociste? → IA", UTMs y cupones exclusivos (acta §5) |
-| Dependencia de plataformas (Meta, Doctoralia, cambios en las IAs) | Media | Medio | No depender de una sola fuente. Medir las 3 IAs |
+| Dependencia de plataformas (Meta, Doctoralia, cambios en las IAs) | Media | Medio | No depender de una sola fuente. Medir 3 superficies (ChatGPT, Gemini y Google Modo IA) |
 | CreceRank u otro baja al segmento local | Media | Medio | Velocidad, nicho de salud en Lima y relación directa con las clínicas |
 | Datos personales (Ley 29733) | Baja | Medio | Solo datos públicos de negocios. Revisar en la fase 2 el tratamiento de los datos de contacto de dueños y pacientes |
 
 ## ✅ Conclusión y puerta de aprobación
-- **¿Vale la pena seguir?** Propuesta: **✅ sí, seguir** _(pendiente de aprobación del Director)_
+- **¿Vale la pena seguir?** **✅ Sí, seguir.**
 - **Porque:** H1 se cumple con holgura (30/30 en las 3 superficies completas, 31/40 aun contando Perplexity como fallo). Las fuentes son accionables (ficha de Google, Doctoralia, web, redes) y la variación entre IAs justifica medir con muestreo repetido.
-- **Ajustes que salen de la muestra (a confirmar):**
-  1. Reformular H2: la ficha de Google Maps es la fuente principal. La diferencia frente al SEO local clásico está en **medir qué dice cada IA** y en optimizar la ficha, Doctoralia y la web **para la IA**, no en evitar Google.
-  2. Perplexity queda fuera de la prueba completa (3 superficies × 30 × 3 = **270 consultas**, ~9–10 h) y Google se mantiene.
-  3. Registrar en la prueba completa si aparece AI Overview antes de pasar al Modo IA.
-- **Aprobado por el Director el:** _(pendiente)_
+- **Ajustes que salen de la muestra (aprobados):**
+  1. **H2 reformulada:** la fuente principal es la ficha de Google Maps, y le siguen Doctoralia, la web propia y las redes. La diferencia frente al SEO local clásico está en **medir qué dice cada IA** y en optimizar esas fuentes **para la IA**.
+  2. **Perplexity** queda fuera de la prueba completa y del MVP ([ADR-001](../decisiones/ADR-001-excluir-perplexity.md)). Google se mantiene. La prueba completa tiene 270 consultas.
+  3. En la prueba completa se registra si aparece AI Overview antes de pasar al Modo IA.
+  4. Antes de las 270 consultas manuales se hace una prueba con la API de Gemini, sin costo ([propuesta](prueba-fuentes/propuesta-api-gemini.md)). Requiere la aprobación del Director.
+- **Aprobado por el Director el:** 2026-09-26
