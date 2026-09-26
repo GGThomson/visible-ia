@@ -87,7 +87,9 @@ def parse(interaction):
     texts, urls, places, queries = [], [], [], []
     for step in interaction.steps or []:
         if step.type in ("google_search_call", "google_maps_call"):
-            queries.extend(getattr(step, "queries", None) or [])
+            args = getattr(step, "arguments", None)
+            q = args.get("queries") if isinstance(args, dict) else getattr(args, "queries", None)
+            queries.extend(q or [])
         if step.type != "model_output":
             continue
         for block in step.content or []:
@@ -95,8 +97,10 @@ def parse(interaction):
                 continue
             texts.append(block.text)
             for ann in block.annotations or []:
-                if ann.type == "url_citation" and ann.url not in urls:
-                    urls.append(ann.url)
+                # url is a vertexaisearch redirect; the title carries the real domain
+                source = getattr(ann, "title", None) or ann.url
+                if ann.type == "url_citation" and source not in urls:
+                    urls.append(source)
                 elif ann.type == "place_citation" and ann.name not in places:
                     places.append(ann.name)
     return "\n".join(texts), urls, places, queries

@@ -89,7 +89,9 @@ Datos: [registro-api.csv](registro-api.csv) y [registro-api-crudo.jsonl](registr
 
 **Implicación para el producto:** 20 llamadas al día gratis no alcanzan para monitorear clínicas con la API. Sirven para la prueba completa: las 90 repeticiones de Gemini tomarían ~5 días corriendo solas. El monitoreo mensual necesitará el nivel de pago cuando haya ingresos (con aprobación del Director).
 
-**Siguiente paso:** retomar la corrida con `python scripts/prueba_api_gemini.py --configs B A`. El script omite lo ya hecho. Son 41 llamadas, unos 2–3 días a 20 por día: primero la config. B.
+**Cambio de plan (Director, 26/09):**
+- **No se retoman las 41 llamadas.** Solo se hace la **config. B con 1 repetición (10 llamadas)**. Como el riesgo C-001 (términos de grounding) afecta al motor, esta prueba queda como **informativa y de baja prioridad**.
+- **Avance:** B Q01 hecha (4 lugares de Maps). Faltan 9 llamadas: `python scripts/prueba_api_gemini.py --configs B --reps 1`.
 
 ## ✅ Aprobación
 - [x] El Director aprueba la prueba y crea la clave sin facturación (fecha: 2026-09-26)
