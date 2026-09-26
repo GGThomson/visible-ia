@@ -28,7 +28,7 @@ Este archivo lo leen Claude Code, Gemini/Antigravity, Cursor y cualquier agente 
 
 ## Mantener la memoria sana
 - `memoria/ESTADO.md` debe caber en una pantalla (≈ 60 líneas). Mueve el detalle a la bitácora.
-- Al cerrar una sesión: actualiza `ESTADO.md`, añade una entrada en `memoria/bitacora/`, haz commit y push.
+- Al cerrar una sesión: actualiza `ESTADO.md`, añade una entrada en `memoria/bitacora/`, haz commit y push, y **fusiona `memoria/` y `docs/` a `main`** aunque la fase siga en curso, para que los Proyectos de claude.ai lean la memoria actual. El código sin terminar se queda en su rama. Detalle en `/cerrar-sesion`.
 - Al cerrar una fase: resume la fase en `memoria/bitacora/` y crea un tag de Git `fase-N-completa`.
 
 ## Mapa rápido
