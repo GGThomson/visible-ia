@@ -6,9 +6,9 @@
 **Última actualización:** 2026-09-25  
 
 ## Dónde estamos
-- **Fase actual:** 1 · Descubrimiento (ligera)
+- **Fase actual:** 1 · Descubrimiento (ligera). Documento aprobado como plan; **puerta pendiente** de la muestra
 - **Tarea actual:** Muestra de la prueba de fuentes (40 consultas) → puerta de la fase 1
-- **Avance general:** █░░░░░░░░░ 10 %
+- **Avance general:** █░░░░░░░░░ 12 %
 - **Calendario:** fases 1–4 del 25 al 27/09 · construcción del 28/09 al 08/11 · ventas desde el 05/10
 
 ## Ruta de fases
@@ -30,6 +30,7 @@
 3. Iniciar los trámites **sin costo** de WhatsApp Business API y de la pasarela de pagos; luego `/fase 2`
 
 ## Bloqueos / esperando decisión
+- ⏳ Puerta F1: esperando los resultados de la muestra (rama `docs/F1-descubrimiento` sin fusionar)
 - ⏳ Marca blanca para agencias: ¿se acepta? (propuesta: sí; se necesita antes de la semana 5)
 
 ## Decisiones recientes (últimas 5)
