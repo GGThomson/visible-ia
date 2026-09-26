@@ -45,6 +45,8 @@
   - WhatsApp API y dominio: se pagan con el primer cliente.
 - **Punto de equilibrio:** **1 cliente** cubre todos los costos fijos del inicio.
 
+> ⚠️ **Sin definir: ¿los S/ 349 incluyen IGV?** (anotado por el Director el 26/09). Si lo incluyen, el **ingreso real por clínica es ≈ S/ 296** (349 / 1.18), y lo mismo pasa con el setup (S/ 490 → ≈ S/ 415) y con el plan de agencia (S/ 690 → ≈ S/ 585). En ese caso hay que **revisar la meta de la semana 6**. Se confirma cuando el contador defina el régimen tributario.
+
 **Precio frente a la competencia:** CreceRank cobra US$29/mes por 10 prompts (≈ S/ 109) y BrightLocal US$39/mes por local. S/ 349 se justifica porque incluye el análisis local por distrito, los competidores, el checklist y el reporte por WhatsApp. **Se valida con la venta** (H6).
 
 ## Salida al mercado (go-to-market)
@@ -69,6 +71,7 @@
   - % de conversión a pago.
   - % de clientes cuyo índice de presencia mejora en 90 días (la retención).
 - **Metas a la semana 6 (08/11):** ≥ 3 sedes pagando o 2 agencias con piloto pagado (S/ 2,500).
+  - ⚠️ **A revisar cuando se sepa si el precio incluye IGV.** Si lo incluye, 3 clínicas (setup + primer mes = 3 × S/ 839 = S/ 2,517 cobrados) dejan **≈ S/ 2,133 netos**, por debajo de la meta de S/ 2,500. Habría que subir a 4 clínicas o definir la meta como monto cobrado con IGV.
 
 ## Alcance del MVP / v1
 **Dentro (semanas 1–6):**
@@ -120,4 +123,5 @@
   - ⚠️ Es orientación general, no asesoría tributaria: confirmar con un contador.
 
 ## ✅ Puerta de aprobación
-- Aprobado por el Director el: _(pendiente)_
+- **Aprobado por el Director el:** 2026-09-26
+- **Queda abierto:** si los precios incluyen IGV (depende del régimen que defina el contador) y, con eso, revisar la meta de la semana 6.
