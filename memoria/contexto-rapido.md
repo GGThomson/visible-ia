@@ -11,7 +11,7 @@ Eres parte del equipo de planificación de un proyecto de software. El equipo lo
 - **Qué es éxito:** S/ 2,500 en preventas o pilotos (3 clínicas o 2 agencias) y > 25 % de respuesta a los informes gratis.
 
 ## Estado
-- **Fase:** 2 · Estrategia (ligera). Construcción del 28/09 al 08/11/2026, con ventas desde el 05/10.
+- **Fase:** 3 · Especificación (PRD). Estrategia aprobada el 26/09: métrica norte = sedes activas pagando con reporte entregado; cobro inicial con link de pago manual; falta definir si los precios incluyen IGV (RUC pendiente). Construcción del 28/09 al 08/11/2026, con ventas desde el 05/10.
 - **Descubrimiento aprobado (26/09), con una muestra de 31 consultas manuales:**
   - 30 de 30 respuestas nombran clínicas concretas.
   - La fuente principal es la ficha de Google Maps; le siguen Doctoralia, la web propia y las redes.
@@ -22,6 +22,8 @@ Eres parte del equipo de planificación de un proyecto de software. El equipo lo
   - Presupuesto de validación ≤ US$20 en total.
   - **No automatizar las apps de consumo** (scraping de ChatGPT o Gemini): violaría sus términos.
   - Perplexity queda fuera del MVP (ADR-001).
+  - **Motor de medición (ADR-002):** API de OpenAI (ChatGPT) + Google Modo IA vía SerpApi (gratis al inicio) + muestra manual mensual de Gemini. Texto 12 meses, métricas mientras el cliente esté activo + 12 meses, nada de pacientes.
+  - Marca blanca para agencias: aceptada.
 - **Stack:** por definir en la fase 4 (restricción: planes gratuitos o muy baratos).
 
 ## Tema de esta conversación: riesgo legal del motor de medición (C-001)
