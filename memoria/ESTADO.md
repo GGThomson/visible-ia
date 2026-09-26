@@ -7,7 +7,7 @@
 
 ## Dónde estamos
 - **Fase actual:** 5 · Construcción. Fase 4 aprobada el 26/09: arquitectura + plan (tags `fase-4-completa`, `plan-aprobado`)
-- **Tarea actual:** **C1-T01**, paquete Python, herramientas y CLI "hola" (`docs/05-plan/fases/C1-base.md`)
+- **Tarea actual:** **C1-T03**, migración inicial del esquema + RLS (C1-T01 y C1-T02 ✅, PRs abiertos)
 - **Rama de trabajo:** cada tarea en `feat/C<n>-T<nn>-...` desde `main` (las fases 1–4 ya están en `main`)
 - **Avance general:** █████░░░░░ 45 %
 - **Calendario:** construcción del 28/09 al 08/11 · **v1.0 "Vender" el 04/10** · ventas desde el 05/10 · control del Plan B el **jue 02/10** (C6-T05)
@@ -26,8 +26,8 @@
 <!-- ⚪ pendiente · 🟡 en curso · ✅ completa · ⏭️ omitida (explicar por qué en el brief) -->
 
 ## Próximos 3 pasos
-1. **Director (28/09):** crear Supabase dev/prod y Cloudflare Pages; completar `.env` y GitHub Secrets (tabla "Tareas del Director" del roadmap)
-2. `/siguiente` → C1-T01 … C1-T06 (base). Luego C2 (mercados)
+1. **Director:** `Copy-Item .env.example .env`, pegar los valores, correr `uv run visible-ia config check` (dev y prod) y cargar los GitHub Secrets; revisar y fusionar los PRs de C1-T01 y C1-T02
+2. `/siguiente` → C1-T03 (necesita `SUPABASE_DB_URL_DEV`) … C1-T06. Luego C2 (mercados)
 3. **Director (29/09):** cuenta de SerpApi y **aprobar la facturación de OpenAI** (≈ US$4/mes, tope US$10) antes de C3. En paralelo: lista de 40 clínicas, trámites de WhatsApp y pasarela, tareas legales
 
 ## Bloqueos / esperando decisión

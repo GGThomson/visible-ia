@@ -8,13 +8,13 @@
 - Landing vacía publicada en Cloudflare Pages.
 
 **Historias que cubre:** — (infraestructura). Habilita todo el PRD.
-**Estado:** ⚪ pendiente
+**Estado:** 🟡 en curso
 **Depende de (Director):** proyectos de Supabase dev/prod creados, claves en `.env` y en GitHub Secrets, cuenta de Cloudflare Pages conectada.
 
 ## Tareas
 
 ### C1-T01 · Paquete Python, herramientas y CLI "hola"
-- **Estado:** ⚪
+- **Estado:** ✅ (26/09, PR de `feat/C1-T01-python-package`)
 - **Qué:** crear el paquete `visible_ia` en `src/`, gestionado con `uv`.
   - `pyproject.toml` con Python ≥ 3.12.
   - Dependencias base: `typer`, `pydantic`, `pydantic-settings`, `httpx`, `psycopg[binary]`.
@@ -34,9 +34,10 @@
   - Nada de Poetry ni pip-tools: solo `uv`.
 
 ### C1-T02 · Configuración y `.env.example`
-- **Estado:** ⚪
+- **Estado:** ✅ (26/09, PR de `feat/C1-T02-config`)
 - **Qué:** crear `config.py` con `pydantic-settings`.
-  - Variables que lee: `SUPABASE_DB_URL`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `OPENAI_API_KEY`, `SERPAPI_API_KEY`, `VISIBLE_IA_ENV` (`dev`/`prod`, por defecto `dev`) y `MONTHLY_BUDGET_USD` (por defecto 10).
+  - Variables que lee (**ajustado el 26/09 a pedido del Director: un juego por entorno**): `VISIBLE_IA_ENV` (`dev`/`prod`); `SUPABASE_URL_*`, `SUPABASE_ANON_KEY_*`, `SUPABASE_SERVICE_ROLE_KEY_*` y `SUPABASE_DB_URL_*` para `DEV` y `PROD`; `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`; `OPENAI_API_KEY`, `SERPAPI_API_KEY`; `MONTHLY_BUDGET_USD` (10) y `SERPAPI_MONTHLY_QUOTA` (250).
+  - Obligatorias para `config check`: las 3 de Supabase del entorno activo. Las demás se listan como "pendiente", con la tarea que las necesita.
   - `.env.example` con todas, sin valores.
   - Comando `visible-ia config check`: dice cuáles faltan **sin mostrar ningún valor**.
 - **Archivos probables:** `src/visible_ia/config.py`, `.env.example`, `tests/unit/test_config.py`
