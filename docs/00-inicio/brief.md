@@ -61,7 +61,7 @@
 **Calendario:** fases 1–4 ligeras del 25 al 27/09 · construcción del 28/09 al 08/11.
 
 ## Pendientes del acta
-- ⏳ Confirmar la aceptación de la marca blanca para agencias (propuesta: sí). Se necesita antes de la semana 5.
+- ✅ Marca blanca para agencias: **aceptada** por el Director el 26/09/2026 (acta `memoria/actas/2026-09-26-riesgo-legal-motor.md`).
 
 ## Puertas de aprobación
 <!-- Momentos en los que el Director debe decir "sí, avanzamos". -->

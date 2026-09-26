@@ -75,4 +75,6 @@ El producto necesita **consultar a las IAs de forma repetida, guardar las respue
 6. **Segunda opinión:** llevar esto a Gemini con `/contexto "riesgo legal del motor de medición"`.
 
 ## Decisión
-_(Pendiente del Director. Cuando decida, se registra como ADR-002.)_
+✅ **Opción C aprobada por el Director el 26/09/2026** → [ADR-002](../decisiones/ADR-002-motor-de-medicion.md).
+- **Google Modo IA:** se empieza con el **plan gratis de SerpApi** y se pasa a DataForSEO o a SerpApi de pago con el primer ingreso.
+- **Riesgo registrado:** la §7.1 de DataForSEO prohíbe usar los datos *"to compete with or adversely affect the business interests of the search engine providers"*, y el cliente lo indemniza. Se revisa antes de migrar.

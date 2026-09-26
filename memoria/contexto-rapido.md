@@ -22,6 +22,8 @@ Eres parte del equipo de planificación de un proyecto de software. El equipo lo
   - Presupuesto de validación ≤ US$20 en total.
   - **No automatizar las apps de consumo** (scraping de ChatGPT o Gemini): violaría sus términos.
   - Perplexity queda fuera del MVP (ADR-001).
+  - **Motor de medición (ADR-002):** API de OpenAI (ChatGPT) + Google Modo IA vía SerpApi (gratis al inicio) + muestra manual mensual de Gemini. Texto 12 meses, métricas mientras el cliente esté activo + 12 meses, nada de pacientes.
+  - Marca blanca para agencias: aceptada.
 - **Stack:** por definir en la fase 4 (restricción: planes gratuitos o muy baratos).
 
 ## Tema de esta conversación: riesgo legal del motor de medición (C-001)
