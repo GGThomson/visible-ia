@@ -8,6 +8,7 @@
 ## Dónde estamos
 - **Fase actual:** 2 · Estrategia (ligera). Fase 1 aprobada el 26/09 (tag `fase-1-completa`)
 - **Tarea actual:** `/fase 2`, más la prueba con la API de Gemini (propuesta, pendiente de aprobación)
+- **Rama de trabajo:** `docs/F2-estrategia` (la fase 1 ya está en `main`)
 - **Avance general:** ██░░░░░░░░ 18 %
 - **Calendario:** fases 1–4 del 25 al 27/09 · construcción del 28/09 al 08/11 · ventas desde el 05/10
 
