@@ -31,7 +31,7 @@
 3. Iniciar los trámites **sin costo** de WhatsApp Business API y de la pasarela de pagos. Prueba completa (270 consultas) en la semana 1
 
 ## Bloqueos / esperando decisión
-- ⏳ Prueba con la API de Gemini: esperando la aprobación del Director (US$0, sin facturación)
+- ⏳ Prueba con la API de Gemini: 19 de 60 llamadas (tope gratuito de 20 al día). Retomar con `python scripts/prueba_api_gemini.py --configs B A` (rama `chore/prueba-api-gemini`)
 - ⏳ Marca blanca para agencias: ¿se acepta? (propuesta: sí; se necesita antes de la semana 5)
 
 ## Decisiones recientes (últimas 5)

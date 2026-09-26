@@ -22,7 +22,8 @@ OUT_DIR = ROOT / "docs" / "01-descubrimiento" / "prueba-fuentes"
 OUT_CSV = OUT_DIR / "registro-api.csv"
 OUT_RAW = OUT_DIR / "registro-api-crudo.jsonl"
 
-DEFAULT_MODEL = "gemini-3.8-flash"
+# Free tier: grounding (Search/Maps) is only available on 2.5 models, not on 3.x.
+DEFAULT_MODEL = "gemini-2.5-flash"
 MIRAFLORES = (-12.1211, -77.0297)
 PAUSE_SECONDS = 7  # stay under free-tier requests-per-minute
 
@@ -85,7 +86,7 @@ def parse(interaction):
     """Return (text, url sources, maps places, search queries) from an interaction."""
     texts, urls, places, queries = [], [], [], []
     for step in interaction.steps or []:
-        if step.type == "google_search_call":
+        if step.type in ("google_search_call", "google_maps_call"):
             queries.extend(getattr(step, "queries", None) or [])
         if step.type != "model_output":
             continue
@@ -125,7 +126,13 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
-    plan = [(c, q, r) for c in args.configs for q in args.questions for r in range(1, args.reps + 1)]
+    done = set()
+    if OUT_CSV.exists():  # resume: skip calls already answered (free tier allows ~20/day per model)
+        with open(OUT_CSV, encoding="utf-8", newline="") as f:
+            done = {(r["config"], r["pregunta_id"], int(r["repeticion"]))
+                    for r in csv.DictReader(f) if not r["notas"].startswith("ERROR")}
+    plan = [(c, q, r) for c in args.configs for q in args.questions for r in range(1, args.reps + 1)
+            if (c, q, r) not in done]
     print(f"Plan: {len(plan)} llamadas · modelo {args.model} · configs {args.configs}")
     if args.dry_run:
         for c, q, r in plan[:3]:
