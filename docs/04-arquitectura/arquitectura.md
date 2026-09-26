@@ -84,6 +84,8 @@ flowchart LR
 | `informe` | tipo (diagnóstico, mensual), clínica o sede, mes, ruta del PDF, marca (visible-ia / agencia) | N–1 `clinica` o `sede` |
 | `prospecto` | nombre, clínica, distrito, rubro, contacto, UTM, consentimiento (sí/no + fecha), estado, **no contactar** | Opcional: N–1 `clinica` |
 | `pago` | cliente, periodo, monto, medio (link, Yape, transferencia, suscripción), fecha, referencia | N–1 `cliente` |
+| `latido` | proyecto (dev/prod), fecha y hora | — Lo escribe el job diario para mantener activo Supabase; se borra a los 30 días |
+| `evento_webhook` (v1.2) | origen (whatsapp, culqi, mercadopago), recibido, cuerpo crudo, firma válida, procesado | — Lo llenan las Edge Functions; lo procesa Python |
 
 **Retención (ADR-002):**
 - El job semanal borra el texto y el JSON crudo de las `respuesta` con más de 12 meses. Las `mencion`, `fuente` y `puntaje_mensual` se conservan.
