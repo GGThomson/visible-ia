@@ -7,7 +7,7 @@
 
 ## Dónde estamos
 - **Fase actual:** 1 · Descubrimiento (ligera)
-- **Tarea actual:** Preparar la prueba de fuentes (30 preguntas)
+- **Tarea actual:** Muestra de la prueba de fuentes (30 consultas) → puerta de la fase 1
 - **Avance general:** █░░░░░░░░░ 10 %
 - **Calendario:** fases 1–4 del 25 al 27/09 · construcción del 28/09 al 08/11 · ventas desde el 05/10
 
@@ -25,15 +25,15 @@
 <!-- ⚪ pendiente · 🟡 en curso · ✅ completa · ⏭️ omitida (explicar por qué en el brief) -->
 
 ## Próximos 3 pasos
-1. `/fase` → Descubrimiento: definir las 30 preguntas de la prueba de fuentes y la plantilla para registrar las respuestas
-2. Iniciar los trámites **sin costo** de WhatsApp Business API (verificación) y de la pasarela de pagos
-3. `/fase` → Estrategia ligera (legal, métrica norte, costos ~US$0) y luego Especificación
+1. **Director (26/09):** hacer la muestra (Q01, Q05, Q10, Q11, Q16, Q19, Q22, Q24, Q29, Q30 × 3 IAs, sin sesión) y pegarla en `docs/01-descubrimiento/prueba-fuentes/registro.csv`
+2. `/fase 1` → analizar la muestra y decidir la puerta (≥ 60 % con clínica nombrada = seguir)
+3. Iniciar los trámites **sin costo** de WhatsApp Business API y de la pasarela de pagos; luego `/fase 2`
 
 ## Bloqueos / esperando decisión
 - ⏳ Marca blanca para agencias: ¿se acepta? (propuesta: sí; se necesita antes de la semana 5)
 
 ## Decisiones recientes (últimas 5)
-- 2026-09-25 · Idea, nicho (salud electiva, Lima Top), canal dual y precios aprobados (ver acta)
+- 2026-09-25 · Puerta F1 con muestra de 30 consultas; prueba completa (270) en la semana 1; consultas sin sesión; 30 preguntas aprobadas
 - 2026-09-25 · Tipo A + J, tiempo completo, ruta de fases aprobada
 - 2026-09-25 · Presupuesto máximo de US$20 en la validación; solo planes gratuitos; ningún gasto sin aprobación
 - 2026-09-25 · Consultas manuales en las apps gratuitas + script de análisis donde la API cueste
