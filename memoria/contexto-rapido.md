@@ -11,7 +11,7 @@ Eres parte del equipo de planificación de un proyecto de software. El equipo lo
 - **Qué es éxito:** S/ 2,500 en preventas o pilotos (3 clínicas o 2 agencias) y > 25 % de respuesta a los informes gratis.
 
 ## Estado
-- **Fase:** 4 · Arquitectura y plan. PRD v1 congelado el 26/09: entregas v1.0 "Vender" (semanas 1–2: informe gratis + landing), v1.1 "Servir" (3–4), v1.2 "Escalar" (5–6); 10 plantillas de preguntas por rubro; índice = % de respuestas donde aparece la clínica, con margen de Wilson; pendiente ADR-003 (repeticiones: con 30 respuestas al mes el margen es ±15–17 puntos). Estrategia aprobada el 26/09: métrica norte = sedes activas pagando con reporte entregado; cobro inicial con link de pago manual; falta definir si los precios incluyen IGV (RUC pendiente). Construcción del 28/09 al 08/11/2026, con ventas desde el 05/10.
+- **Fase:** 5 · Construcción (desde el 28/09). Arquitectura aprobada: Python sin servidor (Supabase + GitHub Actions + Cloudflare Pages), ADR-003 = 3 repeticiones + prueba de 2 proporciones + ventana de 3 meses. Plan C1–C12 (46 tareas) con Plan B para vender el 05/10. Antes: PRD v1 congelado el 26/09: entregas v1.0 "Vender" (semanas 1–2: informe gratis + landing), v1.1 "Servir" (3–4), v1.2 "Escalar" (5–6); 10 plantillas de preguntas por rubro; índice = % de respuestas donde aparece la clínica, con margen de Wilson; pendiente ADR-003 (repeticiones: con 30 respuestas al mes el margen es ±15–17 puntos). Estrategia aprobada el 26/09: métrica norte = sedes activas pagando con reporte entregado; cobro inicial con link de pago manual; falta definir si los precios incluyen IGV (RUC pendiente). Construcción del 28/09 al 08/11/2026, con ventas desde el 05/10.
 - **Descubrimiento aprobado (26/09), con una muestra de 31 consultas manuales:**
   - 30 de 30 respuestas nombran clínicas concretas.
   - La fuente principal es la ficha de Google Maps; le siguen Doctoralia, la web propia y las redes.
@@ -24,7 +24,7 @@ Eres parte del equipo de planificación de un proyecto de software. El equipo lo
   - Perplexity queda fuera del MVP (ADR-001).
   - **Motor de medición (ADR-002):** API de OpenAI (ChatGPT) + Google Modo IA vía SerpApi (gratis al inicio) + muestra manual mensual de Gemini. Texto 12 meses, métricas mientras el cliente esté activo + 12 meses, nada de pacientes.
   - Marca blanca para agencias: aceptada.
-- **Stack:** por definir en la fase 4 (restricción: planes gratuitos o muy baratos).
+- **Stack (ADR-004):** Python 3.12 (uv, pytest, typer, OpenAI SDK, rapidfuzz, jinja2, Playwright), Supabase (Postgres + RLS + Auth + Storage), GitHub Actions (corridas, job diario), Cloudflare Pages (landing y panel estáticos). US$0 fijo; ≈ US$4/mes de API con 5 mercados.
 
 ## Tema de esta conversación: riesgo legal del motor de medición (C-001)
 El producto necesita consultar a las IAs de forma repetida (10 preguntas × 3 repeticiones por mercado y mes), **guardar las respuestas y analizarlas** (clínicas mencionadas, posición, fuentes). Medir con API cuesta poco (≈ US$5–29 al mes para 5–30 mercados). El problema son los términos de uso.

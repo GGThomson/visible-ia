@@ -20,7 +20,7 @@
 
 ## Éxito
 - **Se considera exitoso si…** (medible):
-  1. **Prueba de fuentes** completada: ~30 preguntas × 3 superficies (ChatGPT, Gemini y Google Modo IA) × 3 repeticiones (~270 consultas). Perplexity queda fuera del MVP ([ADR-001](../decisiones/ADR-001-excluir-perplexity.md)), con clínicas mencionadas y fuentes citadas registradas.
+  1. **Prueba de fuentes** completada: ~30 preguntas × 3 superficies (ChatGPT, Gemini y Google Modo IA) × 3 repeticiones (~270 consultas). **Actualización 26/09:** se reemplaza por las primeras corridas reales del motor más la calibración manual (roadmap). Perplexity queda fuera del MVP ([ADR-001](../decisiones/ADR-001-excluir-perplexity.md)), con clínicas mencionadas y fuentes citadas registradas.
   2. **Interés:** > 25 % de respuesta a los informes gratis (40 enviados → 10 interesados).
   3. **Pago:** 3 clínicas (setup + primer mes) o 2 agencias con piloto pagado. **Meta: S/ 2,500 en preventas o pilotos.**
 - **Criterio de replanteo:** si tras contactar 50 clínicas y 10 agencias con el informe nadie paga por adelantado → se reevalúa (rubro, canal o descarte).

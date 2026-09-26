@@ -121,7 +121,7 @@
 - ✅ **Índice de presencia por superficie** = % de las respuestas de esa superficie en las que aparece la clínica (0–100), con 30 respuestas por superficie. Es un % simple, sin ponderar por posición (decidido por el Director el 26/09): es fácil de explicar a un dueño de clínica.
 - **Índice combinado** = promedio de los índices de las superficies medidas (ChatGPT y Google), con el mismo peso.
 - **Margen de variación:** intervalo de confianza del 95 % (Wilson) sobre la proporción. Se muestra siempre junto al índice.
-- **Cambio "real" entre meses:** solo se informa como subida o bajada si los intervalos de los dos meses no se solapan. Si se solapan, se dice "sin cambio claro". ⚠️ Con 30 respuestas por superficie, esta regla casi nunca detecta cambios: ver la §5.5. La regla definitiva se decide en ADR-003 (fase 4).
+- **Cambio "real" entre meses:** solo se informa como subida o bajada si los intervalos de los dos meses no se solapan. Si se solapan, se dice "sin cambio claro". ⚠️ **Reemplazada por el [ADR-003](../decisiones/ADR-003-repeticiones-y-regla-de-cambio.md) (26/09):** el cambio mensual se decide con una prueba de 2 proporciones sobre el índice combinado; la evolución se informa con una ventana móvil de 3 meses (§5.5).
 - **Métricas secundarias:**
   - **Posición media**, cuando aparece (1 = la primera nombrada).
   - **Cuota de menciones:** apariciones de la clínica / apariciones de todas las clínicas del mercado.
@@ -162,7 +162,7 @@
 - **El margen real es todavía más ancho.** Las 3 repeticiones de una misma pregunta no son independientes: en la prueba de la API, cerca de la mitad de las clínicas se repitió en las 3. En el peor caso, lo que cuenta son solo las 10 preguntas. Con 10 respuestas efectivas, el margen en 30 % va de 11 % a 60 %.
 - **El índice de un mes sirve para comparar a una clínica con sus competidores** en ese mismo mes, siempre que la diferencia sea grande. **No sirve para ver la evolución mes a mes** con este volumen.
 
-**Opciones** (a decidir en la fase 4 con los costos: ⏳ **ADR-003**):
+**Opciones** (✅ **decidido: opción D**, [ADR-003](../decisiones/ADR-003-repeticiones-y-regla-de-cambio.md), 26/09/2026):
 
 | Opción | Respuestas/mes por superficie | Subida detectable (desde 30 %, prueba de 2 proporciones) | Costo API por mercado al mes | Efecto en el plan gratis de SerpApi (250/mes) |
 |---|---|---|---|---|
@@ -217,7 +217,7 @@
 - Prometer o mostrar un "puesto #1" garantizado.
 
 ## 8. Preguntas abiertas
-- ⏳ **ADR-003 (fase 4): repeticiones por mes y regla de cambio** (§5.5). Recomendación: opción D (prueba de 2 proporciones sobre el índice combinado + ventana móvil de 3 meses).
+- ~~ADR-003: repeticiones y regla de cambio~~ → ✅ opción D (26/09).
 - ¿Los precios incluyen IGV? Depende del régimen que defina el contador (estrategia). No afecta la construcción de la v1.0.
 - Tareas legales de la estrategia: términos de *web search* de OpenAI, créditos de SerpApi en Modo IA, Ley 29733.
 
@@ -227,4 +227,4 @@
 
 ## ✅ Puerta de aprobación
 - **Aprobado y congelado por el Director el:** 2026-09-26, con las plantillas de `plantillas-preguntas.md`.
-- **Queda abierto:** ADR-003 (repeticiones y regla de cambio, §5.5), a decidir en la fase 4 con los costos. Los cambios de alcance van por `/cambio`.
+- **ADR-003** (repeticiones y regla de cambio, §5.5) se decidió en la fase 4: opción D. Los cambios de alcance van por `/cambio`.

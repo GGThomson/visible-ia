@@ -14,4 +14,6 @@
 ## Clasificados (historial)
 | ID | Fecha | Tipo | Descripción | Impacto | Destino | Estado |
 |---|---|---|---|---|---|---|
+| C-002 | 2026-09-26 | 🔁 cambio de alcance | Reemplazar la prueba manual de 270 consultas por las primeras corridas reales + calibración manual | Medio | Construcción (C3–C5) | ✅ Decidido por el Director |
+| C-003 | 2026-09-26 | ✨ mejora | Plan B de la v1.0: informes semiautomáticos si C1–C5 se atrasan | Bajo | C6-T05 | ✅ Decidido por el Director |
 | C-001 | 2026-09-26 | ❓ pregunta | Riesgo legal del motor de medición (los términos de grounding de Gemini prohíben "analyze") | Alto | Fase 2 | ✅ Resuelto: ADR-002 (opción C) |
