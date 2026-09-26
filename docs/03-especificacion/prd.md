@@ -10,7 +10,7 @@
   - Clínicas de implantología, estética dental, medicina estética y dermatología en Miraflores, San Isidro y Surco.
   - Agencias de marketing, que lo revenden con su marca.
 - **Unidad de medida: el mercado** = rubro + distrito (p. ej., "implantología · Miraflores"). Cada mercado tiene un **banco de 10 preguntas** y una **lista de clínicas** (el cliente y sus competidores).
-- **Entregas escalonadas** (el calendario sale de la estrategia):
+- ✅ **Entregas escalonadas** (aprobadas por el Director el 26/09; el calendario sale de la estrategia):
   | Entrega | Semanas | Para qué | Módulos |
   |---|---|---|---|
   | **v1.0 "Vender"** | 1–2 | Generar el **informe gratis** que abre la venta desde el 05/10 | Mercados y clínicas, motor, extractor, puntaje, informe PDF de diagnóstico, landing |
@@ -110,14 +110,15 @@
 
 ## 5. Índice de presencia: definición y evaluación (núcleo de datos)
 ### 5.1 Qué se pregunta
-- **Plantillas por rubro:** 10 preguntas redactadas como las escribiría un paciente, con el distrito como variable. Mezclan las 5 formas de la fase 1: M "mejor", R recomendación, C criterio, P procedimiento, L Lima.
-  - Se parte de las 30 preguntas aprobadas el 25/09: cada una se convierte en plantilla dentro de su rubro, y se completan hasta 10 por rubro.
-  - Las plantillas de rubro se aprueban antes de la primera corrida real.
+- ✅ **10 plantillas por rubro, con el distrito como variable** (decidido por el Director el 26/09) → [plantillas-preguntas.md](plantillas-preguntas.md).
+  - Las 30 preguntas aprobadas el 25/09 se convierten en plantillas y se completan hasta 10 por rubro.
+  - Las de "Lima general" pasan a preguntar por el distrito.
+  - Todos los distritos de un rubro usan las mismas preguntas, así los mercados son comparables.
 - **Por mercado y mes:** 10 preguntas × 3 repeticiones × 2 superficies (ChatGPT API y Google Modo IA) = **60 respuestas**.
 
 ### 5.2 Cómo se calcula
 - **Aparición:** una clínica "aparece" en una respuesta si se la nombra al menos una vez, después de resolver los alias.
-- **Índice de presencia por superficie** = % de las respuestas de esa superficie en las que aparece la clínica (0–100). Con 30 respuestas por superficie.
+- ✅ **Índice de presencia por superficie** = % de las respuestas de esa superficie en las que aparece la clínica (0–100), con 30 respuestas por superficie. Es un % simple, sin ponderar por posición (decidido por el Director el 26/09): es fácil de explicar a un dueño de clínica.
 - **Índice combinado** = promedio de los índices de las superficies medidas (ChatGPT y Google), con el mismo peso.
 - **Margen de variación:** intervalo de confianza del 95 % (Wilson) sobre la proporción. Se muestra siempre junto al índice.
 - **Cambio "real" entre meses:** solo se informa como subida o bajada si los intervalos de los dos meses no se solapan. Si se solapan, se dice "sin cambio claro".
