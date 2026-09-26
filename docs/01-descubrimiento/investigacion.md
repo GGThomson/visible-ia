@@ -5,9 +5,9 @@
 ## Hipótesis iniciales
 | # | Creemos que… | Lo sabremos cuando… | Estado |
 |---|---|---|---|
-| H1 | Las IAs nombran **clínicas concretas** de Lima Top al preguntarles por un rubro y un distrito, en vez de dar respuestas genéricas | En la prueba de fuentes, ≥ 60 % de las respuestas nombra al menos 1 clínica | ⚪ sin probar |
-| H2 | Las IAs se apoyan en **fuentes distintas de Google Maps** (Doctoralia, directorios, webs, reseñas) y esas fuentes se pueden trabajar | Las fuentes citadas se concentran en ≤ 10 dominios, y al menos 3 son accionables (perfil editable) | ⚪ |
-| H3 | Las respuestas **varían** entre repeticiones y entre IAs, lo que justifica un índice con muestreo repetido | Menos del 70 % de las clínicas mencionadas se repite en las 3 repeticiones de una misma pregunta | ⚪ |
+| H1 | Las IAs nombran **clínicas concretas** de Lima Top al preguntarles por un rubro y un distrito, en vez de dar respuestas genéricas | En la prueba de fuentes, ≥ 60 % de las respuestas nombra al menos 1 clínica | ✅ muestra: 30/30 (100 %) |
+| H2 | Las IAs se apoyan en **fuentes distintas de Google Maps** (Doctoralia, directorios, webs, reseñas) y esas fuentes se pueden trabajar | Las fuentes citadas se concentran en ≤ 10 dominios, y al menos 3 son accionables (perfil editable) | 🟡 accionables sí (≥ 4); pero la fuente n.º 1 **es** Google Maps → reformular |
+| H3 | Las respuestas **varían** entre repeticiones y entre IAs, lo que justifica un índice con muestreo repetido | Menos del 70 % de las clínicas mencionadas se repite en las 3 repeticiones de una misma pregunta | 🟡 indicio: alta variación entre IAs; repeticiones → prueba completa |
 | H4 | Hay **brecha Maps vs IA**: clínicas fuertes en Google Maps no aparecen en la IA (ese es el gancho de venta) | ≥ 5 de las 40 clínicas de la lista tienen ≥ 4.5★ y ≥ 100 reseñas en Maps, pero presencia IA ≈ 0 | ⚪ |
 | H5 | Los dueños o gerentes de clínica **responden** a un informe gratis personalizado | > 25 % de respuesta (40 enviados → 10 interesados) | ⚪ |
 | H6 | Las clínicas o agencias **pagan por adelantado** | S/ 2,500 en preventas o pilotos (3 clínicas o 2 agencias) | ⚪ |
@@ -48,6 +48,35 @@ Decisión del Director (25/09): la puerta se decide con una **muestra**, y la pr
   - ✅ **Seguir** si ≥ 60 % de las respuestas (≥ 24 de 40) nombra al menos 1 clínica concreta (H1).
   - 🔁 **Pivotear** si < 40 % (< 16 de 40): las IAs no recomiendan clínicas en Lima. Probar otro rubro (abogados, colegios) o ciudad antes de construir.
   - ⚠️ Entre 40 % y 60 % (16 a 23 de 40): se sigue con cautela y se revisa en la prueba completa.
+
+### Resultados de la muestra (26/09)
+Datos en [prueba-fuentes/registro.csv](prueba-fuentes/registro.csv). Conteo manual. El extractor lo automatizará en la semana 1.
+
+**Qué se hizo:** ChatGPT, Gemini y Google (Modo IA), completas: 10 preguntas cada una, más una 2.ª repetición de ChatGPT en Q22. Son 31 respuestas en total. **Perplexity** solo se hizo en Q01: el Director la descartó para la muestra porque sin sesión mezcla resultados de España y tiene poca adopción en Perú. Todas las consultas se hicieron en incógnito y en todas la IA buscó en la web.
+
+**H1 (regla de la puerta):** **30 de 30** respuestas de las 3 superficies completas nombran ≥ 1 clínica concreta (100 %). Contando las 40 previstas y tomando como fallo las 9 de Perplexity que no se hicieron, quedan 31 de 40 (77.5 %). **Ambas cuentas superan el umbral de 24/40.** Casi todas las respuestas dan de 3 a 5 clínicas con nombre, dirección y ★. Las respuestas del tipo "no hay un único mejor" también terminan nombrando clínicas.
+
+**H2 (fuentes):**
+| Superficie | Fuente principal | Otras fuentes |
+|---|---|---|
+| Gemini | **Fichas de Google Maps** (10 de 10: tarjetas con ★, horario y dirección) | Webs propias y Doctoralia, pocas veces |
+| Google Modo IA | **Fichas de Google (Business Profile)** en 7 de 10, con unas 20 fichas por consulta | Webs propias; **Doctoralia** en 4 de 10; **Facebook/Instagram** en 6 de 10; blogs y rankings (dentum.com.pe, pielbella, blogs de cuidamedic y de Zegarra) |
+| ChatGPT | Datos de mapa (primero pasa la ubicación; da ★ y n.º de reseñas) | **Doctoralia** en 5 de 11; webs propias; limadentalrating.com; 1 respuesta sin fuentes |
+
+- **Hallazgo clave:** la fuente dominante **es** la ficha de Google Maps, al contrario de lo que suponía H2 ("fuentes distintas de Google Maps"). La segunda palanca es Doctoralia. Detrás vienen la web propia, Instagram/Facebook y los sitios de ranking.
+- **Fuentes accionables:** hay ≥ 4 fuentes con perfil editable (ficha de Google, Doctoralia, web propia, Instagram/Facebook). Esa parte de H2 se cumple.
+- **Señal de "GEO" local:** muchas fichas que aparecen tienen palabras clave en el nombre ("Implantes Dentales Miraflores", "…| Carillas | Diseño de sonrisa"). Es una práctica que las normas de Google Business Profile prohíben. Nosotros **no la recomendaremos**. Sí confirma que el contenido de la ficha pesa.
+
+**H3 (variación), preliminar:**
+- **Entre IAs:** en 7 de 10 preguntas hay **una clínica "líder" que nombran las 3 superficies**: Smiles Peru (Q01), Top Smile (Q10), Cuidamedic (Q16), Medi Esthetic (Q22), Clínica Lima Derma (Q24), Clínica de la Piel (Q29) y Cderma (Q30). Fuera de esa líder, la mayoría de las clínicas aparece en **una sola** superficie. En Q05 y Q19, ChatGPT no coincide con ninguna de las otras dos.
+- **Entre repeticiones:** hay un solo dato (ChatGPT Q22): de 5 clínicas, solo 1 se repite. Eso apunta a mucha variación, pero la estabilidad se mide en la prueba completa.
+
+**H4 (brecha Maps vs IA), indicio:** las IAs no ordenan solo por ★. Gemini puso primera en Q24 a una clínica con 3.4★ y en Q19 a otra con 3.8★. La lista de 40 clínicas (semana 1) medirá la brecha.
+
+**Otros datos:**
+- El **Modo IA de Google** respondió siempre. Si hubo AI Overview en la búsqueda normal no quedó registrado de forma sistemática.
+- **Gemini y Google** usan casi los mismos datos (fichas de Maps). **ChatGPT** es la superficie más distinta.
+- Perplexity (Q01) nombró clínicas: Dr. Teixeira y Odontologists.
 
 ### Las 30 preguntas
 Aprobadas por el Director el 25/09/2026, sin cambios. Redactadas como lo haría un paciente. Mezclan 4 rubros, 3 distritos y 5 formas de preguntar: **M** = "mejor", **R** = pide recomendación, **C** = con criterio (precio, confianza, especialista), **P** = procedimiento concreto, **L** = Lima sin distrito.
@@ -132,6 +161,10 @@ Estimaciones **a validar**. No hay censos confiables por rubro y distrito. La li
 | Datos personales (Ley 29733) | Baja | Medio | Solo datos públicos de negocios. Revisar en la fase 2 el tratamiento de los datos de contacto de dueños y pacientes |
 
 ## ✅ Conclusión y puerta de aprobación
-- **¿Vale la pena seguir?** _(pendiente)_
-- **Porque:** _(pendiente)_
+- **¿Vale la pena seguir?** Propuesta: **✅ sí, seguir** _(pendiente de aprobación del Director)_
+- **Porque:** H1 se cumple con holgura (30/30 en las 3 superficies completas, 31/40 aun contando Perplexity como fallo). Las fuentes son accionables (ficha de Google, Doctoralia, web, redes) y la variación entre IAs justifica medir con muestreo repetido.
+- **Ajustes que salen de la muestra (a confirmar):**
+  1. Reformular H2: la ficha de Google Maps es la fuente principal. La diferencia frente al SEO local clásico está en **medir qué dice cada IA** y en optimizar la ficha, Doctoralia y la web **para la IA**, no en evitar Google.
+  2. Perplexity queda fuera de la prueba completa (3 superficies × 30 × 3 = **270 consultas**, ~9–10 h) y Google se mantiene.
+  3. Registrar en la prueba completa si aparece AI Overview antes de pasar al Modo IA.
 - **Aprobado por el Director el:** _(pendiente)_
