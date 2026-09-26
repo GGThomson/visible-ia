@@ -8,6 +8,7 @@
 - ADR-001 a ADR-004
 
 **Calendario:**
+- **Plan aprobado por el Director el 26/09/2026.** Seguimiento: `memoria/ESTADO.md` (sin GitHub Issues).
 - Construcción del 28/09 al 08/11/2026.
 - Ventas desde el 05/10: la v1.0 tiene que estar lista para generar informes gratis ese día.
 
@@ -28,6 +29,13 @@
 | C12 | **Suscripción y ranking gratis:** cobro recurrente con tarjeta y ranking público por rubro y distrito → **v1.2** | HU-24, HU-27 | [fases/C12-suscripcion-ranking.md](fases/C12-suscripcion-ranking.md) | **v1.2** | 6 | ⚪ |
 
 **Regla:** cada fase termina en algo que **puedes ver y probar**, no en "la mitad del backend".
+
+**Plan B de la v1.0 (decidido el 26/09):** si C1–C5 se atrasan, el **05/10** se vende igual con **informes semiautomáticos**. Es la tarea **C6-T05**:
+- **Control:** el jueves 02/10.
+- **Nivel 1:** CLI + informe armado a mano.
+- **Nivel 2:** muestra manual como la de la fase 1, si el motor no está listo.
+
+**Prueba de fuentes completa (decidido el 26/09):** la prueba manual de 270 consultas se **reemplaza** por las **primeras corridas reales** del motor (60 respuestas por mercado, con repeticiones) más la **calibración manual** del PRD §5.4. Con eso se evalúan H2 y H3 (fase 1) sobre datos reales.
 
 **Tareas del Director** (no las hace Claude Code; bloquean las fases indicadas):
 

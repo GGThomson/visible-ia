@@ -76,6 +76,30 @@
 - **Depende de:** C6-T03, C1-T05
 - **Rama:** `feat/C6-T04-prospect-alerts`
 
+### C6-T05 · Plan B: vender el 05/10 con informes semiautomáticos (solo si C1–C5 se atrasan)
+- **Estado:** ⚪ (contingencia; decidido por el Director el 26/09)
+- **Cuándo se activa:** en el **control del jueves 02/10 al final del día**. Si C5 (puntaje) no está completo, o si se ve que C6-T02 (PDF) no llegará al 04/10, se activa el nivel que corresponda. La decisión queda en la bitácora.
+- **Qué:** preparar lo mínimo para que el **05/10** se puedan enviar los primeros informes gratis igual:
+  - **Nivel 1 (C3–C5 listos; faltan C6-T01/T02):**
+    - Corrida y puntaje por la CLI (`corrida lanzar`, `extraer`, `revisar`, `puntaje ranking/fuentes/brecha`).
+    - El informe se arma **a mano** con una plantilla simple (HTML estático en `web/informe-manual/` o un documento), con las mismas 6 partes del PRD HU-14.
+    - Meta: ≤ 30 minutos por informe.
+  - **Nivel 2 (C3 no está listo):**
+    - "Diagnóstico preliminar" con una **muestra manual** como la de la fase 1: 10 preguntas del mercado × 1 repetición en la app de ChatGPT y en Google Modo IA.
+    - Registro en el formato de `registro.csv`, conteo con `scripts/comparar_api_vs_muestra.py` (adaptado a la lista de clínicas del mercado) e informe manual.
+    - La nota de método dice claramente que es una muestra de 1 repetición, con un margen muy amplio.
+- **Archivos probables:** `web/informe-manual/plantilla.html` (nivel 1) · `docs/06-lanzamiento/guia-informe-manual.md` (pasos para ambos niveles)
+- **Criterios de aceptación:**
+  - [ ] Existe una guía paso a paso para cada nivel, que el Director puede seguir sin ayuda.
+  - [ ] El informe manual respeta el PRD: las 6 partes, sin datos de pacientes, sin "puesto #1" y con la nota de método honesta.
+  - [ ] Si el Plan B no se activa, la guía queda igual como respaldo.
+- **Pruebas:** el Director arma 1 informe de prueba con la guía del nivel que corresponda.
+- **Depende de:** — (se prepara el 02/10 si se activa; no bloquea a C6-T01/T02, que siguen en paralelo)
+- **Rama:** `docs/C6-T05-plan-b-informe-manual`
+- **Notas para Claude Code:**
+  - Nunca automatizar las apps de consumo para el nivel 2: la muestra la hace el Director a mano (ADR-002).
+  - Al activar el Plan B, C6-T01/T02 siguen siendo prioridad para reemplazar los informes manuales cuanto antes.
+
 ## Demo de la fase (= demo de la v1.0)
 - Desde un mercado real, el Director genera el informe gratis de una clínica real en ≤ 10 minutos y lo abre en su celular.
 - Llena el formulario de la landing y ve el issue "Prospectos nuevos" al día siguiente.

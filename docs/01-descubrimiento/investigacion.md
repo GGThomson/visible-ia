@@ -40,6 +40,8 @@ H1–H4 se prueban con la **prueba de fuentes** (sin clientes). H5–H8 se prueb
 - **Volumen de la prueba completa:** 30 preguntas × 3 superficies × 3 repeticiones = **270 consultas**, unas **9–10 h** de trabajo manual (~2 min por consulta). Google se mantiene y Perplexity sale (decidido el 26/09). Antes de hacerlas a mano, se prueba si la API de Gemini puede automatizar las repeticiones ([propuesta](prueba-fuentes/propuesta-api-gemini.md)).
 - **Análisis:** un script (módulo "extractor" de la semana 1) lee el CSV y saca las clínicas mencionadas, las fuentes y la frecuencia. Mientras tanto, conteo manual en una hoja.
 
+> **Actualización 26/09/2026 (fase 4):** la prueba completa manual de 270 consultas **se reemplaza** por las primeras corridas reales del motor (ADR-002; 60 respuestas por mercado con repeticiones) más la calibración manual mensual (PRD §5.4). H2 y H3 se evalúan con esos datos. Ver `docs/05-plan/roadmap.md`.
+
 ### Muestra rápida (26/09) → puerta de la fase 1
 Decisión del Director (25/09): la puerta se decide con una **muestra**, y la prueba completa se hace en la **semana 1**, en paralelo con la construcción.
 - **Preguntas:** Q01, Q05, Q10, Q11, Q16, Q19, Q22, Q24, Q29 y Q30 (cubren los 4 rubros, los 3 distritos y Lima).
