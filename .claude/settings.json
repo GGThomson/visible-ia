@@ -1,0 +1,22 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '=== ESTADO DEL PROYECTO (memoria/ESTADO.md) ==='; cat \"$CLAUDE_PROJECT_DIR/memoria/ESTADO.md\" 2>/dev/null || echo 'No existe memoria/ESTADO.md'; echo; echo '=== Git ==='; git -C \"$CLAUDE_PROJECT_DIR\" status --short --branch 2>/dev/null | head -15"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)"
+    ]
+  }
+}
