@@ -1,2 +1,3 @@
-fecha,ia,pregunta_id,repeticion,modo,respuesta,fuentes_citadas,notas
-2026-09-26,chatgpt,Q01,1,sin-sesion,"(pegar aquí la respuesta completa)","doctoralia.pe; clinicaejemplo.pe",ejemplo - borrar esta fila
+fecha,ia,pregunta_id,repeticion,modo,busco_web,respuesta,fuentes_citadas,notas
+2026-09-26,chatgpt,Q01,1,sin-sesion,si,"(pegar aquí la respuesta completa)","doctoralia.pe; clinicaejemplo.pe",ejemplo - borrar esta fila
+2026-09-26,google,Q01,1,google-modo-ia,si,"(pegar aquí la respuesta completa)",sin fuentes visibles,sin AI Overview - ejemplo - borrar esta fila

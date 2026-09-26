@@ -28,22 +28,26 @@ H1–H4 se prueban con la **prueba de fuentes** (sin clientes). H5–H8 se prueb
 **Objetivo:** probar H1–H4 y obtener datos reales para el primer informe PDF y para calibrar el extractor y el puntaje.
 
 ### Protocolo
-- **IAs:** ChatGPT, Gemini y Perplexity, en sus **apps web gratuitas**. Por la restricción de presupuesto no se usan APIs de pago (ver brief).
+- **Superficies (4):** ChatGPT, Gemini y Perplexity en sus **apps web gratuitas**, más **Google (Modo IA / AI Overviews)**, que es la IA que más pacientes ven en Lima (añadida por el Director el 25/09). Por la restricción de presupuesto no se usan APIs de pago (ver brief).
+- **Cómo consultar Google:** hacer la búsqueda normal en google.com.pe. Si aparece un AI Overview, registrar ese texto con `modo` = `google-ai-overview`. Si no aparece, repetir la pregunta en **Modo IA** y registrarla con `modo` = `google-modo-ia`. Cuando no hay AI Overview, anotar en `notas` "sin AI Overview": ese dato también sirve.
 - **Repeticiones:** 3 por pregunta y por IA, cada una en un **chat nuevo**.
 - **Sesión:** sin iniciar sesión o en ventana de incógnito cuando la IA lo permita. Si exige cuenta, usar una cuenta **sin memoria ni historial** (desactivar "memoria" y "personalización"). Registrar en el campo `modo` cómo se hizo.
 - **Ubicación:** desde Lima, sin VPN.
 - **Registro:** copiar la respuesta **completa** y las fuentes citadas en [prueba-fuentes/registro.csv](prueba-fuentes/registro.csv): una fila por consulta.
-- **Volumen:** 30 preguntas × 3 IAs × 3 repeticiones = **270 consultas**, unas **9–10 h** de trabajo manual (~2 min por consulta).
+  - `ia`: `chatgpt`, `gemini`, `perplexity` o `google`.
+  - `busco_web`: `si` si la IA muestra que buscó en internet (indicador de búsqueda, enlaces o fuentes); `no` si respondió solo con lo que sabe.
+  - `fuentes_citadas`: dominios separados por `;`. Si no muestra ninguna, escribir exactamente `sin fuentes visibles`.
+- **Volumen de la prueba completa:** 30 preguntas × 4 superficies × 3 repeticiones = **360 consultas**, unas **12 h** de trabajo manual (~2 min por consulta). ⏳ Si Google se mantiene en la prueba completa o solo en la muestra se decide con los resultados de la muestra (con Google fuera: 270 consultas, ~9–10 h).
 - **Análisis:** un script (módulo "extractor" de la semana 1) lee el CSV y saca las clínicas mencionadas, las fuentes y la frecuencia. Mientras tanto, conteo manual en una hoja.
 
 ### Muestra rápida (26/09) → puerta de la fase 1
-Decisión del Director (25/09): la puerta se decide con una **muestra**, y la prueba completa (270) se hace en la **semana 1**, en paralelo con la construcción.
+Decisión del Director (25/09): la puerta se decide con una **muestra**, y la prueba completa se hace en la **semana 1**, en paralelo con la construcción.
 - **Preguntas:** Q01, Q05, Q10, Q11, Q16, Q19, Q22, Q24, Q29 y Q30 (cubren los 4 rubros, los 3 distritos y Lima).
-- **Volumen:** 10 preguntas × 3 IAs × 1 repetición = **30 consultas** (~1 h), sin sesión o en incógnito.
+- **Volumen:** 10 preguntas × 4 superficies × 1 repetición = **40 consultas** (~1 h 20 min), sin sesión o en incógnito.
 - **Regla de decisión:**
-  - ✅ **Seguir** si ≥ 60 % de las respuestas (≥ 18 de 30) nombra al menos 1 clínica concreta (H1).
-  - 🔁 **Pivotear** si < 40 %: las IAs no recomiendan clínicas en Lima. Probar otro rubro (abogados, colegios) o ciudad antes de construir.
-  - ⚠️ Entre 40 % y 60 %: se sigue con cautela y se revisa en la prueba completa.
+  - ✅ **Seguir** si ≥ 60 % de las respuestas (≥ 24 de 40) nombra al menos 1 clínica concreta (H1).
+  - 🔁 **Pivotear** si < 40 % (< 16 de 40): las IAs no recomiendan clínicas en Lima. Probar otro rubro (abogados, colegios) o ciudad antes de construir.
+  - ⚠️ Entre 40 % y 60 % (16 a 23 de 40): se sigue con cautela y se revisa en la prueba completa.
 
 ### Las 30 preguntas
 Aprobadas por el Director el 25/09/2026, sin cambios. Redactadas como lo haría un paciente. Mezclan 4 rubros, 3 distritos y 5 formas de preguntar: **M** = "mejor", **R** = pide recomendación, **C** = con criterio (precio, confianza, especialista), **P** = procedimiento concreto, **L** = Lima sin distrito.
@@ -89,7 +93,9 @@ Reparto: 8 de implantología, 7 de estética dental, 8 de medicina estética y 7
 | % de respuestas con ≥ 1 clínica nombrada | Conteo por respuesta | H1 |
 | Top de dominios citados (Doctoralia, webs, directorios…) | Frecuencia de fuentes | H2 |
 | Estabilidad: % de clínicas que se repiten en las 3 repeticiones | Intersección por pregunta e IA | H3 |
-| Coincidencia entre IAs | Clínicas compartidas por 2 o 3 IAs | H3 |
+| Coincidencia entre IAs | Clínicas compartidas por 2, 3 o 4 superficies | H3 |
+| % de respuestas con búsqueda web y % sin fuentes visibles | Columnas `busco_web` y `fuentes_citadas` | H2 |
+| Frecuencia de AI Overview en Google para preguntas locales | Notas "sin AI Overview" | H2, H8 |
 | Brecha Maps vs IA | Cruzar con la lista de 40 clínicas (★ y n.º de reseñas) | H4 |
 
 ## Competencia y alternativas
