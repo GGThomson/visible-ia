@@ -9,7 +9,8 @@ flowchart LR
   end
   subgraph GH["GitHub Actions (gratis, repo privado)"]
     JOB["Corrida mensual<br/>motor → extractor → puntaje → PDF"]
-    WEEK["Job semanal<br/>retención + salud"]
+    DAY["Job diario<br/>mantener activos dev y prod"]
+    WEEK["Job semanal<br/>retención + respaldo"]
     CI["CI: ruff + pytest + evaluación del extractor"]
   end
   subgraph SB["Supabase (plan gratis)"]
@@ -29,6 +30,7 @@ flowchart LR
   JOB --> SERP
   JOB --> DB
   JOB --> ST
+  DAY --> DB
   WEEK --> DB
   LAND -- insert con RLS --> DB
   PANEL -- lectura con RLS --> DB
@@ -55,10 +57,10 @@ flowchart LR
 | Base de datos | **Supabase Postgres** (plan gratis: 500 MB, 2 proyectos activos), con migraciones SQL versionadas en `supabase/migrations/` | ADR-004 |
 | Autenticación | **Supabase Auth** con enlace mágico por correo (v1.1). Permisos con **RLS** por cliente y por agencia | PRD HU-19 y §6 (ADR-004) |
 | Archivos | Supabase Storage (1 GB gratis): PDFs de informes y logos de agencias | ADR-004 |
-| Tareas programadas | **GitHub Actions**: corrida mensual (`schedule` + botón manual), job semanal y CI. Repo privado: 2,000 min/mes gratis | ADR-004 |
+| Tareas programadas | **GitHub Actions**: corrida mensual (`schedule` + botón manual), **job diario** para mantener activos los proyectos de Supabase, job semanal (retención y respaldo) y CI. Repo privado: 2,000 min/mes gratis | ADR-004 |
 | Web (landing y panel) | **Cloudflare Pages** (sitio estático). Estilos con **Pico CSS** y `supabase-js` desde CDN | Vercel queda descartado: su plan Hobby prohíbe el uso comercial (ADR-004) |
-| WhatsApp (v1.2) | API de WhatsApp Cloud de Meta. El envío sale de Python en Actions; el webhook de respuestas, si hace falta, va en una Supabase Edge Function | Se decide al planificar la v1.2 |
-| Pagos | v1.1: registro manual en la CLI. v1.2: suscripción de Culqi o Mercado Pago con webhook (Edge Function) | Estrategia (link de pago manual al inicio) |
+| WhatsApp (v1.2) | API de WhatsApp Cloud de Meta. El envío sale de Python en Actions; el webhook de respuestas va en una **Supabase Edge Function** (ver "Webhooks de la v1.2") | ADR-004 |
+| Pagos | v1.1: registro manual en la CLI. v1.2: suscripción de Culqi o Mercado Pago con webhook en una **Supabase Edge Function** | Estrategia (link de pago manual al inicio) |
 | Pruebas | `pytest` (unitarias e integración), **evaluación del extractor** con el conjunto etiquetado y **pruebas de RLS** (un cliente no puede leer a otro) | PRD §5.3 y §6 |
 
 ## Modelo de datos
@@ -103,7 +105,8 @@ supabase/migrations/     # esquema SQL + políticas RLS (versionadas)
 web/                     # landing (index.html) y panel (panel/*.html), estáticos
 data/                    # plantillas-preguntas.csv, conjuntos de evaluación etiquetados
 tests/                   # unit/, integration/, eval/ (extractor), rls/
-.github/workflows/       # ci.yml, corrida-mensual.yml, semanal.yml
+.github/workflows/       # ci.yml, corrida-mensual.yml, diario.yml, semanal.yml
+supabase/functions/      # v1.2: webhooks (TypeScript mínimo: validar firma y guardar el evento)
 scripts/                 # scripts de la fase 1 (prueba de la API de Gemini), fuera del producto
 ```
 
@@ -159,10 +162,43 @@ scripts/                 # scripts de la fase 1 (prueba de la API de Gemini), fu
 - **Supabase:** más de 500 MB, o si se necesitan copias de seguridad automáticas → plan Pro, US$25 al mes.
   - Mientras tanto, el job semanal exporta un respaldo (`pg_dump`) como artefacto privado de Actions.
 
+## Mantener activos los proyectos de Supabase (nota del Director, 26/09)
+- **Qué dice Supabase:** un proyecto gratis se pausa si *"does not receive sufficient user database activity over the past week"*. Lo típico para evitarlo es *"a few user requests to the database each day over the previous week"* ([Supabase: Project Pausing](https://supabase.com/docs/guides/platform/free-project-pausing)).
+- **Conclusión:** **el job semanal no alcanza**, y visitar el panel de Supabase tampoco cuenta. El proyecto **dev** es el más expuesto, porque puede pasar días sin uso.
+- **Solución:**
+  - **Workflow `diario.yml`**, 1 vez al día. Para **cada** proyecto (dev y prod), hace 3 consultas reales a la base de datos por la API REST de Supabase, que cuenta como uso "de usuario":
+    1. Lee `mercado`.
+    2. Inserta una fila en `latido`.
+    3. Borra los latidos de más de 30 días.
+  - **Si falla**, abre un aviso (issue) en GitHub para que el operador lo vea.
+  - **Costo:** ≈ 1 minuto por proyecto al día, unos 60 min/mes de Actions de los 2,000 gratis.
+- **Plan B:** si un proyecto se pausa igual, se restaura desde Supabase Studio. Según la misma página, vuelve *"to its previous state, including data and configurations"* y se puede restaurar hasta 1 año después.
+- **Por confirmar en la semana 1:** que el proyecto dev siga activo después de 8 días usando solo el job diario (tarea de la fase de construcción F1).
+
+## Webhooks de la v1.2: evaluación de Supabase Edge Functions (nota del Director, 26/09)
+| Criterio | Supabase Edge Functions | Comentario |
+|---|---|---|
+| Ya está en el stack | ✅ Mismo proyecto, mismos secretos y acceso directo a la base de datos | No hay que sumar otro proveedor |
+| Lenguaje | ⚠️ Solo **TypeScript sobre Deno**, sin Python | Se limita a lo mínimo (ver el diseño) |
+| Límites (plan gratis) | 256 MB de memoria, **150 s** de duración, **2 s de CPU** por llamada; 500,000 invocaciones/mes | De sobra para recibir un webhook: validar y guardar toma milisegundos ([límites](https://supabase.com/docs/guides/functions/limits) · [precios](https://supabase.com/pricing)) |
+| Webhooks públicos | Meta y las pasarelas no envían un JWT de Supabase, así que hay que desactivar la verificación de JWT en esa función y **validar la firma del proveedor** en su lugar | Verificar la opción exacta del despliegue al implementarlo |
+| Secretos | Secretos del proyecto, leídos como variables de entorno | Igual que en Actions |
+| Arranque en frío | Posible | Meta y las pasarelas reintentan si no hay respuesta; la función responde 200 al instante |
+
+**Recomendación: sí, usar Edge Functions solo como "buzón".**
+- **Qué hace cada función** (≈ 50 líneas de TypeScript):
+  1. Responde la verificación de Meta (GET con `hub.verify_token`).
+  2. **Valida la firma** (`X-Hub-Signature-256` de Meta; la firma de Culqi o Mercado Pago).
+  3. **Guarda el evento crudo** en una tabla `evento_webhook`.
+  4. Responde 200.
+- **Toda la lógica** (qué hacer con el mensaje o el pago) sigue en Python y se procesa desde Actions o desde la CLI. Así el TypeScript es mínimo y fácil de revisar.
+- **Alternativa descartada:** Cloudflare Workers. También es gratis, pero suma otro lugar donde desplegar y manejar secretos, sin ventaja clara.
+- La decisión final se toma al planificar la v1.2, con esta evaluación como base.
+
 ## Riesgos técnicos
 | Riesgo | Mitigación |
 |---|---|
-| Supabase pausa el proyecto tras 1 semana sin actividad | El job semanal (retención y salud) hace actividad real cada semana |
+| Supabase pausa el proyecto tras 1 semana sin actividad | **Job diario** contra **dev y prod** (ver la sección "Mantener activos los proyectos de Supabase"). Si igual se pausa, se restaura desde Supabase Studio sin perder datos (hasta 1 año) |
 | La API de OpenAI difiere de la app | Calibración manual mensual (PRD §5.4) |
 | El formato de respuesta de SerpApi cambia | Se guarda el JSON crudo; el extractor trabaja sobre el texto; hay una prueba de contrato con una respuesta guardada |
 | Los límites de los planes gratis cambian | Se revisan las páginas de precios en cada cierre de fase; los costos quedan en este documento |
@@ -176,4 +212,4 @@ scripts/                 # scripts de la fase 1 (prueba de la API de Gemini), fu
 - Costos de las APIs de medición: [costos-medicion-api.md](costos-medicion-api.md)
 
 ## ✅ Puerta de aprobación
-- Aprobado por el Director el: _(pendiente)_
+- **Aprobado por el Director el:** 2026-09-26, con dos notas incorporadas: mantener activos los proyectos de Supabase (job **diario**, no semanal) y webhooks de la v1.2 en Supabase Edge Functions.

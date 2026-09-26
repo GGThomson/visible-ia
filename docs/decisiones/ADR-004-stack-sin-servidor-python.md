@@ -22,7 +22,7 @@ La v1 debe construirse en 6 semanas y costar US$0 fijo al mes (brief: planes gra
 Elegimos **A**:
 - **Datos:** Python 3.12+ (uv, ruff, pytest, pydantic, typer, httpx, SDK de OpenAI, rapidfuzz, jinja2 y Playwright para los PDF).
 - **Base de datos:** Supabase (proyectos dev y prod) con migraciones SQL versionadas y RLS probado.
-- **Tareas:** GitHub Actions para la corrida mensual, el job semanal y la CI.
+- **Tareas:** GitHub Actions para la corrida mensual, un **job diario** que mantiene activos los proyectos de Supabase (el gratis se pausa sin actividad de base de datos por una semana), el job semanal (retención y respaldo) y la CI.
 - **Web:** Cloudflare Pages para la landing y el panel estáticos (HTML + Pico CSS + `supabase-js`, sin framework).
 - **Extractor:** gpt-5-nano con salida estructurada, más coincidencia por alias y rapidfuzz.
 
@@ -33,7 +33,7 @@ Elegimos **A**:
   - La seguridad por cliente vive en la base de datos.
 - **Negativas / lo que aceptamos:**
   - Un poco de JavaScript en el panel.
-  - Los webhooks de v1.2 (WhatsApp y pagos) necesitarán una función pequeña (Supabase Edge Function, en TypeScript) o una alternativa que se decide al planificar la v1.2.
+  - Los webhooks de v1.2 (WhatsApp y pagos) irán en **Supabase Edge Functions** (TypeScript sobre Deno) usadas solo como "buzón": validan la firma y guardan el evento; la lógica queda en Python. Evaluación en `arquitectura.md` (26/09).
   - Hay que vigilar los límites de los planes gratis (sección de costos de la arquitectura).
 - **Qué habría que hacer si cambiamos de opinión:**
   - La lógica está en el paquete Python `visible_ia`, así que se podría envolver en un servidor FastAPI (opción B) sin reescribirla.
