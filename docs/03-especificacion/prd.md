@@ -2,7 +2,7 @@
 <!-- La fuente de verdad de QUÉ se construye. Claude Code construye desde aquí. Si algo no está aquí, no se construye (va a /cambio). -->
 <!-- Base: brief, investigacion.md (fase 1), estrategia.md (fase 2), ADR-001 y ADR-002. El CÓMO (stack, modelos, base de datos) se decide en la fase 4. -->
 
-**Versión:** v1 · **Estado:** borrador · **Fecha:** 2026-09-26
+**Versión:** v1 · **Estado:** ✅ aprobado y congelado · **Fecha:** 2026-09-26
 
 ## 1. Resumen
 - **Qué es:** visible-ia mide cada mes si **ChatGPT** y **Google (Modo IA)** recomiendan a una clínica cuando un paciente pregunta por su rubro y distrito en Lima. La compara con sus competidores y le da un checklist de arreglos. Gemini se mide con una muestra manual, como calibración (ADR-002).
@@ -121,7 +121,7 @@
 - ✅ **Índice de presencia por superficie** = % de las respuestas de esa superficie en las que aparece la clínica (0–100), con 30 respuestas por superficie. Es un % simple, sin ponderar por posición (decidido por el Director el 26/09): es fácil de explicar a un dueño de clínica.
 - **Índice combinado** = promedio de los índices de las superficies medidas (ChatGPT y Google), con el mismo peso.
 - **Margen de variación:** intervalo de confianza del 95 % (Wilson) sobre la proporción. Se muestra siempre junto al índice.
-- **Cambio "real" entre meses:** solo se informa como subida o bajada si los intervalos de los dos meses no se solapan. Si se solapan, se dice "sin cambio claro".
+- **Cambio "real" entre meses:** solo se informa como subida o bajada si los intervalos de los dos meses no se solapan. Si se solapan, se dice "sin cambio claro". ⚠️ Con 30 respuestas por superficie, esta regla casi nunca detecta cambios: ver la §5.5. La regla definitiva se decide en ADR-003 (fase 4).
 - **Métricas secundarias:**
   - **Posición media**, cuando aparece (1 = la primera nombrada).
   - **Cuota de menciones:** apariciones de la clínica / apariciones de todas las clínicas del mercado.
@@ -142,6 +142,37 @@
   - % de clínicas de la app que también aparecen en la API.
   - Si la clínica "líder" coincide.
 - **Umbral de alerta:** si en ChatGPT la coincidencia baja de **50 %** dos meses seguidos, el informe lo advierte y se revisa el método.
+
+### 5.5 Repeticiones por mes y margen de variación
+**Cuántas veces se repite cada pregunta (v1):**
+- **3 veces al mes por superficie**, en una sola corrida mensual.
+- Por mercado y superficie son **30 respuestas al mes** (10 preguntas × 3). Combinando ChatGPT y Google, 60.
+
+**Qué margen da eso** (intervalo de Wilson al 95 %, calculado el 26/09/2026):
+
+| Respuestas por superficie | Presencia real 10 % | 30 % | 50 % | Subida mínima que se puede informar, partiendo de 30 %: regla "márgenes sin solaparse" | Ídem con prueba de 2 proporciones |
+|---|---|---|---|---|---|
+| **30** (10 × 3, **v1 actual**) | 3–26 % | 17–48 % | 33–67 % | **≈ 36 puntos** | ≈ 23 puntos |
+| 60 (10 × 6, o ChatGPT + Google combinados) | 5–20 % | 20–43 % | 38–62 % | ≈ 26 puntos | ≈ 16 puntos |
+| 90 (10 × 9, o 3 meses acumulados) | 5–18 % | 22–40 % | 40–60 % | ≈ 21 puntos | ≈ 13 puntos |
+| 150 (10 × 15) | 6–16 % | 23–38 % | 42–58 % | ≈ 16 puntos | ≈ 10 puntos |
+
+**Qué significa:**
+- **Con la v1 (30 respuestas y la regla de la §5.2), casi nunca se podrá informar una subida.** Una clínica en 30 % tendría que pasar a ~66 % en un mes. El reporte mensual diría "sin cambio claro" casi siempre.
+- **El margen real es todavía más ancho.** Las 3 repeticiones de una misma pregunta no son independientes: en la prueba de la API, cerca de la mitad de las clínicas se repitió en las 3. En el peor caso, lo que cuenta son solo las 10 preguntas. Con 10 respuestas efectivas, el margen en 30 % va de 11 % a 60 %.
+- **El índice de un mes sirve para comparar a una clínica con sus competidores** en ese mismo mes, siempre que la diferencia sea grande. **No sirve para ver la evolución mes a mes** con este volumen.
+
+**Opciones** (a decidir en la fase 4 con los costos: ⏳ **ADR-003**):
+
+| Opción | Respuestas/mes por superficie | Subida detectable (desde 30 %, prueba de 2 proporciones) | Costo API por mercado al mes | Efecto en el plan gratis de SerpApi (250/mes) |
+|---|---|---|---|---|
+| A. Dejar 3 repeticiones y pasar a la prueba de 2 proporciones sobre el índice combinado (60) | 30 (60 combinadas) | ≈ 16 puntos (combinado) | ≈ US$0.77 | Alcanza para ~8 mercados |
+| B. 9 repeticiones al mes (3 corridas de 3) | 90 | ≈ 13 puntos por superficie | ≈ US$2.30 (OpenAI US$2.19 + DataForSEO US$0.11) | Solo ~2 mercados: hay que pasar a DataForSEO o a SerpApi de pago antes |
+| C. Mensual para el ranking, y tendencia con ventana móvil de 3 meses | 30 al mes, 90 en la ventana | ≈ 13 puntos por trimestre | ≈ US$0.77 | Alcanza para ~8 mercados |
+| D. Combinar A + C | 60 combinadas al mes, 180 en la ventana | ≈ 9–10 puntos por trimestre (combinado) | ≈ US$0.77 | Alcanza para ~8 mercados |
+
+- **Recomendación de Claude Code:** **D**. No cuesta más y hace que el reporte muestre cambios reales. Mensualmente se informa el ranking frente a los competidores y los cambios grandes; la evolución se informa con la ventana de 3 meses. Se pasa a más repeticiones (B) cuando haya ingresos para un proveedor SERP de pago.
+- **Mientras se decide,** el reporte y el informe gratis deben decir de forma explícita qué diferencia es detectable, para no prometer una precisión que no hay.
 
 ## 6. Requisitos no funcionales
 - **Rendimiento:**
@@ -186,6 +217,7 @@
 - Prometer o mostrar un "puesto #1" garantizado.
 
 ## 8. Preguntas abiertas
+- ⏳ **ADR-003 (fase 4): repeticiones por mes y regla de cambio** (§5.5). Recomendación: opción D (prueba de 2 proporciones sobre el índice combinado + ventana móvil de 3 meses).
 - ¿Los precios incluyen IGV? Depende del régimen que defina el contador (estrategia). No afecta la construcción de la v1.0.
 - Tareas legales de la estrategia: términos de *web search* de OpenAI, créditos de SerpApi en Modo IA, Ley 29733.
 
@@ -194,4 +226,5 @@
 - **Idioma de la interfaz y de los informes:** español (Perú).
 
 ## ✅ Puerta de aprobación
-- Aprobado y congelado por el Director el: _(pendiente)_
+- **Aprobado y congelado por el Director el:** 2026-09-26, con las plantillas de `plantillas-preguntas.md`.
+- **Queda abierto:** ADR-003 (repeticiones y regla de cambio, §5.5), a decidir en la fase 4 con los costos. Los cambios de alcance van por `/cambio`.

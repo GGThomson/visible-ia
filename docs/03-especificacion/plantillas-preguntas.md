@@ -1,5 +1,5 @@
 # 🗒️ Plantillas de preguntas por rubro (PRD §5.1)
-<!-- Decisión del Director (26/09/2026): 10 plantillas por rubro, con el distrito como variable. Las 30 preguntas aprobadas el 25/09 se convierten en plantillas y se completan hasta 10 por rubro. Estado: BORRADOR, pendiente de aprobación. -->
+<!-- Decisión del Director (26/09/2026): 10 plantillas por rubro, con el distrito como variable. Las 30 preguntas aprobadas el 25/09 se convierten en plantillas y se completan hasta 10 por rubro. Estado: APROBADAS el 26/09/2026. -->
 
 - **`{d}`** = distrito, escrito como lo diría un paciente: **Miraflores**, **San Isidro**, **Surco**.
 - **Forma:** M "mejor" · R pide recomendación · C con criterio (precio, confianza, reseñas) · P procedimiento concreto.
@@ -70,4 +70,4 @@
 - Dermatología: M1 · R2 · C3 · P4
 
 ## ✅ Aprobación
-- [ ] Plantillas aprobadas por el Director (fecha: ____ )
+- [x] Plantillas aprobadas por el Director (fecha: 2026-09-26)
