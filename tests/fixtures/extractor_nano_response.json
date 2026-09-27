@@ -1,0 +1,37 @@
+{
+  "id": "resp_nano_fixture",
+  "object": "response",
+  "status": "completed",
+  "model": "gpt-5-nano-2025-08-07",
+  "output": [
+    {
+      "id": "rs_1",
+      "type": "reasoning",
+      "summary": []
+    },
+    {
+      "id": "msg_1",
+      "type": "message",
+      "role": "assistant",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [],
+          "text": "{\"menciones\": [{\"nombre_tal_cual\": \"Odontonova\", \"orden\": 2, \"es_establecimiento_o_profesional\": true}, {\"nombre_tal_cual\": \"The Dental Clinic & GT Concept Asociados\", \"orden\": 1, \"es_establecimiento_o_profesional\": true}, {\"nombre_tal_cual\": \"Clínica Miraflores\", \"orden\": 3, \"es_establecimiento_o_profesional\": true}, {\"nombre_tal_cual\": \"V&C Odontólogos\", \"orden\": 4, \"es_establecimiento_o_profesional\": true}, {\"nombre_tal_cual\": \"Smiles Peru\", \"orden\": 5, \"es_establecimiento_o_profesional\": true}, {\"nombre_tal_cual\": \"limadentalrating.com\", \"orden\": 6, \"es_establecimiento_o_profesional\": false}, {\"nombre_tal_cual\": \"Doctoralia\", \"orden\": 7, \"es_establecimiento_o_profesional\": true}, {\"nombre_tal_cual\": \"odontonova\", \"orden\": 8, \"es_establecimiento_o_profesional\": true}]}"
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 1800,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 220,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 2020
+  }
+}

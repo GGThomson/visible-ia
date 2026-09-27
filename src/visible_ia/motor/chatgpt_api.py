@@ -43,19 +43,27 @@ def ask(
     """Ask one question with web search and return the parsed answer."""
     # The SDK's own retries are disabled so the policy lives here (429 and 5xx, 3 times).
     client = client or openai.OpenAI(api_key=api_key, max_retries=0, timeout=TIMEOUT_SECONDS)
+    response = with_retries(
+        lambda: client.responses.create(
+            model=model,
+            input=question,
+            tools=[{"type": "web_search", "user_location": USER_LOCATION}],
+        ),
+        sleep=sleep,
+    )
+    return parse_response(response.model_dump(mode="json"), rates=rates)
+
+
+def with_retries[T](call: Callable[[], T], *, sleep: Callable[[float], None] = time.sleep) -> T:
+    """Run an OpenAI call, retrying 429 and 5xx up to 3 times (2, 4, 8 s); the rest propagates."""
     for attempt in range(MAX_RETRIES + 1):
         try:
-            response = client.responses.create(
-                model=model,
-                input=question,
-                tools=[{"type": "web_search", "user_location": USER_LOCATION}],
-            )
-            break
+            return call()
         except Exception as exc:
             if attempt == MAX_RETRIES or not _is_retryable(exc):
                 raise
             sleep(BACKOFF_SECONDS[attempt])
-    return parse_response(response.model_dump(mode="json"), rates=rates)
+    raise AssertionError("unreachable")
 
 
 def parse_response(raw: dict[str, Any], *, rates: OpenAIRates | None = None) -> EngineResponse:
