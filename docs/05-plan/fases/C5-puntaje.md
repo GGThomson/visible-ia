@@ -5,7 +5,7 @@
 - Aplica la regla de cambio del ADR-003.
 
 **Historias que cubre:** HU-10, HU-11, HU-12, HU-13
-**Estado:** 🟡 en curso
+**Estado:** 🟡 tareas ✅; falta la demo del Director con la corrida real
 
 ## Tareas
 
@@ -56,7 +56,7 @@
 - **Rama:** `feat/C5-T03-change-rule`
 
 ### C5-T04 · Fuentes del mercado y brecha Maps vs IA (HU-12, HU-13)
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:**
   - `visible-ia puntaje fuentes <mercado>`: top de dominios por tipo, con el % de respuestas que los citan.
   - `visible-ia puntaje brecha <mercado>`: por clínica, sus ★, n.º de reseñas e índice combinado.

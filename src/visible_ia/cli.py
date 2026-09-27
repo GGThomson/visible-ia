@@ -993,3 +993,91 @@ def puntaje_ranking(
             labels.get(r.change or "", "—"), _fmt(r.window3),
         )  # fmt: skip
     Console().print(table)
+
+
+@puntaje_app.command("fuentes")
+def puntaje_fuentes(
+    mercado: int = typer.Argument(..., help="Id del mercado."),
+    mes: str = typer.Option(None, help="AAAA-MM (por defecto, la última corrida revisada)."),
+    top: int = typer.Option(5, min=1, help="Dominios por tipo."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Qué fuentes usa la IA en el mercado, por tipo, con el % de respuestas (HU-12)."""
+    from rich.console import Console
+    from rich.table import Table
+
+    from visible_ia.puntaje.fuentes import (
+        TYPE_LABELS,
+        latest_reviewed_month,
+        load_citations,
+        top_sources,
+        type_shares,
+    )
+    from visible_ia.puntaje.indice import ScoreError
+
+    with _connect_or_exit(_resolve_env(env)) as conn:
+        try:
+            month = _parse_month(mes) or latest_reviewed_month(conn, mercado)
+        except ScoreError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+        citations, total = load_citations(conn, mercado, month)
+    if not total:
+        typer.echo(f"Sin respuestas revisadas en {month:%Y-%m}.")
+        raise typer.Exit(code=1)
+    console = Console()
+    shares = type_shares(citations, total)
+    console.print(
+        f"Mercado {mercado} · {month:%Y-%m} · {total} respuestas. Respuestas que citan cada tipo: "
+        + ", ".join(f"{TYPE_LABELS[t]} {p:.0f} %" for t, p in shares.items())
+    )
+    table = Table()
+    for column in ("tipo", "dominio", "respuestas", "% de respuestas", "ChatGPT", "Google"):
+        table.add_column(column, justify="left" if column in ("tipo", "dominio") else "right")
+    for source_type, rows in top_sources(citations, total, per_type=top).items():
+        for r in rows:
+            table.add_row(
+                TYPE_LABELS[source_type], r.domain, str(r.answers), f"{r.share:.0f} %",
+                str(r.by_surface["chatgpt_api"]), str(r.by_surface["google_ai_mode"]),
+            )  # fmt: skip
+    console.print(table)
+
+
+@puntaje_app.command("brecha")
+def puntaje_brecha(
+    mercado: int = typer.Argument(..., help="Id del mercado."),
+    mes: str = typer.Option(None, help="AAAA-MM (por defecto, el último calculado)."),
+    min_rating: float = typer.Option(4.5, help="★ mínimas para marcar brecha."),
+    min_resenas: int = typer.Option(100, help="Reseñas mínimas para marcar brecha."),
+    max_indice: float = typer.Option(10.0, help="Índice combinado máximo (0–100)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Brecha Maps vs IA: bien valoradas en Maps pero casi ausentes en la IA (HU-13)."""
+    from rich.console import Console
+    from rich.table import Table
+
+    from visible_ia.puntaje.brecha import gap_table
+    from visible_ia.puntaje.indice import ScoreError
+
+    with _connect_or_exit(_resolve_env(env)) as conn:
+        try:
+            month, rows = gap_table(
+                conn, mercado, _parse_month(mes),
+                min_rating=min_rating, min_reviews=min_resenas, max_index=max_indice,
+            )  # fmt: skip
+        except ScoreError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    table = Table(
+        title=f"Mercado {mercado} · {month:%Y-%m} · brecha: ★ ≥ {min_rating}, "
+        f"reseñas ≥ {min_resenas}, índice ≤ {max_indice:.0f}"
+    )
+    for column in ("clínica", "★", "reseñas", "dato del", "índice combinado", "brecha"):
+        table.add_column(column, justify="left" if column == "clínica" else "right")
+    for r in rows:
+        table.add_row(
+            r.name, _fmt(r.rating), "—" if r.reviews is None else str(r.reviews),
+            "—" if r.data_date is None else f"{r.data_date:%d/%m/%Y}", _fmt(r.combined_index),
+            "SÍ" if r.gap else "",
+        )  # fmt: skip
+    Console().print(table)
