@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ clinica.nombre }} · Diagnóstico de presencia en la IA · {{ mercado.mes }}</title>
+<style>
+:root {
+  --primario: {{ marca.color_primario }};
+  --acento: {{ marca.color_acento }};
+  --suave: {{ marca.color_suave }};
+}
+{{ estilos|safe }}
+</style>
+</head>
+<body>
+
+<header class="portada">
+  <div>
+    <h1>¿Te recomienda la IA?</h1>
+    <p><b>{{ clinica.nombre }}</b> · {{ mercado.tratamiento|capitalize }} en {{ mercado.distrito }} · {{ mercado.mes }}</p>
+  </div>
+  <div class="marca">
+    {% if marca.logo_url %}<img src="{{ marca.logo_url }}" alt="{{ marca.nombre }}">{% else %}{{ marca.nombre }}{% endif %}
+  </div>
+</header>
+
+<section data-seccion="1-indice">
+  <h2>1. Cuánto te nombra la IA frente a tu competencia</h2>
+  <p class="frase">{{ frase }}</p>
+  <p>Hicimos las mismas {{ metodo.preguntas }} preguntas que hace un paciente ({{ metodo.repeticiones }} veces cada una) a ChatGPT y a Google en su Modo IA. El número es el <b>% de respuestas en que te nombran</b>; entre paréntesis, el rango en que está con seguridad.</p>
+  <div class="barras">
+    {% for r in ranking %}
+    <div class="barra{% if r.es_cliente %} cliente{% endif %}">
+      <div class="nombre">{{ r.nombre }}</div>
+      <div>
+        <div class="riel"><div class="relleno" style="width: {{ r.ancho }}%"></div></div>
+        <div class="valor">{{ r.combinado }} % (entre {{ r.bajo }} % y {{ r.alto }} %) · ChatGPT {{ r.chatgpt }} % · Google {{ r.google }} %</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <p class="nota">Estás en el puesto {{ clinica.posicion }} de {{ clinica.total_clinicas }} clínicas medidas en {{ mercado.distrito }}. Si dos rangos se cruzan, la diferencia entre esas clínicas no es clara.</p>
+</section>
+
+<section data-seccion="2-ejemplos">
+  <h2>2. Lo que respondió la IA</h2>
+  {% for e in ejemplos %}
+  <div class="ejemplo">
+    <p class="pregunta">{{ e.superficie }} · «{{ e.pregunta }}» <small>({{ e.fecha }})</small></p>
+    {% if e.nombres %}
+    <p>Nombró, en este orden:</p>
+    <ol>
+      {% for n in e.nombres %}<li{% if n.es_cliente %} class="cliente"{% endif %}>{{ n.nombre }}</li>{% endfor %}
+    </ol>
+    {% else %}
+    <p>No nombró ninguna clínica.</p>
+    {% endif %}
+    <blockquote>{{ e.cita }}</blockquote>
+  </div>
+  {% endfor %}
+</section>
+
+<section data-seccion="3-fuentes" class="nueva-pagina">
+  <h2>3. Dónde se informa la IA en tu mercado</h2>
+  <p>Antes de responder, la IA busca en la web. Estas son las fuentes que citó en las {{ metodo.respuestas }} respuestas:</p>
+  <table>
+    <thead><tr><th>Tipo de fuente</th><th class="num">% de respuestas que la citan</th></tr></thead>
+    <tbody>
+      {% for t in fuentes.tipos %}<tr><td>{{ t.nombre }}</td><td class="num">{{ t.pct }} %</td></tr>{% endfor %}
+    </tbody>
+  </table>
+  <h3>Sitios más citados</h3>
+  <table>
+    <thead><tr><th>Sitio</th><th>Tipo</th><th class="num">% de respuestas</th></tr></thead>
+    <tbody>
+      {% for s in fuentes.top %}<tr><td>{{ s.dominio }}</td><td>{{ s.tipo }}</td><td class="num">{{ s.pct }} %</td></tr>{% endfor %}
+    </tbody>
+  </table>
+  <p>{% if fuentes.propia_citada %}Tu web aparece entre las fuentes que la IA consultó.{% else %}<b>Tu web no apareció entre las fuentes que la IA consultó.</b>{% endif %}</p>
+</section>
+
+<section data-seccion="4-brecha">
+  <h2>4. Tu reputación en Google Maps frente a la IA</h2>
+  <div class="brecha">
+    <div class="dato"><b>{% if brecha.rating %}{{ brecha.rating }} ★{% else %}—{% endif %}</b>en Google Maps</div>
+    <div class="dato"><b>{% if brecha.resenas is not none %}{{ brecha.resenas }}{% else %}—{% endif %}</b>reseñas</div>
+    <div class="dato"><b>{{ brecha.indice }} %</b>de las respuestas de la IA</div>
+  </div>
+  {% if brecha.tiene_brecha %}
+  <p class="frase">Tus pacientes te valoran mucho en Google Maps, pero la IA casi no te nombra. Esa diferencia es una oportunidad: tu reputación todavía no se traduce en recomendaciones.</p>
+  {% else %}
+  <p>{{ brecha.lider.nombre }}, la clínica más nombrada, aparece en {{ brecha.lider.indice }} % de las respuestas. La IA no ordena solo por estrellas: también pesa lo que encuentra sobre ti en la web.</p>
+  {% endif %}
+  {% if brecha.fecha %}<p class="nota">Estrellas y reseñas tomadas de Google Maps el {{ brecha.fecha }}.</p>{% endif %}
+</section>
+
+<section data-seccion="5-recomendaciones">
+  <h2>5. Tres cosas que puedes hacer</h2>
+  <ol class="recomendaciones">
+    {% for r in recomendaciones %}<li><b>{{ r.titulo }}.</b> {{ r.texto }}</li>{% endfor %}
+  </ol>
+</section>
+
+<section data-seccion="6-metodo">
+  <h2>6. Cómo lo medimos</h2>
+  <p>En {{ metodo.mes }} hicimos {{ metodo.preguntas }} preguntas de pacientes sobre {{ mercado.tratamiento }} en {{ mercado.distrito }}, {{ metodo.repeticiones }} veces cada una, a ChatGPT (por su API, con búsqueda web y ubicación en Lima) y a Google Modo IA: {{ metodo.respuestas }} respuestas en total. Contamos en cuántas te nombran.</p>
+  <p>Las respuestas de la IA cambian de una vez a otra; por eso damos un rango y no un número exacto. Con estos datos, un cambio de menos de {{ metodo.detectable }} puntos entre un mes y otro no se puede distinguir del azar.</p>
+  {% if metodo.google_sin_nombres %}<p>{{ metodo.google_sin_nombres }} respuestas de Google no nombraron clínicas o mostraron fichas cuyo nombre no pudimos leer; esas no suman a ninguna clínica.</p>{% endif %}
+  <p><b>No garantizamos un puesto #1.</b> Medimos cómo te ve la IA hoy y qué puedes mejorar; nadie controla lo que responde.</p>
+</section>
+
+<footer>{{ marca.nombre }} · {{ marca.lema }}{% if marca.contacto %} · {{ marca.contacto }}{% endif %} · {{ marca.web }}</footer>
+</body>
+</html>

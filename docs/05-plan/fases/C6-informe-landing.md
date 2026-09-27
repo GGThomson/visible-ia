@@ -4,12 +4,12 @@
 - Con esto se empieza a vender el 05/10.
 
 **Historias que cubre:** HU-14, HU-26
-**Estado:** ⚪ pendiente
+**Estado:** 🟡 en curso
 
 ## Tareas
 
 ### C6-T01 · Plantilla HTML del informe de diagnóstico
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** plantilla `informes/plantillas/diagnostico.html.j2` (A4 vertical, ≤ 4 páginas) con las 6 partes del PRD HU-14:
   1. Índice de la clínica frente a sus 3 competidores principales, con márgenes y una frase simple.
   2. Ejemplos reales de lo que respondió cada IA, citados y con fecha.
@@ -52,7 +52,7 @@
   - Explicación del servicio y ejemplo anonimizado del informe.
   - Formulario: nombre, clínica, rubro, distrito, contacto, consentimiento de contacto.
   - Inserta en `prospects` con la clave `anon`.
-  - Migración `0002_prospects_insert_policy.sql`: política RLS de **solo insertar** para `anon`.
+  - Migración `0005_prospects_insert_policy.sql` (el 0002 ya estaba usado): política RLS de **solo insertar** para `anon`.
   - Captura de `utm_*` de la URL.
 - **Archivos probables:** `web/index.html`, `web/app.js`, `supabase/migrations/0002_prospects_insert_policy.sql`, `tests/rls/test_prospects_policy.py`
 - **Criterios de aceptación:**
