@@ -26,6 +26,10 @@ presupuesto_app = typer.Typer(
     help="Presupuesto de OpenAI y cuota de SerpApi.", no_args_is_help=True
 )
 app.add_typer(presupuesto_app, name="presupuesto")
+corrida_app = typer.Typer(
+    help="Corridas del motor (ChatGPT API y Google Modo IA).", no_args_is_help=True
+)
+app.add_typer(corrida_app, name="corrida")
 
 SURFACES_API = ("chatgpt_api", "google_ai_mode")
 
@@ -387,3 +391,177 @@ def presupuesto_ver(
     typer.echo(result.explain())
     if not result.ok:
         raise typer.Exit(code=1)
+
+
+def _engine_clients(settings, surfaces: list[str]) -> dict:
+    """Real clients for the requested surfaces; exits if a key is missing."""
+    clients = {}
+    if "chatgpt_api" in surfaces:
+        import openai
+
+        from visible_ia.motor import chatgpt_api
+
+        key = settings.openai_api_key
+        if key is None or not key.get_secret_value().strip():
+            typer.echo("Falta OPENAI_API_KEY en .env")
+            raise typer.Exit(code=1)
+        oa = openai.OpenAI(
+            api_key=key.get_secret_value(),
+            max_retries=0,
+            timeout=chatgpt_api.TIMEOUT_SECONDS,
+        )
+        clients["chatgpt_api"] = lambda q: chatgpt_api.ask(q, client=oa)
+    if "google_ai_mode" in surfaces:
+        import httpx
+
+        from visible_ia.motor import google_ai_mode
+
+        key = settings.serpapi_api_key
+        if key is None or not key.get_secret_value().strip():
+            typer.echo("Falta SERPAPI_API_KEY en .env")
+            raise typer.Exit(code=1)
+        http = httpx.Client(timeout=google_ai_mode.TIMEOUT_SECONDS)
+        secret = key.get_secret_value()
+        clients["google_ai_mode"] = lambda q: google_ai_mode.ask(q, api_key=secret, client=http)
+    return clients
+
+
+def _budget_ok(conn, settings, plan, forzar: bool):
+    """Runs the HU-05 guard. Returns (allowed, forced, estimated_cost)."""
+    from visible_ia.motor.presupuesto import authorize, check, month_usage
+
+    usage = month_usage(conn, serpapi_account_used=_serpapi_account_used(settings))
+    result = check(
+        plan,
+        usage,
+        budget_usd=settings.monthly_budget_usd,
+        serpapi_quota=settings.serpapi_monthly_quota,
+    )
+    allowed = authorize(result, force=forzar, prompt=typer.prompt, echo=typer.echo)
+    return allowed, allowed and not result.ok, result.estimated_cost_usd
+
+
+def _run_and_report(conn, run_id: int, clients: dict) -> None:
+    from visible_ia.motor.corrida import execute
+
+    def progress(call, answer, error):
+        label = f"{call.surface:<15} {call.template_id} rep {call.repetition}"
+        if error is not None:
+            typer.echo(f"  ✗ {label}: {type(error).__name__}: {str(error)[:120]}")
+        else:
+            extra = " (sin respuesta de IA)" if answer.empty else ""
+            typer.echo(f"  ✓ {label}  US${answer.cost_usd:.4f}{extra}")
+
+    typer.echo(f"Corrida {run_id}: lanzando (Ctrl+C la corta; luego: corrida reanudar {run_id})")
+    try:
+        result = execute(conn, run_id, clients, on_progress=progress)
+    except KeyboardInterrupt:
+        typer.echo(
+            f"\nCortada. Lo hecho quedó guardado. Reanuda con: visible-ia corrida reanudar {run_id}"
+        )
+        raise typer.Exit(code=130) from None
+    typer.echo(
+        f"Corrida {run_id}: {result.status} · {result.done}/{result.total} respuestas · "
+        f"costo US${result.cost_usd:.4f}"
+    )
+    if result.failures:
+        typer.echo(f"{len(result.failures)} llamadas fallaron (reanuda para reintentarlas).")
+        raise typer.Exit(code=1)
+
+
+@corrida_app.command("lanzar")
+def corrida_lanzar(
+    mercado: int = typer.Option(..., help="Id del mercado."),
+    superficies: str = typer.Option(",".join(SURFACES_API), help="Superficies separadas por coma."),
+    reps: int = typer.Option(3, min=1, help="Repeticiones por pregunta."),
+    forzar: bool = typer.Option(False, "--forzar", help="Permite superar el tope (pide SI)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Crea una corrida del mercado y hace todas sus llamadas (respeta el presupuesto)."""
+    from visible_ia.mercados.mercado import MarketError, list_questions
+    from visible_ia.motor.corrida import create_run
+    from visible_ia.motor.presupuesto import RunPlan
+
+    surfaces = _parse_surfaces(superficies)
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    settings = get_settings()
+    with _connect_or_exit(target) as conn:
+        try:
+            questions = list_questions(conn, mercado)
+        except MarketError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+        plan = RunPlan.for_market(len(questions), reps, surfaces)
+        allowed, forced, estimated = _budget_ok(conn, settings, plan, forzar)
+        if not allowed:
+            raise typer.Exit(code=1)
+        clients = _engine_clients(settings, surfaces)
+        run_id = create_run(
+            conn,
+            mercado,
+            surfaces=surfaces,
+            repetitions=reps,
+            estimated_cost_usd=estimated,
+            forced=forced,
+        )
+        _run_and_report(conn, run_id, clients)
+
+
+@corrida_app.command("reanudar")
+def corrida_reanudar(
+    corrida: int = typer.Argument(..., help="Id de la corrida."),
+    forzar: bool = typer.Option(False, "--forzar", help="Permite superar el tope (pide SI)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Hace solo las llamadas que faltan de una corrida."""
+    from visible_ia.motor.corrida import RunError, pending_calls, plan_of
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    settings = get_settings()
+    with _connect_or_exit(target) as conn:
+        try:
+            calls = pending_calls(conn, corrida)
+        except RunError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+        if not calls:
+            typer.echo(f"La corrida {corrida} no tiene llamadas pendientes.")
+            return
+        plan = plan_of(calls)
+        allowed, forced, _ = _budget_ok(conn, settings, plan, forzar)
+        if not allowed:
+            raise typer.Exit(code=1)
+        if forced:
+            with conn.transaction(), conn.cursor() as cur:
+                cur.execute("update public.runs set forced = true where id = %s", (corrida,))
+        clients = _engine_clients(settings, sorted({c.surface for c in calls}))
+        _run_and_report(conn, corrida, clients)
+
+
+@corrida_app.command("ver")
+def corrida_ver(
+    corrida: int = typer.Argument(..., help="Id de la corrida."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Muestra el avance, el costo y lo que falló de una corrida."""
+    from visible_ia.motor.corrida import RunError, progress_by_surface, summary
+
+    with _connect_or_exit(_resolve_env(env)) as conn:
+        try:
+            result = summary(conn, corrida)
+        except RunError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+        typer.echo(
+            f"Corrida {corrida}: {result.status} · {result.done}/{result.total} respuestas · "
+            f"costo US${result.cost_usd:.4f}"
+        )
+        for surface, (done, total) in progress_by_surface(conn, corrida).items():
+            typer.echo(f"  {surface:<15} {done}/{total}")
+        for failure in result.failures:
+            typer.echo(
+                f"  ✗ {failure['surface']} {failure['template_id']} rep {failure['repetition']}: "
+                f"{failure['error']}"
+            )
