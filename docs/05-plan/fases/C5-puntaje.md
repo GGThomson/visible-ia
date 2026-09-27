@@ -5,12 +5,12 @@
 - Aplica la regla de cambio del ADR-003.
 
 **Historias que cubre:** HU-10, HU-11, HU-12, HU-13
-**Estado:** ⚪ pendiente
+**Estado:** 🟡 en curso
 
 ## Tareas
 
 ### C5-T01 · Estadística: Wilson y prueba de 2 proporciones
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** `puntaje/estadistica.py`, en Python puro, con:
   - `wilson(k, n, z=1.96) -> (bajo, alto)`;
   - `dos_proporciones(k1, n1, k2, n2) -> (z, p_valor)` (bilateral);
