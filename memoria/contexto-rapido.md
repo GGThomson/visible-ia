@@ -24,6 +24,7 @@ Eres parte del equipo de planificación de un proyecto de software. El equipo lo
   - Perplexity queda fuera del MVP (ADR-001).
   - **Motor de medición (ADR-002):** API de OpenAI (ChatGPT) + Google Modo IA vía SerpApi (gratis al inicio) + muestra manual mensual de Gemini. Texto 12 meses, métricas mientras el cliente esté activo + 12 meses, nada de pacientes.
   - Marca blanca para agencias: aceptada.
+  - **Hipótesis H9 (C-004), no decidida:** plan Gestionado, en el que ejecutamos los arreglos. Tentativo: S/ 990 de puesta a punto + S/ 790/mes (medición, reporte, 3 mejoras al mes y una llamada). Se valida en las llamadas con las primeras 40 clínicas.
 - **Stack (ADR-004):** Python 3.12 (uv, pytest, typer, OpenAI SDK, rapidfuzz, jinja2, Playwright), Supabase (Postgres + RLS + Auth + Storage), GitHub Actions (corridas, job diario), Cloudflare Pages (landing y panel estáticos). US$0 fijo; ≈ US$4/mes de API con 5 mercados.
 
 ## Tema de esta conversación: riesgo legal del motor de medición (C-001)

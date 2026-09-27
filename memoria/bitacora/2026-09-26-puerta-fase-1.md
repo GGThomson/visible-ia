@@ -146,3 +146,38 @@
   - Crear la cuenta de SerpApi y **decidir la facturación de OpenAI** (≈ US$4/mes, tope US$10).
 - **Claude Code:** C3 (motor). Sin la facturación aprobada, avanzar con respuestas grabadas, sin llamadas reales.
 - **Hacia el 04/10:** confirmar que Supabase dev no se pausó. **Jue 02/10:** control del Plan B.
+
+---
+
+# Sesión 2026-09-26 (4.ª parte) · Plan Gestionado como hipótesis (C-004)
+
+- **Fase / tareas:** 5 · Construcción (sin avance de código); cambio C-004
+- **Rama(s):** `docs/C-004-plan-gestionado`, `docs/C-004-precios-tentativos` (fusionadas y borradas)
+- **Commits:**
+  - `4aa3d7c` Merge docs/C-004-plan-gestionado: registra cambio C-004
+  - `8dc79bf` Merge docs/C-004-precios-tentativos: precios tentativos del plan Gestionado
+
+## Qué se hizo
+- **Registro del cambio C-004 (`/cambio`):** plan **Gestionado**, en el que nosotros ejecutamos los arreglos además de medir. Queda como hipótesis **H9**, a validar con las primeras 40 clínicas. Sin código.
+- **Precios tentativos del Director:**
+  - Puesta a punto: **S/ 990**, pago único (ficha de Google, Doctoralia, web y plan de reseñas).
+  - Mensual: **S/ 790/mes** (medición, reporte, 3 mejoras al mes y una llamada corta).
+  - Son para preguntar en las llamadas, no definitivos.
+- **Documentos actualizados:**
+  - `cambios-pendientes.md` (C-004)
+  - `investigacion.md` (H9: ≥ 3 de las primeras 10 interesadas lo eligen o piden propuesta; anotar la reacción al precio)
+  - `estrategia.md` (tabla tentativa junto al plan base)
+  - `roadmap.md` (tarea del Director en las semanas 2–6)
+
+## Qué se decidió (y dónde quedó registrado)
+- **Plan Gestionado:** hipótesis de venta, no plan oficial ni función del producto (C-004). Si se valida: `/decision` y revisión del PRD §7, que hoy excluye editar los perfiles del cliente dentro del producto; el servicio sería manual.
+
+## Problemas y cómo se resolvieron
+- Ninguno.
+
+## Para la próxima sesión
+- **Director:**
+  - Crear la cuenta de SerpApi y decidir la facturación de OpenAI.
+  - Hacer la demo de C2 y revisar la landing en el celular.
+  - Preparar las llamadas con H9.
+- **Claude Code:** C3-T01 (motor), con respuestas grabadas si no hay facturación.
