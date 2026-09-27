@@ -1,0 +1,11 @@
+pregunta_id,plantilla,distrito,mercado_original,texto_original
+Q01,IMP-01,Miraflores,Miraflores,¿Cuál es la mejor clínica de implantes dentales en Miraflores?
+Q05,IMP-05,Miraflores,Lima,¿Cuáles son las clínicas dentales más confiables en Lima para implantes?
+Q10,EDE-02,San Isidro,San Isidro,¿Dónde me hago carillas dentales en San Isidro?
+Q11,EDE-03,Surco,Surco,Recomiéndame un lugar para ortodoncia invisible (Invisalign) en Surco
+Q16,MES-01,Miraflores,Miraflores,¿Cuál es la mejor clínica estética en Miraflores?
+Q19,MES-04,Miraflores,Lima,¿Qué clínicas de medicina estética en Lima son seguras y tienen buenas reseñas?
+Q22,MES-07,Surco,Surco,¿Qué clínica estética en Surco tiene buenos precios?
+Q24,DER-01,Miraflores,Miraflores,¿Cuál es el mejor dermatólogo en Miraflores?
+Q29,DER-06,San Isidro,San Isidro,¿Cuál es la clínica dermatológica mejor valorada en San Isidro?
+Q30,DER-07,Surco,Surco,"Necesito un dermatólogo para caída de cabello en Surco, ¿a quién voy?"

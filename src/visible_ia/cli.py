@@ -30,6 +30,10 @@ corrida_app = typer.Typer(
     help="Corridas del motor (ChatGPT API y Google Modo IA).", no_args_is_help=True
 )
 app.add_typer(corrida_app, name="corrida")
+muestra_app = typer.Typer(
+    help="Muestras manuales de las apps (no entran al índice).", no_args_is_help=True
+)
+app.add_typer(muestra_app, name="muestra")
 
 SURFACES_API = ("chatgpt_api", "google_ai_mode")
 
@@ -565,3 +569,90 @@ def corrida_ver(
                 f"  ✗ {failure['surface']} {failure['template_id']} rep {failure['repetition']}: "
                 f"{failure['error']}"
             )
+
+
+@muestra_app.command("cargar")
+def muestra_cargar(
+    mercado: int = typer.Option(..., help="Id del mercado."),
+    pregunta: int = typer.Option(..., min=1, max=10, help="N.º de la pregunta (1 a 10)."),
+    superficie: str = typer.Option(
+        ..., help="chatgpt_app_manual, gemini_app_manual o google_ai_mode_manual."
+    ),
+    archivo: Path = typer.Option(
+        None, exists=True, dir_okay=False, help="Archivo con la respuesta (si no, abre el editor)."
+    ),
+    fuentes: str = typer.Option("", help="URLs citadas, separadas por espacios."),
+    fecha: str = typer.Option(None, help="Fecha de la consulta, AAAA-MM-DD (por defecto, hoy)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Guarda una respuesta pegada de la app de ChatGPT, Gemini o Google (manual / app)."""
+    from visible_ia.mercados.mercado import MarketError
+    from visible_ia.motor.manual import ManualError, parse_sources, save_manual, split_pasted
+
+    if archivo is not None:
+        text = archivo.read_text(encoding="utf-8")
+    else:
+        text = typer.edit(
+            "\n# Pega arriba la respuesta completa de la app. Las líneas con # se ignoran.\n"
+            "# Pega las URLs citadas en líneas que empiecen con 'fuente: '.\n"
+        )
+        text = text or ""
+    body, pasted_urls = split_pasted(text)
+    urls = parse_sources(fuentes) + pasted_urls
+    taken_on = date.fromisoformat(fecha) if fecha else date.today()
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target) as conn:
+        try:
+            category = _market_category(conn, mercado)
+            run_id, rep, _ = save_manual(
+                conn,
+                mercado,
+                f"{category}-{pregunta:02d}",
+                superficie,
+                body,
+                urls,
+                taken_on=taken_on,
+            )
+        except (ManualError, MarketError) as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    typer.echo(
+        f"Muestra guardada (manual / app, no entra al índice): corrida {run_id}, "
+        f"{category}-{pregunta:02d}, {superficie}, repetición {rep}, {len(urls)} fuentes."
+    )
+
+
+def _market_category(conn, market_id: int) -> str:
+    from visible_ia.mercados.mercado import MarketError
+
+    with conn.cursor() as cur:
+        cur.execute("select category_code from public.markets where id = %s", (market_id,))
+        row = cur.fetchone()
+    if row is None:
+        raise MarketError(f"No existe el mercado {market_id}")
+    return row[0]
+
+
+@muestra_app.command("importar")
+def muestra_importar(
+    archivo: Path = typer.Argument(..., exists=True, dir_okay=False, help="CSV de registro."),
+    crear_mercados: bool = typer.Option(
+        False, "--crear-mercados", help="Crea (inactivos) los mercados que falten."
+    ),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Importa respuestas manuales con el formato de registro.csv de la fase 1."""
+    from visible_ia.motor.manual import import_registry
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target) as conn:
+        result = import_registry(conn, archivo, create_markets=crear_mercados)
+    for market in result.markets_created:
+        typer.echo(f"Mercado creado (inactivo): {market}")
+    for surface, count in sorted(result.by_surface.items()):
+        typer.echo(f"  {surface:<22} {count}")
+    typer.echo(f"Importadas: {result.imported} · ya estaban: {result.already_there}")
+    for skipped in result.skipped:
+        typer.echo(f"  omitida: {skipped}")
