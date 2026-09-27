@@ -4,6 +4,7 @@ import typer
 
 from visible_ia import __version__, db
 from visible_ia.config import get_settings
+from visible_ia.heartbeat import HeartbeatError, run_heartbeat
 
 app = typer.Typer(help="visible-ia: herramienta del operador.", no_args_is_help=True)
 config_app = typer.Typer(help="Configuración y variables de entorno.", no_args_is_help=True)
@@ -21,6 +22,26 @@ def main() -> None:
 def version() -> None:
     """Muestra la versión instalada."""
     typer.echo(__version__)
+
+
+@app.command()
+def heartbeat(env: str = typer.Option(None, help="dev o prod.")) -> None:
+    """Hace actividad real en Supabase para que el plan gratis no pause el proyecto."""
+    target = _resolve_env(env)
+    settings = get_settings()
+    url = settings.value(f"SUPABASE_URL_{target.upper()}")
+    key = settings.value(f"SUPABASE_SERVICE_ROLE_KEY_{target.upper()}")
+    if not url or key is None or not key.get_secret_value():
+        typer.echo(
+            f"Faltan SUPABASE_URL_{target.upper()} o SUPABASE_SERVICE_ROLE_KEY_{target.upper()}"
+        )
+        raise typer.Exit(code=1)
+    try:
+        result = run_heartbeat(url, key.get_secret_value(), target)
+    except HeartbeatError as exc:
+        typer.echo(f"Heartbeat falló ({target}): {exc}")
+        raise typer.Exit(code=1) from None
+    typer.echo(f"Heartbeat OK ({target}): latido guardado, {result.old_deleted} viejos borrados.")
 
 
 def _resolve_env(env: str | None) -> str:
