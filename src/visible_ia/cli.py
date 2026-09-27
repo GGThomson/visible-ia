@@ -11,6 +11,16 @@ config_app = typer.Typer(help="Configuración y variables de entorno.", no_args_
 app.add_typer(config_app, name="config")
 db_app = typer.Typer(help="Base de datos: migraciones.", no_args_is_help=True)
 app.add_typer(db_app, name="db")
+plantillas_app = typer.Typer(help="Plantillas de preguntas por rubro.", no_args_is_help=True)
+app.add_typer(plantillas_app, name="plantillas")
+
+
+def _confirm_prod(target: str) -> None:
+    if target == "prod":
+        answer = typer.prompt("Vas a modificar PRODUCCIÓN. Escribe SI para continuar")
+        if answer.strip() != "SI":
+            typer.echo("Cancelado.")
+            raise typer.Exit(code=1)
 
 
 @app.callback()
@@ -111,12 +121,29 @@ def db_migrate(
             for path in pending:
                 typer.echo(f"  se aplicaría: {path.name}")
             return
-        if target == "prod":
-            answer = typer.prompt("Vas a modificar PRODUCCIÓN. Escribe SI para continuar")
-            if answer.strip() != "SI":
-                typer.echo("Cancelado.")
-                raise typer.Exit(code=1)
+        _confirm_prod(target)
         for path in pending:
             db.apply_migration(conn, path)
             typer.echo(f"  aplicada: {path.name}")
     typer.echo("Listo.")
+
+
+@plantillas_app.command("cargar")
+def plantillas_cargar(env: str = typer.Option(None, help="dev o prod.")) -> None:
+    """Carga (o actualiza) las 40 plantillas aprobadas desde data/plantillas-preguntas.csv."""
+    from visible_ia.mercados.plantillas import InvalidTemplates, read_templates, upsert_templates
+
+    target = _resolve_env(env)
+    try:
+        templates = read_templates()
+    except InvalidTemplates as exc:
+        typer.echo(f"El CSV de plantillas no es válido: {exc}")
+        raise typer.Exit(code=1) from None
+    _confirm_prod(target)
+    try:
+        with db.connect(get_settings(), target) as conn:
+            n = upsert_templates(conn, templates)
+    except db.MissingDatabaseUrl as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from None
+    typer.echo(f"Entorno: {target} · plantillas cargadas: {n}")
