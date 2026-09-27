@@ -1,0 +1,53 @@
+name: Diario (mantener activo Supabase)
+
+# Supabase pauses free projects after a week without database activity.
+# This runs once a day against dev and prod (docs/04-arquitectura/arquitectura.md).
+on:
+  schedule:
+    - cron: "17 12 * * *" # 07:17 in Lima (UTC-5); off the hour to avoid peak queueing
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        env: [dev, prod]
+    steps:
+      - uses: actions/checkout@v7
+
+      # setup-uv publishes no major tag (v10), only full versions.
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          enable-cache: true
+
+      - run: uv sync --locked --no-dev
+
+      - name: Heartbeat ${{ matrix.env }}
+        run: uv run visible-ia heartbeat --env ${{ matrix.env }}
+        env:
+          SUPABASE_URL_DEV: ${{ secrets.SUPABASE_URL_DEV }}
+          SUPABASE_SERVICE_ROLE_KEY_DEV: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY_DEV }}
+          SUPABASE_URL_PROD: ${{ secrets.SUPABASE_URL_PROD }}
+          SUPABASE_SERVICE_ROLE_KEY_PROD: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY_PROD }}
+
+      - name: Open or update an issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: "Heartbeat falló (${{ matrix.env }})"
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          number=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number -q '.[0].number')
+          body="El job diario no pudo hacer actividad en Supabase ${{ matrix.env }}. Si sigue fallando 7 días, el proyecto se pausa. Registro: $RUN_URL"
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body "$body"
+          else
+            gh issue create --title "$TITLE" --body "$body"
+          fi

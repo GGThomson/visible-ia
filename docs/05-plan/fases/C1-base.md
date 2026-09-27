@@ -87,7 +87,7 @@
   - Solo runners Linux: los de Windows y macOS consumen más minutos.
 
 ### C1-T05 · Job diario: mantener activos Supabase dev y prod
-- **Estado:** ⚪
+- **Estado:** 🟡 código listo y probado en dev (26/09); el PR espera que el Director migre prod, porque el job escribe en producción. Falta la verificación a 8 días
 - **Qué:** comando `visible-ia heartbeat` y workflow `diario.yml` (cron 1 vez al día + ejecución manual).
   - Por **cada** proyecto (dev y prod) hace 3 operaciones reales en la base de datos por la **API REST de Supabase**:
     1. `select` en `markets`.
