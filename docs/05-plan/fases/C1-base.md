@@ -73,7 +73,7 @@
   - La tabla `evento_webhook` **no** va aquí (es de la v1.2).
 
 ### C1-T04 · CI en GitHub Actions
-- **Estado:** ⚪
+- **Estado:** ✅ (26/09)
 - **Qué:** workflow `ci.yml` que, en cada push y PR, instala con `uv`, corre `ruff check`, `ruff format --check` y `pytest` (sin las pruebas de integración).
 - **Archivos probables:** `.github/workflows/ci.yml`
 - **Criterios de aceptación:**
