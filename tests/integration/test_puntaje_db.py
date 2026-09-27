@@ -126,3 +126,41 @@ def test_second_month_gets_change_and_window(tx):
         change, window, detectable = cur.fetchone()
     assert change == "no_clear_change"
     assert float(window) == 45.0 and detectable is not None
+
+
+def test_sources_and_gap_from_the_database(tx):
+    from visible_ia.puntaje.brecha import gap_table
+    from visible_ia.puntaje.fuentes import latest_reviewed_month, load_citations, top_sources
+
+    market, run_id, ids = _setup(tx)
+    with tx.cursor() as cur:
+        cur.execute("update public.runs set status = 'reviewed' where id = %s", (run_id,))
+        cur.execute(
+            "select id from public.responses where run_id = %s and surface = 'chatgpt_api' "
+            "order by id limit 3",
+            (run_id,),
+        )
+        for (rid,) in cur.fetchall():
+            cur.execute(
+                "insert into public.sources (response_id, url, domain, source_type) "
+                "values (%s, 'https://www.doctoralia.pe/x', 'doctoralia.pe', 'doctoralia')",
+                (rid,),
+            )
+        # Tres: great on Maps, absent from the AI -> gap. Uno: well rated but present.
+        cur.execute(
+            "update public.clinics set rating = 4.9, review_count = 300, data_date = '2026-09-27' "
+            "where id = any(%s)",
+            ([ids["Clínica Tres"], ids["Clínica Uno"]],),
+        )
+    calculate(tx, run_id)
+
+    month = latest_reviewed_month(tx, market)
+    citations, total = load_citations(tx, market, month)
+    assert total == 20
+    doctoralia = top_sources(citations, total)["doctoralia"][0]
+    assert (doctoralia.answers, doctoralia.share) == (3, 15.0)
+
+    _, rows = gap_table(tx, market)
+    gaps = [r.name for r in rows if r.gap]
+    assert gaps == ["Clínica Tres"]
+    assert rows[0].data_date.isoformat() == "2026-09-27"
