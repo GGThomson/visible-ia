@@ -2,12 +2,12 @@
 
 **Objetivo:** el operador puede crear un mercado (rubro + distrito) con sus 10 preguntas generadas desde las plantillas aprobadas, importar la lista de clínicas desde un CSV y registrar alias.
 **Historias que cubre:** HU-01, HU-02, HU-03
-**Estado:** ⚪ pendiente
+**Estado:** 🟡 en curso
 
 ## Tareas
 
 ### C2-T01 · Cargar las 40 plantillas aprobadas
-- **Estado:** ⚪
+- **Estado:** ✅ (26/09) cargadas en dev; en prod las carga el Director (`visible-ia plantillas cargar --env prod`) antes de la primera corrida real
 - **Qué:**
   - Convertir `docs/03-especificacion/plantillas-preguntas.md` en `data/plantillas-preguntas.csv` con las columnas `id,rubro,forma,texto,origen`.
   - Comando `visible-ia plantillas cargar`, que las inserta o actualiza en `templates` con `version = 1`.

@@ -87,7 +87,7 @@
   - Solo runners Linux: los de Windows y macOS consumen más minutos.
 
 ### C1-T05 · Job diario: mantener activos Supabase dev y prod
-- **Estado:** 🟡 fusionado (26/09); funciona en local para dev y prod, pero en Actions falla con "Invalid API key": falta recargar `SUPABASE_SERVICE_ROLE_KEY_DEV/PROD` en los Secrets. Después, verificación a 8 días
+- **Estado:** ✅ (26/09) el job pasa en Actions para dev y prod (issues #6/#7 cerrados). Queda la verificación a 8 días (~04/10)
 - **Qué:** comando `visible-ia heartbeat` y workflow `diario.yml` (cron 1 vez al día + ejecución manual).
   - Por **cada** proyecto (dev y prod) hace 3 operaciones reales en la base de datos por la **API REST de Supabase**:
     1. `select` en `markets`.

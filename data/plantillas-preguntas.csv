@@ -1,0 +1,41 @@
+id,rubro,forma,texto,origen
+IMP-01,IMP,M,¿Cuál es la mejor clínica de implantes dentales en {d}?,Q01
+IMP-02,IMP,R,Recomiéndame una clínica para hacerme implantes dentales en {d},Q02
+IMP-03,IMP,C,¿Dónde me pongo implantes dentales en {d} a buen precio y con garantía?,Q03
+IMP-04,IMP,P,"Necesito un implante dental de un solo diente, ¿qué clínica en {d} me recomiendas?",Q04
+IMP-05,IMP,C,¿Cuáles son las clínicas dentales más confiables en {d} para implantes?,Q05 (antes: Lima)
+IMP-06,IMP,P,¿Qué clínica hace all-on-4 o implantes de arcada completa en {d}?,Q06
+IMP-07,IMP,C,¿Qué implantólogo tiene buenas reseñas en {d}?,Q07
+IMP-08,IMP,C,¿Cuánto cuesta un implante dental en {d} y dónde lo hacen bien?,Q08 (antes: Lima)
+IMP-09,IMP,P,¿Dónde me hago implantes dentales de carga inmediata en {d}?,Nueva
+IMP-10,IMP,R,"Perdí varios dientes y quiero implantes, ¿a qué clínica de {d} voy?",Nueva
+EDE-01,EDE,M,¿Cuál es la mejor clínica de estética dental en {d}?,Q09
+EDE-02,EDE,P,¿Dónde me hago carillas dentales en {d}?,Q10
+EDE-03,EDE,P,Recomiéndame un lugar para ortodoncia invisible (Invisalign) en {d},Q11
+EDE-04,EDE,C,¿Qué clínica dental en {d} tiene los mejores resultados en diseño de sonrisa?,Q12 (antes: Lima)
+EDE-05,EDE,R,"Quiero blanquearme los dientes en {d}, ¿a qué clínica voy?",Q13
+EDE-06,EDE,C,¿Cuál es la clínica de ortodoncia más recomendada en {d}?,Q14
+EDE-07,EDE,M,¿Cuál es el mejor dentista estético en {d}?,Q15
+EDE-08,EDE,C,¿Cuánto cuestan las carillas de porcelana en {d} y dónde las hacen bien?,Nueva
+EDE-09,EDE,P,¿Dónde me pongo brackets estéticos o de zafiro en {d}?,Nueva
+EDE-10,EDE,R,"Quiero mejorar mi sonrisa antes de mi boda, ¿qué dentista de {d} me recomiendas?",Nueva
+MES-01,MES,M,¿Cuál es la mejor clínica estética en {d}?,Q16
+MES-02,MES,P,¿Dónde me pongo bótox en {d} con un médico confiable?,Q17
+MES-03,MES,P,Recomiéndame una clínica para ácido hialurónico o rellenos en {d},Q18
+MES-04,MES,C,¿Qué clínicas de medicina estética en {d} son seguras y tienen buenas reseñas?,Q19 (antes: Lima)
+MES-05,MES,P,¿Dónde hacen depilación láser de buena calidad en {d}?,Q20
+MES-06,MES,R,"Quiero un tratamiento facial antiedad en {d}, ¿qué clínica me recomiendas?",Q21
+MES-07,MES,C,¿Qué clínica estética en {d} tiene buenos precios?,Q22
+MES-08,MES,P,¿Dónde se hace una buena lipoescultura o lipo sin cirugía en {d}?,Q23 (antes: Lima)
+MES-09,MES,P,¿Dónde me hago HIFU o radiofrecuencia facial en {d}?,Nueva
+MES-10,MES,M,¿Cuál es el mejor médico estético en {d}?,Nueva
+DER-01,DER,M,¿Cuál es el mejor dermatólogo en {d}?,Q24
+DER-02,DER,P,Recomiéndame una clínica dermatológica en {d} para tratar el acné,Q25
+DER-03,DER,P,¿Dónde tratan manchas en la piel o melasma en {d}?,Q26
+DER-04,DER,C,¿Qué dermatólogo en {d} es bueno y atiende particular?,Q27 (antes: Lima)
+DER-05,DER,P,¿Dónde me hago un peeling químico con dermatólogo en {d}?,Q28
+DER-06,DER,C,¿Cuál es la clínica dermatológica mejor valorada en {d}?,Q29
+DER-07,DER,R,"Necesito un dermatólogo para caída de cabello en {d}, ¿a quién voy?",Q30
+DER-08,DER,P,¿Dónde me reviso los lunares con dermatoscopia en {d}?,Nueva
+DER-09,DER,C,¿Cuánto cuesta una consulta con dermatólogo en {d} y a quién me recomiendas?,Nueva
+DER-10,DER,R,"Tengo rosácea, ¿qué dermatólogo de {d} me recomiendas?",Nueva
