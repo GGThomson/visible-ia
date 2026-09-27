@@ -36,6 +36,10 @@ muestra_app = typer.Typer(
 app.add_typer(muestra_app, name="muestra")
 revisar_app = typer.Typer(help="Revisión de las menciones extraídas.", no_args_is_help=True)
 app.add_typer(revisar_app, name="revisar")
+puntaje_app = typer.Typer(
+    help="Índice de presencia, ranking, fuentes y brecha.", no_args_is_help=True
+)
+app.add_typer(puntaje_app, name="puntaje")
 
 SURFACES_API = ("chatgpt_api", "google_ai_mode")
 
@@ -914,3 +918,82 @@ def revisar_reasociar(
         f"{counts['review']} a revisar · {counts['changed']} menciones cambiaron · "
         f"{counts['sources_changed']} fuentes reclasificadas"
     )
+
+
+# --- score (C5) ----------------------------------------------------------------------------
+
+
+def _parse_month(value: str | None) -> date | None:
+    if not value:
+        return None
+    try:
+        year, month = (int(x) for x in value.split("-")[:2])
+        return date(year, month, 1)
+    except ValueError:
+        typer.echo(f"Mes no válido: {value} (usa AAAA-MM)")
+        raise typer.Exit(code=2) from None
+
+
+def _fmt(value, suffix: str = "") -> str:
+    return "—" if value is None else f"{value:.0f}{suffix}" if suffix else f"{value:.1f}"
+
+
+@puntaje_app.command("calcular")
+def puntaje_calcular(
+    corrida: int = typer.Argument(..., help="Id de una corrida revisada."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Calcula el índice del mes de una corrida revisada y lo guarda (sin costo)."""
+    from visible_ia.puntaje.indice import ScoreError, calculate
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target, autocommit=True) as conn:
+        try:
+            market_id, month, scores = calculate(conn, corrida)
+        except ScoreError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    clinics = len({s.clinic_id for s in scores})
+    typer.echo(
+        f"Mercado {market_id} · {month:%Y-%m}: puntaje de {clinics} clínicas guardado. "
+        f"Ver: visible-ia puntaje ranking {market_id}"
+    )
+
+
+@puntaje_app.command("ranking")
+def puntaje_ranking(
+    mercado: int = typer.Argument(..., help="Id del mercado."),
+    mes: str = typer.Option(None, help="AAAA-MM (por defecto, el último calculado)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Ranking del mercado por índice combinado, con su margen (HU-10, HU-11)."""
+    from rich.console import Console
+    from rich.table import Table
+
+    from visible_ia.puntaje.indice import ScoreError, ranking
+
+    with _connect_or_exit(_resolve_env(env)) as conn:
+        try:
+            month, rows = ranking(conn, mercado, _parse_month(mes))
+        except ScoreError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    table = Table(title=f"Mercado {mercado} · {month:%Y-%m} · índice de presencia (0–100)")
+    for column in (
+        "#",
+        "clínica",
+        "combinado",
+        "margen 95 %",
+        "ChatGPT",
+        "Google",
+        "posición media",
+        "cuota",
+    ):
+        table.add_column(column, justify="left" if column == "clínica" else "right")
+    for i, r in enumerate(rows, start=1):
+        table.add_row(
+            str(i), r.name, _fmt(r.combined), f"{_fmt(r.ci_low, '')}–{_fmt(r.ci_high, '')}",
+            _fmt(r.chatgpt), _fmt(r.google), _fmt(r.avg_position), _fmt(r.mention_share, " %"),
+        )  # fmt: skip
+    Console().print(table)
