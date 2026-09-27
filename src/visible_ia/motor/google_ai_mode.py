@@ -89,7 +89,7 @@ def parse_response(raw: dict[str, Any]) -> EngineResponse:
     citations: list[Citation] = []
     seen: set[str] = set()
     # Inline links carry the clinics' real websites; references are often Google viewer URLs.
-    links = [(x.get("link"), x.get("text")) for x in _snippet_links(blocks)]
+    links = [(x.get("link"), x.get("text")) for x in snippet_links(blocks)]
     links += [(r.get("link"), r.get("title")) for r in raw.get("references") or []]
     for url, title in links:
         if url and url not in seen:
@@ -142,11 +142,11 @@ def _block_lines(blocks: list[dict[str, Any]], depth: int) -> list[str]:
     return lines
 
 
-def _snippet_links(blocks: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def snippet_links(blocks: list[dict[str, Any]]) -> list[dict[str, Any]]:
     links: list[dict[str, Any]] = []
     for block in blocks:
         links.extend(block.get("snippet_links") or [])
-        links.extend(_snippet_links(block.get("list") or []))
+        links.extend(snippet_links(block.get("list") or []))
     return links
 
 
