@@ -13,6 +13,8 @@ db_app = typer.Typer(help="Base de datos: migraciones.", no_args_is_help=True)
 app.add_typer(db_app, name="db")
 plantillas_app = typer.Typer(help="Plantillas de preguntas por rubro.", no_args_is_help=True)
 app.add_typer(plantillas_app, name="plantillas")
+mercado_app = typer.Typer(help="Mercados (rubro + distrito) y sus preguntas.", no_args_is_help=True)
+app.add_typer(mercado_app, name="mercado")
 
 
 def _confirm_prod(target: str) -> None:
@@ -147,3 +149,84 @@ def plantillas_cargar(env: str = typer.Option(None, help="dev o prod.")) -> None
         typer.echo(str(exc))
         raise typer.Exit(code=1) from None
     typer.echo(f"Entorno: {target} · plantillas cargadas: {n}")
+
+
+def _connect_or_exit(target: str):
+    try:
+        return db.connect(get_settings(), target)
+    except db.MissingDatabaseUrl as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from None
+
+
+@mercado_app.command("crear")
+def mercado_crear(
+    rubro: str = typer.Option(..., help="IMP, EDE, MES o DER."),
+    distrito: str = typer.Option(..., help="Miraflores, San Isidro o Surco."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Crea el mercado y genera sus 10 preguntas desde las plantillas del rubro."""
+    from visible_ia.mercados.mercado import MarketError, create_market, list_questions
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target) as conn:
+        try:
+            market_id = create_market(conn, rubro.upper(), distrito)
+        except MarketError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+        typer.echo(f"Mercado {market_id} creado: {rubro.upper()} · {distrito}")
+        for q in list_questions(conn, market_id):
+            typer.echo(f"  {q.template_id}  {q.text}")
+
+
+@mercado_app.command("listar")
+def mercado_listar(env: str = typer.Option(None, help="dev o prod.")) -> None:
+    """Lista los mercados."""
+    from visible_ia.mercados.mercado import list_markets
+
+    with _connect_or_exit(_resolve_env(env)) as conn:
+        for market_id, category, district, version, active in list_markets(conn):
+            state = "activo" if active else "inactivo"
+            typer.echo(f"{market_id}  {category} · {district}  (banco v{version}, {state})")
+
+
+@mercado_app.command("preguntas")
+def mercado_preguntas(
+    market_id: int,
+    version: int = typer.Option(None, help="Versión del banco (por defecto, la actual)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Muestra las preguntas del mercado."""
+    from visible_ia.mercados.mercado import MarketError, list_questions
+
+    with _connect_or_exit(_resolve_env(env)) as conn:
+        try:
+            questions = list_questions(conn, market_id, version)
+        except MarketError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    for q in questions:
+        typer.echo(f"{q.template_id}  (v{q.version})  {q.text}")
+
+
+@mercado_app.command("editar-pregunta")
+def mercado_editar_pregunta(
+    market_id: int,
+    plantilla: str = typer.Option(..., help="Id de la plantilla, p. ej. IMP-03."),
+    texto: str = typer.Option(..., help="Nuevo texto de la pregunta."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Cambia una pregunta (crea una versión nueva del banco si ya hubo corridas)."""
+    from visible_ia.mercados.mercado import MarketError, edit_question
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target) as conn:
+        try:
+            version = edit_question(conn, market_id, plantilla.upper(), texto)
+        except MarketError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    typer.echo(f"Pregunta {plantilla.upper()} actualizada (banco v{version}).")

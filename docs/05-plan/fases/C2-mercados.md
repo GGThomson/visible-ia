@@ -22,7 +22,7 @@
   - El texto se copia **exactamente** del documento aprobado. No "mejorar" la redacción: el PRD está congelado.
 
 ### C2-T02 · Crear mercado y generar sus preguntas (HU-01)
-- **Estado:** ⚪
+- **Estado:** ✅ (26/09)
 - **Qué:** comando `visible-ia mercado crear --rubro IMP --distrito Miraflores`.
   - Crea el mercado y sus 10 preguntas, reemplazando `{d}`.
   - `visible-ia mercado preguntas <id>` las lista.
