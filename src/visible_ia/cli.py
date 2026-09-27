@@ -4,7 +4,7 @@ import typer
 
 from visible_ia import __version__, db
 from visible_ia.config import get_settings
-from visible_ia.heartbeat import HeartbeatError, run_heartbeat
+from visible_ia.heartbeat import HeartbeatError, diagnose_supabase_url, run_heartbeat
 
 app = typer.Typer(help="visible-ia: herramienta del operador.", no_args_is_help=True)
 config_app = typer.Typer(help="Configuración y variables de entorno.", no_args_is_help=True)
@@ -35,6 +35,10 @@ def heartbeat(env: str = typer.Option(None, help="dev o prod.")) -> None:
         typer.echo(
             f"Faltan SUPABASE_URL_{target.upper()} o SUPABASE_SERVICE_ROLE_KEY_{target.upper()}"
         )
+        raise typer.Exit(code=1)
+    problem = diagnose_supabase_url(url)
+    if problem:
+        typer.echo(f"SUPABASE_URL_{target.upper()} no es la URL de la API: {problem}")
         raise typer.Exit(code=1)
     try:
         result = run_heartbeat(url, key.get_secret_value(), target)

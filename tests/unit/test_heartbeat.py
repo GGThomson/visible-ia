@@ -67,3 +67,24 @@ def test_failure_on_insert_stops_before_delete():
     with pytest.raises(HeartbeatError, match="insertar heartbeat: HTTP 500"):
         run_heartbeat(URL, KEY, "dev", client=make_client(handler), now=NOW)
     assert methods == ["GET", "POST"]
+
+
+@pytest.mark.parametrize(
+    ("url", "expected"),
+    [
+        ("https://abc123.supabase.co", None),
+        ("https://abc123", "debe tener la forma"),
+        ("https://supabase.com/dashboard/project/abc123", "panel de Supabase"),
+        ("https://postgres.abc:pw@aws-0.pooler.supabase.com:5432/postgres", "Postgres"),
+        ("https://abc123.supabase.co/rest/v1", "no debe llevar ruta"),
+    ],
+)
+def test_diagnose_supabase_url(url, expected):
+    from visible_ia.heartbeat import diagnose_supabase_url
+
+    result = diagnose_supabase_url(url)
+    if expected is None:
+        assert result is None
+    else:
+        assert expected in result
+        assert "abc123" not in result and "pw" not in result
