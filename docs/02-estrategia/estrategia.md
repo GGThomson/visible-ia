@@ -26,6 +26,8 @@
 | Setup | **S/ 490** (auditoría + schema + perfiles) | S/ 0 (la agencia ejecuta los checklists) |
 | Entregables | Reporte por WhatsApp, alertas y soporte | Reportes PDF con el logo de la agencia |
 
+> 💡 **Hipótesis C-004 (26/09): plan Gestionado.** Además de medir, nosotros ejecutamos los arreglos del checklist. Se valida con las primeras 40 clínicas (H9); por ahora no se ofrece como plan ni se construye nada. **Contenido y precio: por definir por el Director.** Si se valida: `/decision` para fijar el precio y revisar el PRD §7, que hoy excluye editar los perfiles del cliente dentro del producto (el servicio sería manual).
+
 **Costo variable por cliente al mes** (estimado; precios del 26/09/2026). La pasarela aplica solo a pagos con tarjeta; con Yape o transferencia el costo baja a ≈ S/ 4 por clínica:
 
 | Concepto | Clínica (1 sede, 1 mercado) | Agencia (5 sedes, hasta 5 mercados) | Fuente |
