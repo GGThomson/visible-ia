@@ -46,6 +46,15 @@ def test_market_clinic_website_is_own_website():
     assert classify("https://kagem.pe/implantes") == "other"  # not known without the market
 
 
+def test_a_clinic_website_on_a_platform_does_not_capture_the_platform():
+    websites = {
+        "https://www.doctoralia.pe/perfil/edith-molina-miranda",
+        "https://sites.google.com/view/draconnienegrete",
+    }
+    assert classify("https://www.doctoralia.pe/implantologia/lima", websites) == "doctoralia"
+    assert classify("https://sites.google.com/view/otra", websites) == "other"
+
+
 def test_longest_suffix_wins():
     assert classify("https://sites.google.com/x") == "other"
     assert classify("https://www.google.com/maps/place/x") == "google_profile"

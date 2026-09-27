@@ -1,7 +1,7 @@
 """Source types (HU-12): Google profile, Doctoralia, own website, social, directory, press, other.
 
 Order of the rules:
-1. The exact host of a market clinic's website -> own website.
+1. The exact host of a market clinic's website -> own website (unless it is a known platform).
 2. The known-domains table (data/dominios.csv); the longest matching suffix wins, so
    sites.google.com is not taken for google.com.
 3. Institutional sites (.gob, .gov, .edu, guilds, academic) -> other.
@@ -53,13 +53,17 @@ def classify(url_or_domain: str, market_websites: set[str] | None = None) -> str
     domain = domain_of(value) if "://" in value else value.lower().removeprefix("www.")
     if not domain:
         return "other"
+    table = known_domains()
     own = {
         domain_of(w) if "://" in w else w.lower().removeprefix("www.")
         for w in market_websites or ()
     }
+    # A clinic whose "website" is a platform page (a Doctoralia profile, a Google Site) must
+    # not turn the whole platform into its own website.
+    own = {d for d in own if d and _table_type(d, table) is None}
     if domain in own:
         return "own_website"
-    found = _table_type(domain, known_domains())
+    found = _table_type(domain, table)
     if found:
         return found
     if domain.endswith(INSTITUTIONAL_SUFFIXES) or domain.startswith(INSTITUTIONAL_PARTS):

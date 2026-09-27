@@ -296,3 +296,54 @@ def _excerpt(text: str, name: str, width: int = 90) -> str:
         return flat[:width]
     start = max(where - width // 3, 0)
     return flat[start : start + width]
+
+
+# --- re-association after the market's clinic list changes ----------------------------------
+
+
+def reassociate(conn: psycopg.Connection, run_id: int) -> dict[str, int]:
+    """Match again the automatic mentions (auto / review) of a run against the market's
+    current clinics, and re-type its sources. Corrected or discarded mentions are kept."""
+    from visible_ia.extractor.extraccion import market_websites, run_market
+    from visible_ia.extractor.fuentes import classify
+    from visible_ia.extractor.matching import load_market_clinics, match
+
+    market_id = run_market(conn, run_id)
+    clinics = load_market_clinics(conn, market_id)
+    websites = market_websites(conn, market_id)
+    counts = {"matched": 0, "new": 0, "review": 0, "changed": 0, "sources_changed": 0}
+    with conn.cursor() as cur:
+        cur.execute(
+            "select m.id, m.raw_name, m.clinic_id, m.status from public.mentions m "
+            "join public.responses r on r.id = m.response_id "
+            "where r.run_id = %s and m.status in ('auto', 'review')",
+            (run_id,),
+        )
+        mentions = cur.fetchall()
+        cur.execute(
+            "select s.id, s.url, s.source_type from public.sources s "
+            "join public.responses r on r.id = s.response_id where r.run_id = %s",
+            (run_id,),
+        )
+        sources = cur.fetchall()
+    with conn.transaction(), conn.cursor() as cur:
+        for mention_id, raw_name, clinic_id, status in mentions:
+            result = match(raw_name, clinics)
+            counts[result.status] += 1
+            new_status = "review" if result.status == "review" else "auto"
+            if (result.clinic_id, new_status) != (clinic_id, status):
+                counts["changed"] += 1
+                cur.execute(
+                    "update public.mentions set clinic_id = %s, status = %s, updated_at = now() "
+                    "where id = %s",
+                    (result.clinic_id, new_status, mention_id),
+                )
+        for source_id, url, source_type in sources:
+            new_type = classify(url, websites)
+            if new_type != source_type:
+                counts["sources_changed"] += 1
+                cur.execute(
+                    "update public.sources set source_type = %s where id = %s",
+                    (new_type, source_id),
+                )
+    return counts
