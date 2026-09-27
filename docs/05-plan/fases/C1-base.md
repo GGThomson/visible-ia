@@ -107,7 +107,7 @@
   - Secrets por entorno: `SUPABASE_URL_DEV`/`_PROD`, `SUPABASE_SERVICE_ROLE_KEY_DEV`/`_PROD`.
 
 ### C1-T06 · Landing vacía publicada + README técnico
-- **Estado:** ⚪
+- **Estado:** 🟡 (26/09) publicación desde GitHub Actions (`web.yml`, wrangler) en lugar de la integración Git de Cloudflare: usa el token de Pages del Director
 - **Qué:**
   - `web/index.html` con Pico CSS: nombre, una frase de valor y "Pronto: pide tu informe gratis".
   - Publicarla en Cloudflare Pages desde `main`, con vistas previas por rama.
