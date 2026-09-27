@@ -135,6 +135,14 @@ def month_usage(
             (start, end),
         )
         spent, serpapi_used = cur.fetchone()
+        # The extractor (gpt-5-nano) also spends OpenAI money, in the month it ran.
+        cur.execute(
+            "select coalesce(sum(extraction_cost_usd), 0) from public.responses "
+            "where (extracted_at at time zone 'America/Lima') >= %s "
+            "  and (extracted_at at time zone 'America/Lima') < %s",
+            (start, end),
+        )
+        spent += cur.fetchone()[0]
     return MonthUsage(float(spent), max(int(serpapi_used), serpapi_account_used or 0))
 
 

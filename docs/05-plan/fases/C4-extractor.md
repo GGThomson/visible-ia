@@ -53,7 +53,7 @@
 - **Rama:** `feat/C4-T03-source-types`
 
 ### C4-T04 · Comando de extracción + revisión desde la CLI (HU-07, HU-08, HU-09)
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:**
   - `visible-ia extraer <corrida_id>`: extrae, asocia y clasifica todas las respuestas pendientes.
   - `visible-ia revisar <corrida_id>` muestra, por respuesta, el texto resumido y las menciones, y permite:
