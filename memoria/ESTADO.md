@@ -7,7 +7,7 @@
 
 ## Dónde estamos
 - **Fase actual:** 5 · Construcción. Fase 4 aprobada el 26/09: arquitectura + plan (tags `fase-4-completa`, `plan-aprobado`)
-- **Tarea actual:** **C2-T03**, importar clínicas desde CSV (C1 ✅ salvo la verificación a 8 días y la demo; C2-T01 y C2-T02 ✅; landing en https://visible-ia.pages.dev)
+- **Tarea actual:** **C2-T04**, alias de clínicas (C1 ✅ salvo la verificación a 8 días y la demo; C2-T01 a C2-T03 ✅; landing en https://visible-ia.pages.dev)
 - **Rama de trabajo:** cada tarea en `feat/C<n>-T<nn>-...` desde `main` (las fases 1–4 ya están en `main`)
 - **Avance general:** █████░░░░░ 45 %
 - **Calendario:** construcción del 28/09 al 08/11 · **v1.0 "Vender" el 04/10** · ventas desde el 05/10 · control del Plan B el **jue 02/10** (C6-T05)

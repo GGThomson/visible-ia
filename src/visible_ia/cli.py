@@ -1,5 +1,8 @@
 """Command line interface for the operator."""
 
+from datetime import date
+from pathlib import Path
+
 import typer
 
 from visible_ia import __version__, db
@@ -15,6 +18,8 @@ plantillas_app = typer.Typer(help="Plantillas de preguntas por rubro.", no_args_
 app.add_typer(plantillas_app, name="plantillas")
 mercado_app = typer.Typer(help="Mercados (rubro + distrito) y sus preguntas.", no_args_is_help=True)
 app.add_typer(mercado_app, name="mercado")
+clinicas_app = typer.Typer(help="Clínicas de cada mercado y sus alias.", no_args_is_help=True)
+app.add_typer(clinicas_app, name="clinicas")
 
 
 def _confirm_prod(target: str) -> None:
@@ -230,3 +235,51 @@ def mercado_editar_pregunta(
             typer.echo(str(exc))
             raise typer.Exit(code=1) from None
     typer.echo(f"Pregunta {plantilla.upper()} actualizada (banco v{version}).")
+
+
+@clinicas_app.command("importar")
+def clinicas_importar(
+    archivo: Path = typer.Argument(..., exists=True, dir_okay=False, help="CSV de clínicas."),
+    mercado: int = typer.Option(..., help="Id del mercado."),
+    fecha_dato: str = typer.Option(
+        None, help="Fecha de ★ y reseñas (AAAA-MM-DD); hoy si se omite."
+    ),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Importa clínicas desde un CSV y las asocia al mercado (informa filas con errores)."""
+    from visible_ia.mercados.clinicas import InvalidClinicsFile, import_clinics, read_clinics_csv
+
+    target = _resolve_env(env)
+    try:
+        rows, errors = read_clinics_csv(archivo)
+        data_date = date.fromisoformat(fecha_dato) if fecha_dato else date.today()
+    except (InvalidClinicsFile, ValueError) as exc:
+        typer.echo(f"No se pudo leer el archivo: {exc}")
+        raise typer.Exit(code=1) from None
+    for err in errors:
+        typer.echo(f"  fila {err.line}: {err.message} (omitida)")
+    _confirm_prod(target)
+    with _connect_or_exit(target) as conn:
+        try:
+            created, updated = import_clinics(conn, mercado, rows, data_date)
+        except InvalidClinicsFile as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    typer.echo(
+        f"Mercado {mercado}: {created} clínicas nuevas, {updated} actualizadas, "
+        f"{len(errors)} filas con errores."
+    )
+
+
+@clinicas_app.command("listar")
+def clinicas_listar(
+    mercado: int = typer.Option(..., help="Id del mercado."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Lista las clínicas del mercado."""
+    from visible_ia.mercados.clinicas import list_market_clinics
+
+    with _connect_or_exit(_resolve_env(env)) as conn:
+        for clinic_id, name, rating, reviews, data_date in list_market_clinics(conn, mercado):
+            stars = f"{rating}★" if rating is not None else "sin ★"
+            typer.echo(f"{clinic_id}  {name}  ({stars}, {reviews or 0} reseñas, dato {data_date})")
