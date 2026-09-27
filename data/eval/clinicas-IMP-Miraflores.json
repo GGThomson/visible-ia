@@ -1,0 +1,223 @@
+{
+ "mercado": "IMP · Miraflores",
+ "estado": "propuesta",
+ "nota": "Lista propuesta a partir de la corrida 1 (27/09); el Director la confirma en el Excel.",
+ "clinicas": [
+  {
+   "nombre": "Smiles Peru",
+   "alias": [
+    "Smiles Perú"
+   ]
+  },
+  {
+   "nombre": "Dental Pérez Yance",
+   "alias": [
+    "Perez Yance",
+    "Pérez & Yance",
+    "Clínicas Dentales Americadent",
+    "Americadent"
+   ]
+  },
+  {
+   "nombre": "Dr. Enmanuel Teixeira",
+   "alias": [
+    "Enmanuel Teixeira",
+    "Implantes Dentales en Miraflores",
+    "Clínica Implantes Dentales (Dr. Enmanuel Teixeira)",
+    "Implantes Dentales — Dr. Enmanuel Teixeira"
+   ]
+  },
+  {
+   "nombre": "Clínica Dental Cano",
+   "alias": []
+  },
+  {
+   "nombre": "Dr. Aldo | Implantes Dentales y Rehabilitación Oral",
+   "alias": [
+    "Dr. Aldo",
+    "Dr. Aldo Implants",
+    "Aldo Implants",
+    "Dr. Aldo Implants & Oral Rehabilitation",
+    "Tus Implantes Dentales Miraflores",
+    "Dr. Aldo Moreno"
+   ]
+  },
+  {
+   "nombre": "Odontonova",
+   "alias": [
+    "Odontonova Centro de Implantología"
+   ]
+  },
+  {
+   "nombre": "Movimiento Sonrisas",
+   "alias": []
+  },
+  {
+   "nombre": "MaxiloFACE",
+   "alias": [
+    "Implantología Maxiloface"
+   ]
+  },
+  {
+   "nombre": "DDS Perú",
+   "alias": [
+    "DDS Peru"
+   ]
+  },
+  {
+   "nombre": "Clínica Odontologists",
+   "alias": [
+    "Odontologists"
+   ]
+  },
+  {
+   "nombre": "Digital Smiles",
+   "alias": []
+  },
+  {
+   "nombre": "Face Clinic",
+   "alias": [
+    "Face Clinic (Miraflores)"
+   ]
+  },
+  {
+   "nombre": "TodoOrtodoncia",
+   "alias": [
+    "TodoOrtodoncia Lima",
+    "Todo Ortodoncia"
+   ]
+  },
+  {
+   "nombre": "Kagem",
+   "alias": []
+  },
+  {
+   "nombre": "The Dental Clinic & GT Concept",
+   "alias": [
+    "The Dental Clinic",
+    "The Dental Clinic & GT Concept Asociados",
+    "The Dental Clinic (GT Concept Asociados)",
+    "GT Concept"
+   ]
+  },
+  {
+   "nombre": "Vicich Dental Clinic",
+   "alias": [
+    "Clínica Dental Vicich",
+    "Clínica Vicich"
+   ]
+  },
+  {
+   "nombre": "Clínica Miraflores",
+   "alias": []
+  },
+  {
+   "nombre": "Dra. Edith Molina Miranda",
+   "alias": []
+  },
+  {
+   "nombre": "Dra. Sully Cardoso",
+   "alias": []
+  },
+  {
+   "nombre": "OdontoDoc",
+   "alias": []
+  },
+  {
+   "nombre": "Clínica Velarde-Alvarez",
+   "alias": []
+  },
+  {
+   "nombre": "Dra. Connie Negrete",
+   "alias": [
+    "Dra. Connie Negrete G.",
+    "Implantes Dentales Miraflores - Dra. Connie Negrete",
+    "Implantes Dentales Miraflores"
+   ]
+  },
+  {
+   "nombre": "Top Dental Health",
+   "alias": []
+  },
+  {
+   "nombre": "Dr. Christian Elías Cornock",
+   "alias": [
+    "Dr. Christian Omar Elías Cornock",
+    "RenovaSmiles"
+   ]
+  },
+  {
+   "nombre": "ETIDENT",
+   "alias": [
+    "Etident"
+   ]
+  },
+  {
+   "nombre": "DentiSonríe",
+   "alias": [
+    "Dentisonríe"
+   ]
+  },
+  {
+   "nombre": "Smile Design Peru",
+   "alias": [
+    "Smile Design",
+    "Smiledesignperu"
+   ]
+  },
+  {
+   "nombre": "Clínica Internacional",
+   "alias": []
+  },
+  {
+   "nombre": "Dr. Tremolada",
+   "alias": []
+  },
+  {
+   "nombre": "Clínica Dental Prosmile Miraflores",
+   "alias": [
+    "Prosmile"
+   ]
+  },
+  {
+   "nombre": "Elisseum Dental Clinic",
+   "alias": [
+    "Elisseum"
+   ]
+  },
+  {
+   "nombre": "Riedent",
+   "alias": []
+  },
+  {
+   "nombre": "Centro Odontológico NEODENTIS",
+   "alias": [
+    "Neodentis"
+   ]
+  },
+  {
+   "nombre": "Clínica Virtual Dent",
+   "alias": []
+  },
+  {
+   "nombre": "Acosta Especialistas Dentales",
+   "alias": []
+  },
+  {
+   "nombre": "Alium Clínica",
+   "alias": [
+    "Alium Digital"
+   ]
+  },
+  {
+   "nombre": "Implantes Portal B",
+   "alias": [
+    "IMPLANTES PORTAL.B"
+   ]
+  },
+  {
+   "nombre": "Dr. Alonso Moreno Mejía",
+   "alias": []
+  }
+ ]
+}
