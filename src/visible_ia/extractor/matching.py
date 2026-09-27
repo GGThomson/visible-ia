@@ -75,10 +75,14 @@ def match(
         return MatchResult("new")
     best: dict[int, float] = {}
     for clinic in clinics:
+        # Extra words are checked against all the clinic's names together, so a mention that
+        # joins two aliases ("Dental Pérez Yance / Clínicas Dentales Americadent") still fits.
+        vocabulary = " ".join(specific(n) for n in clinic.names).split()
         for name in clinic.names:
             other = specific(name)
             if other:
-                best[clinic.id] = max(best.get(clinic.id, 0.0), _score(core, other, threshold))
+                score = _score(core, other, vocabulary, threshold)
+                best[clinic.id] = max(best.get(clinic.id, 0.0), score)
     if not best:
         return MatchResult("new")
     top = max(best.values())
@@ -90,12 +94,11 @@ def match(
     return MatchResult("matched", winners[0], top, "fuzzy")
 
 
-def _score(core: str, other: str, threshold: float) -> float:
+def _score(core: str, other: str, vocabulary: list[str], threshold: float) -> float:
     score = fuzz.token_set_ratio(core, other)
     if score < threshold:
         return score
-    other_words = other.split()
-    extra = [w for w in core.split() if not any(fuzz.ratio(w, o) >= threshold for o in other_words)]
+    extra = [w for w in core.split() if not any(fuzz.ratio(w, v) >= threshold for v in vocabulary)]
     return 0.0 if extra else score
 
 

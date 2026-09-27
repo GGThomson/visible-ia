@@ -59,8 +59,18 @@ def test_missed_and_extra_names_lower_recall_and_precision():
     # Doctoralia is dropped by the validator; "Revisa" is literal but wrong.
     assert (s.true_positives, s.predicted) == (1, 2)
     assert (s.found, s.labelled) == (1, 2)
-    assert s.association == 0.5
-    assert set(s.failing()) == {"precision", "recall", "association"}
+    assert s.association == 1.0  # the missed name only lowers recall
+    assert set(s.failing()) == {"precision", "recall"}
+
+
+def test_best_hit_prefers_the_identical_name():
+    from visible_ia.extractor.evaluacion import best_hit
+
+    assert best_hit(["Smiles Perú", "Digital Smiles"], "Digital Smiles") == "Digital Smiles"
+    assert (
+        best_hit(["Dr. Aldo | Implantes Dentales"], "Dr. Aldo") == "Dr. Aldo | Implantes Dentales"
+    )
+    assert best_hit(["Kagem"], "Odontonova") is None
 
 
 def test_proposed_answers_are_skipped_unless_asked():

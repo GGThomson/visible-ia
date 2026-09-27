@@ -31,6 +31,7 @@ CLINICS = [
         ("RenovaSmiles Perú", "new", None),  # false positive seen in phase 1
         # More real forms from run 1.
         ("Dental Pérez Yance", "matched", 1),
+        ("Dental Pérez Yance / Clínicas Dentales Americadent", "matched", 1),  # two aliases
         ("Smiles Perú", "matched", 3),
         ("SMILES PERU", "matched", 3),
         ("Clínica Dental Cano", "matched", 5),

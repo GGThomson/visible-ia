@@ -5,7 +5,7 @@
 - La calidad se mide de forma automática contra un conjunto etiquetado.
 
 **Historias que cubre:** HU-07, HU-08, HU-09
-**Estado:** 🟡 en curso
+**Estado:** ✅ completa (27/09)
 
 ## Tareas
 
@@ -73,7 +73,7 @@
 - **Notas para Claude Code:** en la terminal, usar `rich` para las tablas. Es la única dependencia nueva permitida en esta tarea.
 
 ### C4-T05 · Conjunto de evaluación y prueba de calidad (PRD §5.3)
-- **Estado:** 🟡 código listo; falta que el Director confirme las etiquetas y aprobar grabar las salidas (≈ US$0.007)
+- **Estado:** ✅ (27/09: precisión 98.3 %, exhaustividad 94.7 %, asociación 100 %, dominios 100 % sobre 63 respuestas confirmadas por muestreo)
 - **Qué:**
   - Armar `data/eval/extractor-gold.jsonl` con ≥ 60 respuestas y sus menciones correctas:
     - las 31 de la muestra del 26/09 (importadas en C3-T05);

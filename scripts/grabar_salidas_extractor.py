@@ -45,7 +45,7 @@ def main() -> None:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
     scores = evaluacion.score(gold, {r["id"]: r["candidatos"] for r in rows}, include_proposed=True)
     print(f"\nGrabadas {len(rows)} salidas en {evaluacion.OUTPUTS.name} · costo US${total:.4f}")
-    print("Con las etiquetas propuestas (aún sin confirmar): " + scores.report())
+    print("Resultado: " + scores.report())
 
 
 if __name__ == "__main__":
