@@ -1175,3 +1175,63 @@ def informe_crear_bucket(env: str = typer.Option(None, help="dev o prod.")) -> N
         typer.echo(str(exc))
         raise typer.Exit(code=1) from None
     typer.echo("Bucket 'informes' creado (privado)." if created else "El bucket ya existía.")
+
+
+# --- prospects (C6-T04) --------------------------------------------------------------------
+
+prospectos_app = typer.Typer(help="Pedidos de informe gratis de la landing.", no_args_is_help=True)
+app.add_typer(prospectos_app, name="prospectos")
+
+
+@prospectos_app.command("nuevos")
+def prospectos_nuevos(
+    marcar: bool = typer.Option(True, "--marcar/--no-marcar", help="Marcarlos como vistos."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Lista los pedidos no vistos (con contacto) y los marca como vistos."""
+    from rich.console import Console
+    from rich.table import Table
+
+    from visible_ia.prospectos import CATEGORY_NAMES, list_unseen, mark_seen
+
+    target = _resolve_env(env)
+    with _connect_or_exit(target, autocommit=True) as conn:
+        rows = list_unseen(conn)
+        if not rows:
+            typer.echo("No hay pedidos nuevos.")
+            return
+        table = Table(title=f"{len(rows)} pedidos nuevos ({target})")
+        for column in ("fecha", "nombre", "clínica", "rubro", "distrito", "contacto", "origen"):
+            table.add_column(column)
+        for p in rows:
+            table.add_row(
+                f"{p.created_at:%d/%m %H:%M}", p.name, p.clinic_name,
+                CATEGORY_NAMES.get(p.category_code or "", "—"), p.district or "—",
+                p.contact, p.source or "—",
+            )  # fmt: skip
+        Console().print(table)
+        if marcar:
+            mark_seen(conn, [p.id for p in rows])
+            typer.echo("Marcados como vistos.")
+
+
+@prospectos_app.command("aviso")
+def prospectos_aviso(env: str = typer.Option("prod", help="dev o prod.")) -> None:
+    """Abre, actualiza o cierra el issue "Prospectos nuevos (n)" (para el job diario)."""
+    import os
+
+    from visible_ia.prospectos import sync_issue, unseen_clinics
+
+    target = _resolve_env(env)
+    settings = get_settings()
+    url = settings.value(f"SUPABASE_URL_{target.upper()}")
+    key = settings.value(f"SUPABASE_SERVICE_ROLE_KEY_{target.upper()}")
+    token, repo = os.environ.get("GITHUB_TOKEN"), os.environ.get("GITHUB_REPOSITORY")
+    if not (url and key and token and repo):
+        typer.echo(
+            "Faltan SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, GITHUB_TOKEN o GITHUB_REPOSITORY"
+        )
+        raise typer.Exit(code=1)
+    clinics = unseen_clinics(url, key.get_secret_value())
+    result = sync_issue(clinics, repo=repo, token=token)
+    typer.echo(f"Prospectos sin revisar ({target}): {len(clinics)} · issue: {result}")

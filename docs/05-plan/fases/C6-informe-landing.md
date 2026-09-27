@@ -67,7 +67,7 @@
   - Añadir una protección básica contra spam: un campo trampa oculto.
 
 ### C6-T04 · Aviso de prospectos nuevos
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** comando `visible-ia prospectos nuevos` (lista los no vistos y los marca como vistos) y un paso en el job diario que, si hay prospectos nuevos, abre o actualiza un issue de GitHub "Prospectos nuevos (n)".
 - **Archivos probables:** `src/visible_ia/prospectos.py`, `.github/workflows/diario.yml`, `tests/unit/test_prospectos.py`
 - **Criterios de aceptación:**
