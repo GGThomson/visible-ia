@@ -7,7 +7,7 @@
 
 ## Dónde estamos
 - **Fase actual:** 5 · Construcción. Fase 4 aprobada el 26/09: arquitectura + plan (tags `fase-4-completa`, `plan-aprobado`)
-- **Tarea actual:** **C4-T05** (código listo): falta que el Director confirme las etiquetas y la lista de clínicas (Excel en `data/propuestas/`). Corrida 1 completa y extraída en prod (60/60, 215 menciones). C4-T01…T04 ✅. Landing: https://visible-ia.pages.dev
+- **Tarea actual:** **C4-T05**: lista de IMP · Miraflores importada en prod (34 clínicas) y corrida 1 re-asociada (205/215 menciones asociadas). Falta que el Director revise la **muestra de 15 etiquetas** (`data/propuestas/etiquetas-muestra-15.xlsx`) y grabar las salidas del extractor (≈ US$0.007, pedir OK). Landing: https://visible-ia.pages.dev
 - **Rama de trabajo:** cada tarea en `feat/C<n>-T<nn>-...` desde `main` (las fases 1–4 ya están en `main`)
 - **Avance general:** ██████░░░░ 60 % (construcción: C1–C3 y C4 casi, de C1–C12)
 - **Calendario:** construcción del 28/09 al 08/11 · **v1.0 "Vender" el 04/10** · ventas desde el 05/10 · control del Plan B el **jue 02/10** (C6-T05)
@@ -26,8 +26,8 @@
 <!-- ⚪ pendiente · 🟡 en curso · ✅ completa · ⏭️ omitida (explicar por qué en el brief) -->
 
 ## Próximos 3 pasos
-1. **Director:** revisar `data/propuestas/clinicas-IMP-Miraflores.xlsx` (completar `maps_url`, rating, reseñas; confirmar alias) y `etiquetas-evaluacion.xlsx` (confirmar las 63 respuestas)
-2. Con eso: importar la lista en prod, re-asociar la corrida 1, marcar etiquetas confirmadas y **grabar las salidas del extractor (≈ US$0.007, pedir OK)** → cerrar C4. Luego **C5** (puntaje)
+1. **Director:** revisar las 15 etiquetas de la muestra y decidir si, con pocas correcciones, se dan por confirmadas las 63
+2. Aplicar correcciones, grabar las salidas del extractor (≈ US$0.007, con OK) y cerrar C4 → **C5** (puntaje)
 3. En paralelo: lista de 40 clínicas (y preguntar por el plan Gestionado, H9), trámites de WhatsApp y pasarela, tareas legales. ~04/10: confirmar que Supabase dev no se pausó · jue 02/10: control del Plan B
 
 ## Bloqueos / esperando decisión
