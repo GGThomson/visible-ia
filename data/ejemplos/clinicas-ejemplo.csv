@@ -1,0 +1,6 @@
+nombre,distrito,maps_url,direccion,rating,resenas,web,instagram
+Clínica Ejemplo Uno,Surco,https://maps.google.com/?cid=1000000000000000001,Av. Ficticia 101,4.8,215,https://ejemplo-uno.test,@ejemplouno
+Dermatología Ejemplo Dos | Láser y Piel,Surco,https://maps.google.com/?cid=1000000000000000002,Calle Inventada 202,4.6,88,,
+Centro Ejemplo Tres (Sede Surco),Surco,https://maps.google.com/?cid=1000000000000000003,,4.9,1.020,https://ejemplo-tres.test,
+Dra. Ejemplo Cuatro - Dermatóloga,Surco,https://maps.google.com/?cid=1000000000000000004,Jr. Demo 404,"4,5",40,,@dracuatro
+Clínica Ejemplo Cinco,Surco,https://maps.google.com/?cid=1000000000000000005,Av. Prueba 505,,,,

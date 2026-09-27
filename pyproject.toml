@@ -43,3 +43,7 @@ markers = [
     "live: calls a paid or rate-limited external API (run manually)",
 ]
 addopts = "-m 'not integration and not live'"
+
+[tool.ruff.lint.flake8-bugbear]
+# Typer declares CLI parameters through default-value calls.
+extend-immutable-calls = ["typer.Argument", "typer.Option"]

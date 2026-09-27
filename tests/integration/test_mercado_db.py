@@ -7,20 +7,8 @@ from visible_ia.mercados.mercado import (
     edit_question,
     list_questions,
 )
-from visible_ia.mercados.plantillas import read_templates, upsert_templates
 
 pytestmark = pytest.mark.integration
-
-
-@pytest.fixture
-def tx(dev_conn):
-    """Everything inside is rolled back: no test data stays in dev."""
-    upsert_templates(dev_conn, read_templates())
-    dev_conn.commit()
-    with dev_conn.transaction(force_rollback=True):
-        with dev_conn.cursor() as cur:
-            cur.execute("delete from public.markets where category_code = 'DER'")
-        yield dev_conn
 
 
 def test_create_market_generates_10_questions(tx):

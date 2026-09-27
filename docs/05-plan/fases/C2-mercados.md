@@ -37,7 +37,7 @@
 - **Rama:** `feat/C2-T02-create-market`
 
 ### C2-T03 · Importar clínicas desde CSV (HU-02)
-- **Estado:** ⚪
+- **Estado:** ✅ (26/09)
 - **Qué:** comando `visible-ia clinicas importar <archivo.csv> --mercado <id>`.
   - Columnas mínimas: `nombre,distrito,maps_url`.
   - Columnas opcionales: `direccion,rating,resenas,web,instagram`.
