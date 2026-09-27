@@ -116,8 +116,8 @@ scripts/                 # scripts de la fase 1 (prueba de la API de Gemini), fu
 | Entorno | URL | Rama | Cómo se despliega |
 |---|---|---|---|
 | Local | CLI en la PC del operador; web con `python -m http.server` | cualquiera | — Apunta al proyecto de Supabase **dev** |
-| Staging | Vista previa de Cloudflare Pages (una URL por rama) | ramas `feat/*`, `fix/*` | Automático al hacer push. Usa Supabase **dev** |
-| Producción | Dominio propio (se compra con el primer cliente); mientras tanto, `*.pages.dev` | `main` | Web: automático al fusionar a `main`. Base de datos: `visible-ia db migrate --env prod` (pide escribir "SI"), ejecutado por el Director |
+| Staging | Vista previa de Cloudflare Pages (una URL por rama, `https://<hash>.visible-ia.pages.dev`) | PRs con cambios en `web/` | Automático en cada PR (`web.yml`). Usa Supabase **dev** |
+| Producción | **https://visible-ia.pages.dev** (dominio propio con el primer cliente) | `main` | Web: automático al fusionar a `main` (`web.yml`, wrangler). Base de datos: `visible-ia db migrate --env prod` (pide escribir "SI"), ejecutado por el Director |
 
 - **Supabase:** dos proyectos, **dev** y **prod**. Es el máximo de 2 activos que permite el plan gratis.
 - **Corridas reales:** siempre contra **prod**, desde `main`.

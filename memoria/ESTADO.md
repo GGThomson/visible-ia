@@ -7,7 +7,7 @@
 
 ## Dónde estamos
 - **Fase actual:** 5 · Construcción. Fase 4 aprobada el 26/09: arquitectura + plan (tags `fase-4-completa`, `plan-aprobado`)
-- **Tarea actual:** **C1-T06** en PR #10, bloqueado por credenciales (C1-T01 a C1-T04 ✅; C1-T05 fusionado, falla en Actions por los Secrets)
+- **Tarea actual:** **C2-T01**, cargar las 40 plantillas (C1-T01 a C1-T04 y C1-T06 ✅; landing en https://visible-ia.pages.dev). C1-T05 espera las claves en los Secrets
 - **Rama de trabajo:** cada tarea en `feat/C<n>-T<nn>-...` desde `main` (las fases 1–4 ya están en `main`)
 - **Avance general:** █████░░░░░ 45 %
 - **Calendario:** construcción del 28/09 al 08/11 · **v1.0 "Vender" el 04/10** · ventas desde el 05/10 · control del Plan B el **jue 02/10** (C6-T05)
@@ -26,8 +26,8 @@
 <!-- ⚪ pendiente · 🟡 en curso · ✅ completa · ⏭️ omitida (explicar por qué en el brief) -->
 
 ## Próximos 3 pasos
-1. **Director:** recargar `SUPABASE_URL_DEV/PROD` en GitHub Secrets desde el `.env` (no tienen la forma https://<id>.supabase.co) y crear un token de Cloudflare con permiso *Account › Cloudflare Pages › Edit* (el actual no ve ninguna cuenta)
-2. Reintentar el job diario y la vista previa del PR #10 → fusionar → C2 (mercados)
+1. **Director:** recargar `SUPABASE_SERVICE_ROLE_KEY_DEV/PROD` en los Secrets desde el `.env` (Actions responde "Invalid API key") y revisar la landing en el celular
+2. Reintentar el job diario → cerrar los issues #6/#7 → demo de C1. En paralelo, `/siguiente` → C2 (mercados)
 3. **Director (29/09):** cuenta de SerpApi y **aprobar la facturación de OpenAI** (≈ US$4/mes, tope US$10) antes de C3. En paralelo: lista de 40 clínicas, trámites de WhatsApp y pasarela, tareas legales
 
 ## Bloqueos / esperando decisión
