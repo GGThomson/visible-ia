@@ -68,6 +68,21 @@ def run_heartbeat(
     return HeartbeatResult(env=env, markets_read=len(read.json()), old_deleted=len(delete.json()))
 
 
+def diagnose_supabase_url(url: str) -> str | None:
+    """Explain, without echoing the value, why a URL is not a Supabase API URL (None if fine)."""
+    lowered = url.lower()
+    if lowered.startswith(("https://postgres", "https://postgresql")) or "@" in lowered:
+        return "parece una cadena de conexión Postgres (esa va en SUPABASE_DB_URL_*)"
+    host = httpx.URL(url).host
+    if host.endswith("supabase.com"):
+        return "parece la URL del panel de Supabase; usa la 'Project URL' de Settings > API"
+    if not host.endswith(".supabase.co"):
+        return "debe tener la forma https://<id-del-proyecto>.supabase.co"
+    if httpx.URL(url).path not in ("", "/"):
+        return "no debe llevar ruta después de .supabase.co"
+    return None
+
+
 def _check(response: httpx.Response, action: str) -> None:
     if response.is_success:
         return
