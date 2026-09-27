@@ -29,3 +29,6 @@ npm-debug.log*
 # Claude Code: configuración personal (la del proyecto sí se versiona)
 .claude/settings.local.json
 .mcp.json
+
+# Raw answers saved by live tests (SAVE_LIVE_FIXTURE=1); copy to *_real.json to keep them
+tests/fixtures/*_live.json

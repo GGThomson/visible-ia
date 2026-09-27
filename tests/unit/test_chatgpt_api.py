@@ -53,6 +53,19 @@ def test_rates_come_from_the_dated_table():
         rates.model("gpt-unknown")
 
 
+def test_real_answer_parses():
+    """Recorded on 2026-09-26 from the verification call (C3-T01): cost US$0.028."""
+    raw = json.loads(FIXTURE.with_name("openai_response_real.json").read_text(encoding="utf-8"))
+    result = chatgpt_api.parse_response(raw)
+    assert result.searches == 2
+    assert len(result.citations) == 7  # 9 annotations, two URLs repeated
+    assert raw["tool_usage"]["web_search"]["num_requests"] == 2
+    raw["tool_usage"]["web_search"]["num_requests"] = 5  # the billed count wins
+    assert chatgpt_api.parse_response(raw).searches == 5
+    assert result.usage.input_tokens == 13290 and result.usage.output_tokens == 2339
+    assert result.cost_usd == pytest.approx(0.028, abs=0.0005)
+
+
 def test_answer_without_text_is_marked_empty():
     raw = {"model": "gpt-5-mini", "output": [], "usage": {}}
     result = chatgpt_api.parse_response(raw)

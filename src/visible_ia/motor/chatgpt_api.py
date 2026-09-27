@@ -90,6 +90,10 @@ def parse_response(raw: dict[str, Any], *, rates: OpenAIRates | None = None) -> 
         reasoning_tokens=(usage_raw.get("output_tokens_details") or {}).get("reasoning_tokens")
         or 0,
     )
+    # The billed count, when the API reports it, wins over counting the output items.
+    billed = ((raw.get("tool_usage") or {}).get("web_search") or {}).get("num_requests")
+    if billed is not None:
+        searches = billed
     model = raw.get("model") or MODEL
     rates = rates or openai_rates()
     text = "\n\n".join(t for t in texts if t).strip()

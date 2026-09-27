@@ -1,0 +1,236 @@
+{
+  "id": "resp_05c3d38395db62b0006ab88842ce5487d1b38ca8cca3c9ce82",
+  "created_at": 1790478403.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": null,
+  "metadata": {},
+  "model": "gpt-5-mini-2025-08-07",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_05c3d38395db62b0006ab888440f2487d1a70ed71aa02f7102",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABquIhT3J53WBE8qXGvzEL2LPgAfLQcTOsNQVF0XVlnbQl-YU-UpOFaKGzEHYT5Ueye1x12ejAq_Ub3dlUBfeCFDjeh0YdjWoHSxViEpzHsAm_5KqY7E69JgrbQmSbZV8O4QCLplQcmgdq_gLRgJ76attAATAVw9JTzX9DmxRAXVdI8XEp1cY6Ljlgxn4J3XwvyWqkP5yGZee8R2KBrPkvsKVl1daVtVMd7dVbIyuYjQneh4cpfrPNhjAh0LVIwzGdyATseEwmyA-Bwa6w3bNhmtuppHXzzCjvlbiX3nJqQLA0lT95u7hBGZ3naZ-qom4Zj0U-DcjkMhnkQp9RApZRSrzy0s_BEomJ-2lgOfw0JOK1vFiAzFP05KkoJL4pwVBsxhiNkQDSWEBdp61JV2uJEHaRv5zUXUinsTwgdYSieAuo5JUVWjbxHJnbHXFpP1s8NRmrw__-azYTje7FapEj9J_pZzBaGZxXnA0iU4oGJPMfAuofwYzrXfVETgB0SVnS2LxuLmVuIQBIUom3hMemwmd6A7ZP2ZNUDXWX1o6XQyVs8ipBiRc-EyephTkXdijJ4TPqRHa9ZsE3w16Fj2MOySw43Y05YZm9kmN3QBV_s44h-Oiv-ea9tfbd3R7FX8srXFj-MPlxuAY8F5LHNowh32BeA_6qpWfYKyVid5lQn05rDLGFsjbDXUGeaPTuMJ-fL38XyNwGYbLMbU5exoS4IrsKTolz7iNKetX2KDfxBvrNPZBCKXSLIC932EI-65a3ijnhuH8BTdjnjPwRe-c1FWOfW_AaCKPmCGYQi9s48u-siepskXTsB97-2FyljgtiOqaQY0TQktD5JcDR-ER-ZHZHVXqHhrdoIcmwHVvCfsuwRpOZRsc49OEzr_OpDyUjBSGkD8V1B5-mNQLhfGo0phGWDAXr7ga24K69q5c3m29WVpqpHPaUFuuJJ-Phg7uL59H1_wZwWi1UO4tZFLa1MlDR3aKrorkOyeFn62a0eN3k2bRD5wgtqRdaAa1dfnqvzKKyNRke_bcUARnN8Nx6HLCsF4tD2xa6GD1hrmBU1vYtiNGEhoEDaT4aokAdSp6NL6MP7UfByTqczokZE2YCCwzllkTJL172kEbhm2p9ygPWEcBJKZJey3EbnnAHNonyU8cTXhsSRS_gHXuG8Uk3XiQ0-6hthc2Nv2OJdRAlSyXNHfbio1VkiHONgp9KicFB4XgKaIj7OEz8xPA4hwbdDZFqKYXQ3gqSysYlVO2N_GtROrFBmhptXYuih-x1-ZcvyKzcaytSJ5HJyHi6B2V3bLRBdu47sEL9xChb_4eOrnAEVvAlIciwlnki-cgN0rWhjcWKe8j3dP71bNlc4dH_FDpy3MAQEmhaDmbGHnlg2v1fK8XLR_miuB8ZJvC1gqL8gdn-GgYkyXwXg8kGcb7moNfMFZwHE2NX9l3eASCx16KXb5Fey2HT2I6YR3dJxaVF4S29dal_sHdx-5ANMjjsMMIQAlUFaaepWhLfkqmppBWLlj1zLLEMjE3vQPKR0DFsb7-ihwtthDa8HX7rF56Fh3Ws6c2AaqXAaWEUfCs7th4vTETzMENlD46HvVVDrlp-_IMN4jOdtDxvZJf26FLBsZvrOAriZljFQMxMN-nLvSZWjGGBZL13TZeD9oHhROTQvwi2Aeo4caTEF_CfPksyJwJFCc2ACO1q_JL5fgN44RnI07RwnXMf1cDL48tReojL44OQXaAYjd_KFeROWnjfFDt2BDDzBKLk9pvB4T1h1tqoo_nIeXId81fAncm2ve7YmiyRJ0ZMG1jbEbYOj3tK-oYX372HW2XSULIprPR8IX3VIkV2WeLWD9EMBh6CldzfRrX9c4ONmw1n9AIsT_uLZ9FaXJ_42F6Tw4YXXSt4Yq3JcELyLo-wKLc0Bk3wDeEPXsA3pVdaiRoLBbqkOF8CpgSNqgPOV_acXgQHfHtM2dt1YJnC9X6EFNsxLI-HaMJ6GDlSUYKvW6lhIY38zGdqCbcAHfTlxPdMLJPXBKvbVN9qZHLrILwJDQtDNDWYkvoOijYTnIfTcppM8UBTYw24wlZpj7xzh0WpYdr9K_tvmHJ9VWdsFYTlTLMO947NxhlrxebSsuLZfOOITzins1UTDj-zMgKNDDpkEgRAXixQukx5taKvqBvVOjHsOqEh4OBco0OXd2vdZ8K8ewpN4FFoePv2qGMpJ8ga6iiaYHimSFXZRmNMaBOIjx9ca1fzPolDmgA9-6ljmkW7GOiccmlK3yR5Yy7k7N9fBGcl_DpM-3IUoNDcj0x2gDMVp_sDmfxZi2bYEGyAMwFvyqXiVuPak608V0Q==",
+      "status": null
+    },
+    {
+      "id": "ws_05c3d38395db62b0006ab88845039487d1ba13fdfd436ca5bd",
+      "action": {
+        "type": "search",
+        "queries": [
+          "implantes dentales Miraflores clínica Miraflores implantes dentales Lima 'Miraflores' 'implantes' 'clínica'",
+          "Clínica dental Miraflores implantes 'Clínica Internacional' Miraflores implantes dentales",
+          "Dental clinic Miraflores implants 'Instituto Odontológico' 'implantes' Miraflores Lima",
+          "mejor clínica implantes dentales Miraflores opiniones 'Implantes' 'Miraflores' 'reseñas'"
+        ],
+        "query": "implantes dentales Miraflores clínica Miraflores implantes dentales Lima 'Miraflores' 'implantes' 'clínica'",
+        "sources": null
+      },
+      "status": "completed",
+      "type": "web_search_call"
+    },
+    {
+      "id": "rs_05c3d38395db62b0006ab8884716c087d18ce634dd246345d7",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABquIhTRRaV7j71ubA9b3w8Es5lZh6jiZ1aqav3q92BjoySf30pk2PolM0jEAFaRpGj2Tw-CNmuDZ5jq-r9tpM_5NdU-kDo1bZZkeTWgnb9uEet7jAZ7dr0WqYabz5Xj8B6nRlG48UWJvpBrFwPICelC-tuMD50rlRa-Oi_RGKaamwq14OmzdNZuqGRjeqi0xQcqQV-3V4SJw2uZaDsawTa7jZLNHIw473utzINLPO6PR8MYeT3yg-IYm6K_QrSJJX4FCXXAHEyLe5fOGViyqwPMCPkQbo7O_8Z4a51SLLqQf4UjKhIhdmdcvJcZhil3JKdoEn8IKqrLQ1WeeOxMl8ScqH7adbJSm3PUuEJ3PvneseWkbmBWpiuV5QmW8jYTS4g8diruWSIR9nzF59mAFSGG5UrUE1hROLHRoDz_BoOi3ZDXuAHx_mjbGzl_lUotTd9RBVj24-A-koh1lblRq6jiJowDRheJI_9dQnLn2wQKGPh4Fyk5WCa5O46xgWy-3mRruSdZMCsDp9kJ1V0GiJW0z53Bl7Jd7KAym0CPLxgzp_wYG5h8BY5wmgU3Ns9HuVDcU3LXi75Ltp20itW9xA3yes2z-Deypat9fgpURQkjEhO8n9aYauta4eN_wx4TcB9A8YY-qE1fuBGDQ0Hv7ArnhqbthhWkcdVsHTojKdv0arpc1TDgGUNF6ZvOWGuUWPusPbtWtVcgmVwqBkAfFR2zptEciG1Hq30oNPIIvUQehvr1guF7OOlzmInaO7TJ8IOkLxtSyv0_IR4yteCiy4F0DWvYErFNNWdW3JUNI67UitpX31jvZkoQ1snjrfktZdhgvXRcMwU_MB_TDLl5SUODG3FFKkHnI8BDY3AdaSuUidn6qLncwCcV6KhFKY5TqsqehTZicVc4ydAIBwUWrPSAQIuiarpFjHVeWc6yHVfSi0JZ8KGIEYxuble-nclg11J-8Fmr9v-KGzvG0zET286cZ61ikWrOHMyo9QhzCJHel2hjyBrwKQkzvlD0vbDP3q9jC7bAW87Wz7gIzGCftDwuzoJlKCsuC6CgYV2iQ-gL8voy9pF1nluNwxzT8jAPZi7AHvPDT54q6qb224pzXBmD30rD3wfKyyHBDvHpVTyOfFxuOQWbChBoDEIWgAgkpOaFpgyZrDIy3XYKw_FIAK1dK8sAY9DYM0_wtRnAQFxiuOFMTC0YMsNBjaWqmbdWTl8b0Xbm25Qrlr34_MAtZ5H5UBpAYFxL_Mbgwj6oj_Za3FbL12Kae2PH54BJJmeSjVWx4zuTogQjuEw5H62lCh1lLSISgDnwgCvzVr4gnltB-w0Im5sXzfK7gEcq9FNAHhwiU4pLO9oLlyH0xXmj4gcVk_Se1k3NkW1DNX6wNiHGzGKQMm6BPa9GaDe3w9Xz0TLsdAbL6HkaVG2rDD1oD9W76cVJEGQQ_0H1x5Zx3QBBqu1Ir0r_UZqZw-ynVv7GHIt1-clTequCE0mEITWwMvNlMgCxjUjrklKcy3II7S0WbkCKkt7tvd7ZwS5f6sdacb6EzPwXC8TOwAeUBJwd99tt7P3p_Q7u3Xv-WN5T2q4BKASPz6a6_1ozJoEVtgDM8Mlez9I4oSuI5X6eojVp2pENMWhthRPO1FclO1GaGw1ezJSZGALDWuPPCd8tJYyO58pO6XTZFwgilaTmXioCANJMwaVULRuG4u8Rb7lOdIhwAK2QLytXx9cmZy7kHnyutimQhgKaW5QpXtIQw8sRPUrnV5WWMsEU-1ZnkzVzZKCECyjwoaCtLMBoC5bM-u8-Cfzj136Cs73xYIJ_qfpfMXfaKhQJoDgedfYzfuYxwNto4oLs3QGNw5Zzpy9EpSdk1r9XxPMcQmAYRQOAEaPBY8bOadbByAA04p5df0OgSiMt3Nvyn0tMZMdTzB3hnRYSwuX35GOVmQ4uu1xBw1VNROdEgfbH2NQf_YZ1vLkgzoWWxQQnKupCQKqhEvlWLgFMsDhZATx8sfTFgqZXCtQJj-iTLwPGl0aTHaECgOMfoGs1hMDuBuiKuQ6BmiwdOsY4noFwZeZwgViNK_x4i3seMI5tRz8eTrW0mHLyvoz-mMZiW0IOeaKjL3ZQrvalo6TELyr0yZFgNtkBrgRSTxlxbHiRqH3f6wekmHMbH4rGlH-E86CzafZWuCytACZvy_pLO7NSWAIJ8ru37jpCnbGZR7Xyp00RTCF7_aRWY_BKiMCk3f3Jbd4Zt6wCM08QVBGouSqvK9eXklNmWOp9k_qVzKZxg-ePXFYXoxg4BweWUpYF3VYfxuB0g46aTUuDtWHdVD1eiRgnn6YgxHqGkBlnKYJlwdxE-yiZv6y57UUt4QkOBRgwpF155NTyLtaSRpcXzHqx8AZEDQ_eApsxq_4uvismcn7ci0H6b6Cx5_UFhyI0erOG0cMaUPr317Ri-VdrL0gmrveOo1Rg4WB6qeQMv5lm5aEiOaSW7W9--nukWJbYVw3f4pTZrKWQBt7gw-GfxRY5Svgcs6jkS8nbnyfUphwb3WEHVXG8CeDq_UMryM20lBRUiJmIyFhpW7lB9qi93vC6q22gPh7cBmXm_RoSXTnyGXdW3XmvvWmMDGm_PkSne7fRfAzEKb9IE71fpR_iLkzlmM-YhcYfTbYZn-gQVhWSdY9957GBDGobj85SKL-QQT5l5N8afTuGl3YrIRoqhe1-_VG-eIYp6jswVvFjJhtTj_649Q_4ZLviIPHDYSwyBeeQv84brKXLIE1sdlKS1D93-alo0X_R1cgnlrsUGLv4DMBYVqovaLnr2d9bNcAfNhVi2j3AymQL0HR4iIqWTI0RY3vECBcWqW6Z2_0J8XGd08DSWoOeYfvD-2WldR2UAC5M22HxbyEc_oKWL4KazzUx4P_jQUjBzAXmliiN77ArZyRLuVpOPR31c9CX9_QhAEBQblnv6arnA5P_GDcoAVvIv6SnJJuHXexfxO5WxW9r_I3dVPG0obDwP17kR6zK6AQZKFZ22hW8y80nl1V6qDH7nJ1oXki-H7KKH6g0R7EJ-2_BTSgw1aCMkKWINthtPp4F6zoaSnckyTWsHUtaX2qk6g4i98exJEO8RWNkiKw1aNVIpk2DhcYrvO-EFRpdLBFw4BQe9FXC5M_x8sbUVoz62noT6QaB1DgdE9__dZCHkOQdcfpeXqwLSVmGXkIj6Hz6eSB59OXzDTKpzQB8Y6fDJuhcEYmot0CnXwFF_HlOjMuIJN7ugtK03fK4whYnIfIJgrbrTS0b81lVWc6gBqtwbZdUBn9FcaP2e3TTk3LijYAuwfN4MPH1NeQWpdA7m0WYvFd8N50mtSUscq65_BLW0EaqkqUNBsI9IuqA7zPMY4Nv_gbRGy2BjDoWIhrdB2fimN_k3Ihck2eSqYlV0_aFAjsZSjEBvygGQGcFWZ-yoRcRtm436shD3r660AoPO92dSkk47kkC2GGmmiZwnJgmOY23M6Iqe8B3fUUWiwuLk0zWvCg_TOvo2GGSxlIaYWoyOtJv2gQqMTQ3ZKP18oM9KdpBP0ZF95sCb_3XCeYlX3GLa_3_c9YUMixZIqOCe38CH_9qKRdXLaNJe3FKqHcAwPiOtMf9_MY1OLHrLoQtPJKhFPazOkI56IcicFpTkMv1VJmcPvATaGeoWD5C6bN5-zkOKMp5mODLabd9ymOKalmOxCE9h2-sLYJ_h81hRFYYqEFHnYBh2tFiLPfv4-YQamGaS45jxkynm5GKHvlj9Nqhh9NZLmI-9SNuoYHNvvYTFzFCvbeT1sHUgkVOxziNfHJgyu57bbJNNuxpss9twZofvWDzjFJKYvqbGpyCM7eqorgOCifw18LQzQOysmNOz9pDU86ndY3L3QLLStX9x8nOq8IjGiQjVpF-4QoSKT-se8i2CqRo28z47ABbG_jK7D7zYFq0CI9w3mQM_5XGnFc0f-7ye00xBL76EIODzEBLPehH6frtRfEWyCgQUDhK5rSx4Cgtt8Hv_IOL9VrTqW2YBGzLNwd8C0ciO8c2wWr_UXs87RSxqSlWMCyRgyi6vjbWsrUNYPOD8nkOEWIwHQ0CUwRXvPsG5EbRmW7OInhhpwyINHalvUuIKxtOyuS6g85Y2-KavaTu2cMJlU7zpMTt_Bp1PXSSRXHjiD6IIiAVAkX5Yh_U7LRxl7NU_47YW0X9mWbQuKshD_N8LQDCreENnToK6cUov7PVYTc3JxEJ6ELZZDvyHqKBpUbG5e3qqjQ0F4X3Bpd2bCFWHvGepF7alJUw7vx6Nyiq_tPFhnIpC10DbS59-robAckhd7pl2f_oKyGNuq2RmSpTFoRnt6lKfhot4kybhxXM6EUZyPP3lEdY23PwsiKUE5gy8Mh2scPZLvX-M4cTXZRGV1dfGQPqw==",
+      "status": null
+    },
+    {
+      "id": "ws_05c3d38395db62b0006ab88849793c87d198dc696bcc37dada",
+      "action": {
+        "type": "search",
+        "queries": [
+          "cómo elegir clínica implantes dentales qué preguntar 'implantes dentales' 'elegir clínica' guía paciente",
+          "Colegio Odontológico del Perú implantes dentales recomendaciones pacientes 'implantes' 'guía'"
+        ],
+        "query": "cómo elegir clínica implantes dentales qué preguntar 'implantes dentales' 'elegir clínica' guía paciente",
+        "sources": null
+      },
+      "status": "completed",
+      "type": "web_search_call"
+    },
+    {
+      "id": "rs_05c3d38395db62b0006ab8884b4a3087d1af4f280214ed2320",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABquIhTVBN7wJ1EeuAyZ-Gh1VM_i-e27PI00SNEg7Ks6b4RdMBzUCxei-FqRzVhaYkaQFYIMuMgl78FM6mscgQpYcv_Qg1iXOGm2a6pga2AHxhetcUWaJ7reZB5p9_9WG-PWX6rmLKZNKOgvYGEXTST_teXC3RmFuFvyWzB6-JMo34fa_WMmp2QKIXRyCR9t2DqVo7PGwFuDfnPFLqK-m7X6loYYAySs8ViSBU3F5QAd_7Q5TJGlXCqWHAeWgYgJ_u935YPeOTd8CilcKT3TH12W57GO6cOao94-LiU5suHnhXyzUQyDwr_-tb_Y0h1-3G1mGsR94dXCPAL00Jcr-XOgz8Y9AEetOfM5E9cQQPUKnXB5ASSEj22yAZm4nGaol8yKEQbuC7Da4IDOtayvHpoVo2gLjz9PD9323rABEf9fvwMoJ0WviYWYqoDKfg-VMzcScvm-Y-KRPPIx-QqRSPV9-eVlMW_gixroeX2EXI07vj5GFSOh1eAl0V7UhztRIFXCnloyn6KLDd3OyMMx7xcre60FjwRrwBAN-xzi1HNSM7fwF7ufvu-kHxZK_vLjAYNi-iX2EfudxqF-WdSa4bsMiqrDEo4prac-v0YhJETXv2CsP2OyLeDxM8VVkAVyXr0lhTXO0aRL_HRc0x75kbq_OU8-y9PETwm9jqOo4tltosN0IUZhEYcpULuzRS8poOnRwGIrOMZcPKaCYu-lxX5T6goeyfAQ7Sqoa_nHQX9NJJiCeaC-JfEeGwTv3TStJSZwfVV7fLmJiHjXdx6l8Ahx_k9qj9eJyxsqUafoQTCl8EOXOlzi4gdsOiNlWSsWWPEliIZv0iBVW_WGGBsCji6mlLTmMXHmQia9NfgZgC2YXGw1TxkA0fIE0wR9574-eHfKcPylUIMacveoXJrt3Q9A34zT3AFjVT2bhK9fft26aUl_Qjsk9tORzMNV8fBJwgSiXjxBF6rr_fWRjVmkm0GrKORXAN_swtRlC13nzWByRFl54qFe0PadHtOLDw_8U8eFoDN9jYputn1Oda4WWRwQTSCq9-01XIPAX2N3EoOkOvlp1-yzCW_EGwHRKXgXdbWI0i2ywDnZf_l39JpJav9d2ZzOsEBUoEXms8cohXMwamndn21mnr-aGubNw30C7womI_lSoW9T2PXGTgbDd6p2dp2hHvy9W1DfWXtptCK_QyUjyg-hZbEdIMjIpVN6j4Uci5b-45tKVRBGklBiigmy6JAIaFmkJ3K3fJvliEJfJbLaYGpKxRA50zg9yCub1nDx0ZRPiSW_ZlZ1hAU_Ctwp-cLZ7gFs3Y7C1e_OPT77EWywb-8Y42UoQqXHE0g5wwjpP860wMUU6oOTDC7Y50Fli10Htton5babzJSZUbhktrBlkqgiV_Qjn_TYHUACPuz_BLv4_76APUP15oPrfR9ERXTPIcLMtF3dt9n3EIgexPIl-GkTAPb5Zqnbbk3D4xHPSOTH30uMma1KS8nhz169wpYGFBIWTDGZ2zgzgYEoOsHRxgLZjVmaBqw4ZGBieMG0wxfhTDS-V7h3jbwIJTUJxaS7UTUdp_m3RmOYQgnCRinRF833n7dUlNxUtvdfIQ5tU1PIdqYVO_ftRCHDnBI6VMLw_Oj2RBB36TVVqHMEp3FPYYulcDufNZ0ExeyRG3sW03uUjMuRxMJmzfgEnwSzZL522oVuoW-WdsbL1fhZcVqKmGVH0_fk9aXygaVywgmKzJczaSEuiuSrsA_zIfSSjlV7sFOCFVUOWxqxccaR7VaNU0r5GZf98HmrgHWytlsG_oq6vlWF6JcPnBrDRWjMC4CpROCCfrBNl2MkeaIbWIX5LbtwL2oEJ7YLPE-bbPi3iox8jcM9Cv_4HO8NqKSGfY_RnYWlWp8EBcs2ug-uxe7CwaWZA71-tDU05P-w6VnGBCdBAQSnt6ZVuy5zAKEHSDUWkJZYFYhovjOP1D8kYMv6hRAbPLNPTSyFFTzwMhkIsPUzzUS3YObArM6aLc5TJdMjIHzuqLvGthg9hJ40I5tWyvJbDUYx0qyZwnD5T3_sl2_TmYxtUzkJq2qr3sx7JdU_MKyib2mt8j_Fainh3yx7M5TnFIFpjWWktGgf65yAOErubwD3yvq4edy8ClGq_JQCb8nwYFQQmoe-mcvLMHweG9KtkiGYdF_QlEwxx0Yu6d9wR21iAaUPOP-6k1zbt84Kc6pv_rlIfRbJUnaqJfwLPwiHYcc-jg7JBkOAwPKQmARntOmuBDAcZdya7gY8-Yz8_3A73r03chvKtugp7TwMvo6cpbjPrVnidzWcfu1CkPlnSDW1bsfg6L5390B2zIzIrVqTo6g0ZmsBjSgJqq0gT2GKtXnN4atkHimR7-l8mbL3D2IxoUt0H0TIVb3U6muy3Iwf8tHfqQiEe-38psmUYNcAlZvfdMV5U5q25U1C40orA1kq_wRETG-xeemgK_hFAULQyU9Cc2rCD7iKR2s6-lg7GD3G0p7eS0hJ0Sn07gT72KY34kt3lExHqGdtIBQagamqAw7R62WHVokytdVYM-F1hRxa6yRZUzcvFltV_1h1jo4IMMybH9eIU-14hksFhmofV3qUQwN-7I_0dz0PwSRQ4ejbGxaHuPheXC0Akq94W73wVTDKdFh_40AA7CJzTGPtQ5RFMg_e66H-jqr8aesVcr_HvGNBX-SfewQDvpHbKWeNZGsewtMQCWPqcvw1YEfESqDPBAUZxzkX8EJf2jCdPlRkxStvc8qrIbjt_evChaSAaasuGsfjIjJ8yT-rHb1fsjs_VmhTSwSw4SBZeDrwjiEWeps9uJ9ZvEgUCjdHsF0k-1Bx6-gkOODN20zK2R6vgE_P1whBsCpA1MH69PLM-o16N57JXyzsbOAjnLsHMU7UDy5P1kCB68AYX7p6fGW1BbFNsnobS98ACo76Gw0t1h8pHR-8GW_PfNiMjcCHbh380seo2bufmV7nl6duTtItm6TUV9MtChrG4_vzPr1hEktOJw0jzUHtPJlZ57st3r6PSld0U0ya-m96H5g4VFQICcVByC6utB0xU_DeIyosV66n64GKH5FNZj1cZYvIjGd3W0Z-PRusNQLigUp8ZVPcz3eNJBe0-38-6kHNfuNUhXoIwr7jJCztPa6JFrSM0Uf3lR9hnR4xHkUc6alTmy6blauulo1NJueQ5ZrehLxSeYlum7cnZU5ep_th_13QHPoeBnBJeyCQx8_etfTxe8gWNEMx7BxAUK0PjVhVAqXTRzXu_JMYwp6sUQfh6zvuzf7_yWgeICYo2e0aPh5KPJXh7ZXXUxi1f942PimnO4l2hHYKWWLxGOmrYr4-amTTYyuSL-W9giqQgONbugt26TH_bHisrSaX1nZA0x2oM68Xy3W5HDk6QqT3jY69cpLwb1X5uQJh1acTUzsNgV3aqKLhBWkjC1vhBu15hSTQsG0atcxgO9SFLNnDjD-SGYLji3wkvCyGIZbEL224AHxypoHlaLv2BnqG56byc_K1STrCLhRj0yQ5I-oj39rncAfcIVyeSxpel4sV4er3XxsNcGYogwF52ji4vO_C6RE_au7dYgyYEH5R5OhByVLsWtbx4UZgjzNYGCrgt0lSg1dKWtxxOa4SF0ORPQdJZXmingPF0c_9ggY7bLJp7gWkxP09ThmRrehvfWV7r30dOx3wjajWq6yP-8n7iJU1TpB-SyxozaAr6KcJySxd978QRX9mk6fH0rvw6nmZQ_WBpqzFQNpWE_-BNO9Gj0l2EFLAErp2Ecths5tMlQ3R9uzO1hZegnK2_zhoYbE5Pf9pF4x_23MpVz1qzQco-oMmTk3O6pbD5C4xTTXVoOtwag8UDIwaSp663-9wmwJ0WeoLAxXc-4NcPThWWzE7Yr5CykvtfOLOQ37bJUxf1wYTyrqOmYj64Jp2wBojBLAQqg4bgelNVU7CpE9E43OSOQkUwSlPzNTOwmtS213XAXeTxDSeRvcDP4zTcheLSYBCiReMTYsK6RfWDpQ_feTr8buuqfqzEoFcDHYBXR4hfqYHIIhNb5K367mgyRa4KXtONXWGvTaI1-neeAhR7nThkaeTKpu8rTO-xdiJD8_U_mlDu1I3CFNZYXHXtDdxLqX6C-TmReb9IsNF8mmfv_EDRe2M1179HG0U88q3_SEGRkkZEg6903ffep_Q3QwYtFr-uLEOwOLONhQmss0KD5Dimac7f9jDGos-NWvR27CTxAegygs3TWK1UYA9AyoM31PXJDGJ-r4qXea4vDttfeXXy_L-IptNL09GyseLzlhM02CxwVB7CvgEthLLNn2TGCIwoFhfV6v120to0aw-Fff3rrC2NAYBZKUI7F6psyYO-fM3jjtOQqj02xdok4L1u1QnQrUDeQEWn9iVNEHYKowsTvebCW2X2ewWBSrAbVvCKRAQApFBN4Og5IpomgKNgDzOcG6s1IwStnO1K4dC-SSIVW2vxCOGMZhmyPcD4_pgL-DJ1o8YWMzSKPJDWbrQypoGR00QYCm7a5POK-ZOabBTPp8g-GDvwXeulohTueHjYB9paCJpb1rdv5QMpr1IvhYIEhrD677D7Ajj4WzQewlzeo_0dSpPt3FYu2Mb7Qm40EVM0Ql0CbhuIyp6IASR6fRCggP_5VpzMlEdNoobEtOS4QRx4-LfygByCB6M8RzRbdb_CYQb4dPrW5pFK1YGPOsrOpjsKjeioIm-4z_DYIuhS1y5QOQEmKQCCw1cfvhn9RXjbgl6tNZckEqOYpebYhHY2KElA0qDs52XhtHv_hcT9c3EmMABJ0CWLB588Us8Of8RbmPzZLkQaGjaRSfsA9qB94quUQQ3tRix1JuXTtlykvFa7Wx7XxFKhk-jgLg6JkTc3gXJks8qNSwLHDIBcmqrH8bYloavXR_fQ7H9ZOBfkdaX7kerrOSuFReDU_ITSZyKBomuRY3G4Fj-5jyCMwgZbzIGkWEqv7azuTPuLUzgkYqvPFpxf_0i28kkJ5io9z6cElJC_TXUcN_HrqEnumvmJyALI4cW6z3kXG17mtOq4mGvbKuWQxTfMb09ejtu64-fOMU054TWcrLDbqzTVZlxRr50RamBJpNzhftaaGN4t8uPtcHEdI0WfXy33KD7wuNtKLjPX7W3OwqfxSF0Yewqs6Y-NUuGOZXIcucsei0rbXt2iS81IG6o2tnQD3vUajhYcpKp68X3MA_lxHomyZeeiw-dUS2450zqfzkNT0NIPyE-YUofsfQ4GbtPMdMOF6mtSbPrqeU21XMBhRzTsrjiS-ShB-dy3dTH41Zf5XCEg5baMGCRe5TaOjPH8pzcPylWTdk7l1_WaBq7x22rOpRpueswxzW8FVtQiCLJXWE0hXaUhrECJQ94XODnPbdRlnmT0Fufe5Ha-EcOjrKORbOQTCd9V5vUJVdhGwSF7JNAcJ052lvxGIN3PePWkaER3RNQM6_YsH5CdsSKsgRbPMNyvty5hN8a02NvSleO88aPrHPVXVelAoX-JAltNSoXcldXB9YkFbjqcfIG9kFBOR1Qrm29VMTvfKHe3cOSBZyjMRKrV6t-Ufh9GrMdjCdLehq21kNhKWw-OaRJ21Yyz9iWFBAe5oxbexGncd3KUF5hswqmNI3X-bzVsDB2JjJEz1_Vp54_XEadnLDVZfumCILokf3lMyUZyz3IR3I6rB31dYI6y0TBdLTXo0_CmgKP7kYRtMcMBh5LVcOHeOLBuXjZsM6qvmHOVNN0rTXUze3tAYuDegzJypJtaEnAmbNQYDSJU5mR5I7Qz1Z3JhtW9yEI4SjMsXSIXHe4m4SIo0IoC3cLVbcESaRy-h29WsmPKa_Ne-i1_v1MXWuaTE1HrkVM8MWxDZ5OhiaFanFl4HiCTHCnTxinMHC7OINcgMlKKtGb8dt3t9lE4uElAv_NGxjAvb8sGb8Mc0MaTflOTyKDj6CwhvzduXbXmEF07bxmcYuWkvifC0wBhu-sBOUwf54bjY4eLxytKch8N96Zd4t3UNPj4mByFhsTVZ2fisd1z422qFi8jK1",
+      "status": null
+    },
+    {
+      "id": "msg_05c3d38395db62b0006ab8884f7fec87d194521614fb0ae84d",
+      "content": [
+        {
+          "annotations": [
+            {
+              "end_index": 593,
+              "start_index": 513,
+              "title": "Clasificación de clínicas dentales de Lima — metodología abierta — Lima Dental Rating",
+              "type": "url_citation",
+              "url": "https://www.limadentalrating.com/es/?utm_source=openai"
+            },
+            {
+              "end_index": 881,
+              "start_index": 778,
+              "title": "Odontonova - Centro de Implantología Dental | Miraflores, Lima",
+              "type": "url_citation",
+              "url": "https://centrodeimplantologiaodontonova.com/?utm_source=openai"
+            },
+            {
+              "end_index": 1102,
+              "start_index": 1025,
+              "title": "Implantes Dentales - Clínica Miraflores",
+              "type": "url_citation",
+              "url": "https://clinica-miraflores.com/?utm_source=openai"
+            },
+            {
+              "end_index": 1384,
+              "start_index": 1304,
+              "title": "Clasificación de clínicas dentales de Lima — metodología abierta — Lima Dental Rating",
+              "type": "url_citation",
+              "url": "https://www.limadentalrating.com/es/?utm_source=openai"
+            },
+            {
+              "end_index": 1641,
+              "start_index": 1545,
+              "title": "Consejos antes de un implante dental: qué preguntar y evitar",
+              "type": "url_citation",
+              "url": "https://www.dentalia.com/es/consejos-para-implantes-dentales?utm_source=openai"
+            },
+            {
+              "end_index": 1862,
+              "start_index": 1756,
+              "title": "REPORTE CLÍNICO",
+              "type": "url_citation",
+              "url": "https://spch.cl/wp-content/uploads/2023/01/IJOID-edicion-diciembre-2022.pdf?utm_source=openai"
+            },
+            {
+              "end_index": 2123,
+              "start_index": 1979,
+              "title": "Implantes dentales: tipos, precios, proceso y cómo elegir clínica | Dentalia",
+              "type": "url_citation",
+              "url": "https://www.consalud.es/dentalia/clinicas/implantes-dentales-tipos-precios-proceso-y-como-elegir-clinica.html?utm_source=openai"
+            },
+            {
+              "end_index": 2385,
+              "start_index": 2262,
+              "title": "Implantes dentales en Perú: tipos, proceso y costos | Clínica Dental",
+              "type": "url_citation",
+              "url": "https://www.thedentalclinic.pe/blog-implantes-dentales-peru-tipos-proceso-costos/?utm_source=openai"
+            },
+            {
+              "end_index": 2631,
+              "start_index": 2535,
+              "title": "Consejos antes de un implante dental: qué preguntar y evitar",
+              "type": "url_citation",
+              "url": "https://www.dentalia.com/es/consejos-para-implantes-dentales?utm_source=openai"
+            }
+          ],
+          "text": "Perfecto — te doy 3-4 opciones en Miraflores que suelen recomendarse para implantes y un checklist corto de qué preguntar antes de decidir. Si quieres, luego puedo buscar teléfonos, direcciones y precios exactos y comparar presupuestos.\n\nRecomendadas (breve motivo)\n- The Dental Clinic & GT Concept Asociados (sede Miraflores): clínica con reputación local, sedes en Miraflores/San Isidro y equipo con experiencia en rehabilitación oral e implantes; buena infraestructura para pacientes nacionales y extranjeros. ([limadentalrating.com](https://www.limadentalrating.com/es/?utm_source=openai))  \n- Odontonova — Centro de Implantología (Miraflores): centro especializado en implantología que anuncia campañas y protocolos de prótesis sobre implantes (muy enfocado en implantes). ([centrodeimplantologiaodontonova.com](https://centrodeimplantologiaodontonova.com/?utm_source=openai))  \n- Clínica Miraflores (clínica local especializada en implantes): publicita planificación digital, escáner intraoral 3D y protocolos guiados. ([clinica-miraflores.com](https://clinica-miraflores.com/?utm_source=openai))  \n- Opción adicional: V&C Odontólogos (sede cercana): clínica con equipos de imagen 2D/3D (CBCT) y servicio de rehabilitación oral; buena opción si te interesa disponibilidad de imágenes y tecnología. ([limadentalrating.com](https://www.limadentalrating.com/es/?utm_source=openai))\n\nChecklist breve (qué preguntar / comprobar en la evaluación)\n- ¿Qué especialista hará la cirugía y cuál es su experiencia en implantes? (pide nombre y casos). ([dentalia.com](https://www.dentalia.com/es/consejos-para-implantes-dentales?utm_source=openai))  \n- ¿Tienen CBCT (tomografía 3D) y planificación digital / cirugía guiada? (reduce sorpresas y mejora precisión). ([spch.cl](https://spch.cl/wp-content/uploads/2023/01/IJOID-edicion-diciembre-2022.pdf?utm_source=openai))  \n- ¿Qué marca y modelo de implantes usarán y me entregarán el “pasaporte” del implante? (garantía y trazabilidad). ([consalud.es](https://www.consalud.es/dentalia/clinicas/implantes-dentales-tipos-precios-proceso-y-como-elegir-clinica.html?utm_source=openai))  \n- ¿Incluye el presupuesto injertos (si son necesarios), provisionales y la prótesis final? Pide un plan por fases con tiempos y costos. ([thedentalclinic.pe](https://www.thedentalclinic.pe/blog-implantes-dentales-peru-tipos-proceso-costos/?utm_source=openai))  \n- ¿Qué garantía ofrecen (implantología/protesis) y cuál es el protocolo de mantenimiento/controles? Solicita referencias y fotos de casos previos. ([dentalia.com](https://www.dentalia.com/es/consejos-para-implantes-dentales?utm_source=openai))\n\nSiguiente paso\n- ¿Quieres que busque teléfonos, direcciones exactas y horarios de estas clínicas y le pida presupuestos comparativos? Puedo hacerlo y traerte 2–3 presupuestos con los puntos comparados (marca de implante, necesidad de injerto, tiempo estimado).  \n\nDime si prefieres que busque: (a) contactos y horarios, (b) precios aproximados/comparativa, o (c) reservar una evaluación (puedo indicarte cómo pedirla).",
+          "type": "output_text",
+          "logprobs": []
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": null
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [
+    {
+      "type": "web_search",
+      "external_web_access": null,
+      "filters": null,
+      "search_context_size": "medium",
+      "user_location": {
+        "city": "Lima",
+        "country": "PE",
+        "region": "Lima",
+        "timezone": "America/Lima",
+        "type": "approximate"
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ]
+    }
+  ],
+  "top_p": 1.0,
+  "background": false,
+  "completed_at": 1790478419.0,
+  "conversation": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "moderation": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_diagnostics": null,
+  "prompt_cache_key": null,
+  "prompt_cache_options": null,
+  "prompt_cache_retention": "in_memory",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "generate_summary": null,
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "status": "completed",
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 13290,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 2339,
+    "output_tokens_details": {
+      "reasoning_tokens": 1536
+    },
+    "total_tokens": 15629
+  },
+  "user": null,
+  "access_programs": null,
+  "billing": {
+    "payer": "developer"
+  },
+  "frequency_penalty": 0.0,
+  "presence_penalty": 0.0,
+  "store": true,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 2
+    }
+  }
+}

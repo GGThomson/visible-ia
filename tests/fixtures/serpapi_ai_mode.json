@@ -1,0 +1,79 @@
+{
+  "search_metadata": {
+    "id": "fixture0001",
+    "status": "Success",
+    "json_endpoint": "https://serpapi.com/searches/fixture0001.json",
+    "created_at": "2026-09-26 15:00:00 UTC",
+    "processed_at": "2026-09-26 15:00:00 UTC",
+    "google_ai_mode_url": "https://www.google.com/search?udm=50&q=implantes+dentales+Miraflores",
+    "total_time_taken": 4.2
+  },
+  "search_parameters": {
+    "engine": "google_ai_mode",
+    "q": "¿Dónde me pongo implantes dentales en Miraflores?",
+    "location_used": "Lima,Lima Region,Peru",
+    "hl": "es",
+    "gl": "pe"
+  },
+  "text_blocks": [
+    {
+      "type": "paragraph",
+      "snippet": "En Miraflores hay varias clínicas con experiencia en implantes dentales:",
+      "reference_indexes": [0]
+    },
+    {
+      "type": "list",
+      "list": [
+        {
+          "title": "Clínica Dental Sonrisa Andina:",
+          "snippet": "tomografía propia y garantía de 5 años.",
+          "reference_indexes": [0]
+        },
+        {
+          "title": "Centro Odontológico Larco:",
+          "snippet": "atiende sábados y ofrece financiamiento.",
+          "reference_indexes": [1],
+          "list": [
+            { "snippet": "Evaluación inicial gratuita." }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "snippet": "Consejos"
+    },
+    {
+      "type": "paragraph",
+      "snippet": "Revisa las reseñas en Doctoralia antes de decidir.",
+      "reference_indexes": [2]
+    }
+  ],
+  "references": [
+    {
+      "title": "Implantes dentales | Sonrisa Andina",
+      "link": "https://www.sonrisaandina.pe/implantes",
+      "snippet": "Implantes con garantía.",
+      "source": "Sonrisa Andina",
+      "index": 0
+    },
+    {
+      "title": "Centro Odontológico Larco",
+      "link": "https://www.facebook.com/odontologicolarco",
+      "source": "Facebook",
+      "index": 1
+    },
+    {
+      "title": "Implantólogos en Miraflores - Doctoralia",
+      "link": "https://www.doctoralia.pe/implantologia/miraflores",
+      "source": "Doctoralia",
+      "index": 2
+    },
+    {
+      "title": "Implantes dentales | Sonrisa Andina",
+      "link": "https://www.sonrisaandina.pe/implantes",
+      "source": "Sonrisa Andina",
+      "index": 3
+    }
+  ]
+}
