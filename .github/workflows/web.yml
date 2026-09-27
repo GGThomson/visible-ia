@@ -34,6 +34,24 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages project create ${{ env.PROJECT }} --production-branch=main
 
+      # The form posts with the public anon key (RLS only allows inserting a request).
+      # Production (main) -> prod database; previews (pull requests) -> dev, so tests
+      # never land in prod. Without the key the page still works and the form says so.
+      - name: Write web/config.js
+        env:
+          IS_PROD: ${{ github.event_name != 'pull_request' && github.ref_name == 'main' }}
+          URL_PROD: ${{ secrets.SUPABASE_URL_PROD }}
+          KEY_PROD: ${{ secrets.SUPABASE_ANON_KEY_PROD }}
+          URL_DEV: ${{ secrets.SUPABASE_URL_DEV }}
+          KEY_DEV: ${{ secrets.SUPABASE_ANON_KEY_DEV }}
+        run: |
+          if [ "$IS_PROD" = "true" ]; then URL="$URL_PROD"; KEY="$KEY_PROD"; else URL="$URL_DEV"; KEY="$KEY_DEV"; fi
+          # Secrets pasted by hand may carry quotes, spaces, a trailing slash or no scheme.
+          URL=$(printf '%s' "$URL" | tr -d "\"' " | sed 's#/*$##')
+          case "$URL" in https://*|"") ;; *) URL="https://$URL" ;; esac
+          printf 'window.VISIBLE_IA_CONFIG = {"supabaseUrl": "%s", "anonKey": "%s"};\n' "$URL" "$KEY" > web/config.js
+          echo "config.js -> $( [ "$IS_PROD" = "true" ] && echo prod || echo dev ), clave anon: $( [ -n "$KEY" ] && echo sí || echo FALTA )"
+
       - name: Deploy
         id: deploy
         uses: cloudflare/wrangler-action@v4
