@@ -14,6 +14,7 @@ import httpx
 from visible_ia.motor.modelos import Citation, EngineResponse
 
 ENDPOINT = "https://serpapi.com/search.json"
+ACCOUNT_ENDPOINT = "https://serpapi.com/account.json"
 PARAMS = {"engine": "google_ai_mode", "location": "Lima, Peru", "hl": "es", "gl": "pe"}
 MAX_RETRIES = 3
 BACKOFF_SECONDS = (2, 4, 8)
@@ -58,6 +59,20 @@ def ask(
         message = payload.get("error") or response.text[:200]
         raise SerpApiError(f"SerpApi respondió {response.status_code}: {message}")
     return parse_response(payload)
+
+
+def account_usage(api_key: str, *, client: httpx.Client | None = None) -> int:
+    """Searches used this month according to the SerpApi account (free: no credit)."""
+    own_client = client is None
+    client = client or httpx.Client(timeout=30)
+    try:
+        response = client.get(ACCOUNT_ENDPOINT, params={"api_key": api_key})
+    finally:
+        if own_client:
+            client.close()
+    if response.status_code != 200:
+        raise SerpApiError(f"SerpApi (cuenta) respondió {response.status_code}")
+    return int(response.json().get("this_month_usage") or 0)
 
 
 def parse_response(raw: dict[str, Any]) -> EngineResponse:
