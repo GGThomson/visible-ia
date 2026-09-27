@@ -14,8 +14,16 @@ uv sync                              # instala dependencias (uv.lock)
 Copy-Item .env.example .env          # luego pega los valores en .env (nunca se sube a Git)
 uv run visible-ia config check       # dice qué variables faltan, sin mostrar valores
 uv run visible-ia config check --env prod
+uv run playwright install chromium   # una vez: navegador para generar los informes en PDF
 ```
 Si `uv` no se reconoce en la terminal, usa `python -m uv`.
+
+### Informe gratis de diagnóstico (PDF)
+```powershell
+uv run visible-ia informe crear-bucket --env prod     # una vez por entorno: bucket privado "informes"
+uv run visible-ia informe diagnostico --clinica <id> --mercado <id> --env prod
+```
+Por defecto compara con los 3 mejores del ranking (`--competidores a,b,c` para elegir otros). El PDF queda en `salida/` (fuera de Git), se sube al bucket privado y se registra en `reports`. Con `--sin-subir` solo se genera el archivo local. La marca (nombre, colores, logo, contacto) está en `src/visible_ia/informes/marca.toml`.
 
 ### Pruebas y estilo
 ```powershell

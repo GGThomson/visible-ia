@@ -35,3 +35,6 @@ tests/fixtures/*_live.json
 
 # Working files for the Director to review (Excel), not versioned
 data/propuestas/
+
+# Generated reports (PDF): kept locally and in Supabase Storage, not in Git
+salida/

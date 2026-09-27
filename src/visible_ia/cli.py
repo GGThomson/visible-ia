@@ -1081,3 +1081,97 @@ def puntaje_brecha(
             "SÍ" if r.gap else "",
         )  # fmt: skip
     Console().print(table)
+
+
+# --- reports (C6) --------------------------------------------------------------------------
+
+informe_app = typer.Typer(help="Informes en PDF.", no_args_is_help=True)
+app.add_typer(informe_app, name="informe")
+
+
+@informe_app.command("diagnostico")
+def informe_diagnostico(
+    clinica: int = typer.Option(..., help="Id de la clínica prospecto."),
+    mercado: int = typer.Option(..., help="Id del mercado."),
+    competidores: str = typer.Option(
+        None, help="Ids separados por coma (por defecto, los 3 mejores del ranking)."
+    ),
+    mes: str = typer.Option(None, help="AAAA-MM (por defecto, el último calculado)."),
+    subir: bool = typer.Option(
+        True, "--subir/--sin-subir", help="Subir el PDF a Supabase Storage y registrarlo."
+    ),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Genera el informe gratis de diagnóstico en PDF (HU-14)."""
+    import time
+
+    from visible_ia.informes.contexto import build_context, load_brand, load_report_data
+    from visible_ia.informes.pdf import (
+        OUTPUT_DIR,
+        PdfError,
+        html_to_pdf,
+        record_report,
+        report_filename,
+        upload,
+    )
+    from visible_ia.informes.render import render_diagnostic
+    from visible_ia.puntaje.indice import ScoreError
+
+    started = time.monotonic()
+    target = _resolve_env(env)
+    chosen = [int(c) for c in competidores.split(",")] if competidores else None
+    settings = get_settings()
+    with _connect_or_exit(target, autocommit=True) as conn:
+        try:
+            data = load_report_data(conn, clinica, mercado, _parse_month(mes), chosen)
+            html = render_diagnostic(build_context(data, load_brand()))
+        except ScoreError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+        path = OUTPUT_DIR / report_filename(data.clinic.name, data.month)
+        path.with_suffix(".html").parent.mkdir(parents=True, exist_ok=True)
+        path.with_suffix(".html").write_text(html, encoding="utf-8")
+        try:
+            html_to_pdf(html, path)
+        except PdfError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+        typer.echo(f"PDF: {path} ({path.stat().st_size / 1024:.0f} KB)")
+        if subir:
+            _confirm_prod(target)
+            url = settings.value(f"SUPABASE_URL_{target.upper()}")
+            key = settings.value(f"SUPABASE_SERVICE_ROLE_KEY_{target.upper()}")
+            try:
+                stored = upload(
+                    path,
+                    f"diagnostico/{path.name}",
+                    supabase_url=url,
+                    service_role_key=key.get_secret_value(),
+                )
+            except PdfError as exc:
+                typer.echo(f"No se pudo subir: {exc}")
+                raise typer.Exit(code=1) from None
+            report_id = record_report(conn, data.clinic.id, data.month, stored)
+            typer.echo(f"Subido a Storage ({stored}) y registrado como informe {report_id}.")
+    typer.echo(f"Listo en {time.monotonic() - started:.0f} s.")
+
+
+@informe_app.command("crear-bucket")
+def informe_crear_bucket(env: str = typer.Option(None, help="dev o prod.")) -> None:
+    """Crea el bucket privado 'informes' en Supabase Storage (una vez por entorno)."""
+    from visible_ia.informes.pdf import PdfError, ensure_bucket
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    settings = get_settings()
+    try:
+        created = ensure_bucket(
+            supabase_url=settings.value(f"SUPABASE_URL_{target.upper()}"),
+            service_role_key=settings.value(
+                f"SUPABASE_SERVICE_ROLE_KEY_{target.upper()}"
+            ).get_secret_value(),
+        )
+    except PdfError as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from None
+    typer.echo("Bucket 'informes' creado (privado)." if created else "El bucket ya existía.")

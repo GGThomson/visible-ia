@@ -31,7 +31,7 @@
   - Español de Perú, tono claro y sin tecnicismos. El margen se explica como "entre X % y Y %".
 
 ### C6-T02 · PDF con Playwright + comando `informe diagnostico`
-- **Estado:** ⚪
+- **Estado:** ✅ (27/09: PDF real de 3 páginas, 89 KB, 4 s en Windows; Linux/Actions se verifica en C8)
 - **Qué:**
   - `informes/pdf.py` convierte el HTML a PDF con Playwright (Chromium).
   - Comando `visible-ia informe diagnostico --clinica <id> --mercado <id> [--competidores a,b,c]`: por defecto, los 3 mejores del ranking que no son la clínica.
