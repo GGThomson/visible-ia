@@ -1,4 +1,4 @@
-name: Diario (mantener activo Supabase)
+name: Diario (Supabase activo + aviso de prospectos)
 
 # Supabase pauses free projects after a week without database activity.
 # This runs once a day against dev and prod (docs/04-arquitectura/arquitectura.md).
@@ -51,3 +51,25 @@ jobs:
           else
             gh issue create --title "$TITLE" --body "$body"
           fi
+
+  # C6-T04: the Director learns about landing requests within 24 h without opening Supabase.
+  # The issue has only the count and clinic names (no contact data); it closes itself once
+  # `visible-ia prospectos nuevos` has marked them as seen.
+  prospectos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          enable-cache: true
+
+      - run: uv sync --locked --no-dev
+
+      - name: Aviso de prospectos nuevos (prod)
+        run: uv run visible-ia prospectos aviso --env prod
+        env:
+          SUPABASE_URL_PROD: ${{ secrets.SUPABASE_URL_PROD }}
+          SUPABASE_SERVICE_ROLE_KEY_PROD: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY_PROD }}
+          GITHUB_TOKEN: ${{ github.token }}
