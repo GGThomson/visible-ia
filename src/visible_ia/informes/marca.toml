@@ -1,0 +1,11 @@
+# Brand of the reports. C10 (white label for agencies) replaces these values per agency.
+nombre = "visible-ia"
+lema = "Cómo te ve la IA cuando un paciente busca clínica"
+color_primario = "#0F4C5C"
+color_acento = "#E36414"
+color_suave = "#E8F1F2"
+# Optional: absolute URL or data: URI of a logo. Empty = the name is shown as text.
+logo_url = ""
+# Real contact of the Director (email or WhatsApp). Empty = not shown.
+contacto = ""
+web = "https://visible-ia.pages.dev"
