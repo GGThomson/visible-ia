@@ -1,7 +1,7 @@
 {
  "mercado": "IMP · Miraflores",
- "estado": "propuesta",
- "nota": "Lista propuesta a partir de la corrida 1 (27/09); el Director la confirma en el Excel.",
+ "estado": "confirmada",
+ "nota": "Lista confirmada por el Director el 27/09 e importada en prod (34 clínicas).",
  "clinicas": [
   {
    "nombre": "Smiles Peru",
@@ -19,6 +19,17 @@
    ]
   },
   {
+   "nombre": "Dr. Aldo | Implantes Dentales y Rehabilitación Oral",
+   "alias": [
+    "Dr. Aldo",
+    "Dr. Aldo Implants",
+    "Aldo Implants",
+    "Dr. Aldo Implants & Oral Rehabilitation",
+    "Tus Implantes Dentales Miraflores",
+    "Dr. Aldo Moreno"
+   ]
+  },
+  {
    "nombre": "Dr. Enmanuel Teixeira",
    "alias": [
     "Enmanuel Teixeira",
@@ -32,14 +43,12 @@
    "alias": []
   },
   {
-   "nombre": "Dr. Aldo | Implantes Dentales y Rehabilitación Oral",
+   "nombre": "The Dental Clinic & GT Concept",
    "alias": [
-    "Dr. Aldo",
-    "Dr. Aldo Implants",
-    "Aldo Implants",
-    "Dr. Aldo Implants & Oral Rehabilitation",
-    "Tus Implantes Dentales Miraflores",
-    "Dr. Aldo Moreno"
+    "The Dental Clinic",
+    "The Dental Clinic & GT Concept Asociados",
+    "The Dental Clinic (GT Concept Asociados)",
+    "GT Concept"
    ]
   },
   {
@@ -65,6 +74,13 @@
    ]
   },
   {
+   "nombre": "TodoOrtodoncia",
+   "alias": [
+    "TodoOrtodoncia Lima",
+    "Todo Ortodoncia"
+   ]
+  },
+  {
    "nombre": "Clínica Odontologists",
    "alias": [
     "Odontologists"
@@ -81,24 +97,8 @@
    ]
   },
   {
-   "nombre": "TodoOrtodoncia",
-   "alias": [
-    "TodoOrtodoncia Lima",
-    "Todo Ortodoncia"
-   ]
-  },
-  {
    "nombre": "Kagem",
    "alias": []
-  },
-  {
-   "nombre": "The Dental Clinic & GT Concept",
-   "alias": [
-    "The Dental Clinic",
-    "The Dental Clinic & GT Concept Asociados",
-    "The Dental Clinic (GT Concept Asociados)",
-    "GT Concept"
-   ]
   },
   {
    "nombre": "Vicich Dental Clinic",
@@ -106,10 +106,6 @@
     "Clínica Dental Vicich",
     "Clínica Vicich"
    ]
-  },
-  {
-   "nombre": "Clínica Miraflores",
-   "alias": []
   },
   {
    "nombre": "Dra. Edith Molina Miranda",
@@ -128,23 +124,8 @@
    "alias": []
   },
   {
-   "nombre": "Dra. Connie Negrete",
-   "alias": [
-    "Dra. Connie Negrete G.",
-    "Implantes Dentales Miraflores - Dra. Connie Negrete",
-    "Implantes Dentales Miraflores"
-   ]
-  },
-  {
    "nombre": "Top Dental Health",
    "alias": []
-  },
-  {
-   "nombre": "Dr. Christian Elías Cornock",
-   "alias": [
-    "Dr. Christian Omar Elías Cornock",
-    "RenovaSmiles"
-   ]
   },
   {
    "nombre": "ETIDENT",
@@ -166,10 +147,6 @@
    ]
   },
   {
-   "nombre": "Clínica Internacional",
-   "alias": []
-  },
-  {
    "nombre": "Dr. Tremolada",
    "alias": []
   },
@@ -182,7 +159,11 @@
   {
    "nombre": "Elisseum Dental Clinic",
    "alias": [
-    "Elisseum"
+    "Elisseum",
+    "Dr. Alonso Moreno Mejía",
+    "Dr. Alonso Moreno",
+    "Implantes Dentales Miraflores",
+    "Implantes Dentales - Mejor Clinica dental Elisseum"
    ]
   },
   {
@@ -216,8 +197,11 @@
    ]
   },
   {
-   "nombre": "Dr. Alonso Moreno Mejía",
-   "alias": []
+   "nombre": "Dra. Connie Negrete",
+   "alias": [
+    "Dra. Connie Negrete G.",
+    "Implantes Dentales Miraflores - Dra. Connie Negrete"
+   ]
   }
  ]
 }
