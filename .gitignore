@@ -32,3 +32,6 @@ npm-debug.log*
 
 # Raw answers saved by live tests (SAVE_LIVE_FIXTURE=1); copy to *_real.json to keep them
 tests/fixtures/*_live.json
+
+# Working files for the Director to review (Excel), not versioned
+data/propuestas/

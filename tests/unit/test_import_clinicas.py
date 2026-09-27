@@ -41,3 +41,16 @@ def test_bad_rows_are_reported_without_stopping():
 def test_missing_required_column_fails():
     with pytest.raises(InvalidClinicsFile, match="maps_url"):
         parse_clinics_csv("nombre,distrito\nA,Surco\n")
+
+
+def test_alias_column_accepts_several_names_separated_by_semicolons():
+    text = (
+        "nombre;distrito;maps_url;alias\n"
+        "Dr. Aldo | Implantes Dentales;Miraflores;https://maps.google.com/?cid=1;"
+        '"Dr. Aldo Implants; Aldo Implants ;"\n'
+        "Smiles Peru;Miraflores;https://maps.google.com/?cid=2;\n"
+    )
+    rows, errors = parse_clinics_csv(text)
+    assert errors == []
+    assert rows[0].aliases == ("Dr. Aldo Implants", "Aldo Implants")
+    assert rows[1].aliases == ()

@@ -52,6 +52,21 @@ def test_exact_match_is_marked_as_exact():
     assert result.via == "exact" and result.score == 100
 
 
+@pytest.mark.parametrize(
+    "mention, clinic_name",
+    [
+        ("Digital Smiles", "Smiles Peru"),
+        ("Clínica Dental Vicich", "The Dental Clinic & GT Concept"),
+        ("Vicich Dental Clinic", "The Dental Clinic & GT Concept"),
+        ("Elisseum Dental Clinic", "The Dental Clinic & GT Concept"),
+        ("Smile Design Peru", "Smiles Peru"),
+    ],
+)
+def test_a_distinctive_extra_word_blocks_the_match(mention, clinic_name):
+    """False merges found when grouping run 1: one clinic's name inside the other's."""
+    assert match(mention, [ClinicCandidate(1, clinic_name)]).status == "new"
+
+
 def test_a_tie_goes_to_review_never_to_two_clinics():
     result = match("Smiles", CLINICS)
     assert result.status == "review"
