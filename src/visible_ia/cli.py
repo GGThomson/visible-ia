@@ -980,20 +980,16 @@ def puntaje_ranking(
             typer.echo(str(exc))
             raise typer.Exit(code=1) from None
     table = Table(title=f"Mercado {mercado} · {month:%Y-%m} · índice de presencia (0–100)")
-    for column in (
-        "#",
-        "clínica",
-        "combinado",
-        "margen 95 %",
-        "ChatGPT",
-        "Google",
-        "posición media",
-        "cuota",
-    ):
+    labels = {"up": "sube", "down": "baja", "no_clear_change": "sin cambio claro",
+              "first_month": "primer mes"}  # fmt: skip
+    columns = ("#", "clínica", "combinado", "margen 95 %", "ChatGPT", "Google", "posición media",
+               "cuota", "cambio", "ventana 3 m")  # fmt: skip
+    for column in columns:
         table.add_column(column, justify="left" if column == "clínica" else "right")
     for i, r in enumerate(rows, start=1):
         table.add_row(
             str(i), r.name, _fmt(r.combined), f"{_fmt(r.ci_low, '')}–{_fmt(r.ci_high, '')}",
             _fmt(r.chatgpt), _fmt(r.google), _fmt(r.avg_position), _fmt(r.mention_share, " %"),
+            labels.get(r.change or "", "—"), _fmt(r.window3),
         )  # fmt: skip
     Console().print(table)
