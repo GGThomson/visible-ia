@@ -1,0 +1,46 @@
+dominio,tipo,nota
+google.com,google_profile,Google AI Mode links to its own viewer (searchviewer) and to Maps
+maps.google.com,google_profile,
+g.page,google_profile,
+maps.app.goo.gl,google_profile,
+goo.gl,google_profile,
+business.site,google_profile,Google Business Profile websites
+doctoralia.pe,doctoralia,
+doctoralia.com,doctoralia,
+doctoralia.es,doctoralia,
+facebook.com,social,
+fb.com,social,
+instagram.com,social,
+tiktok.com,social,
+youtube.com,social,
+linkedin.com,social,
+x.com,social,
+twitter.com,social,
+wa.me,social,
+whatsapp.com,social,
+limadentalrating.com,directory,ranking
+whatclinic.com,directory,
+dentaldepartures.com,directory,
+tumedico.pe,directory,
+empresia.pe,directory,
+clinicindex.net,directory,
+cuantomecuesta.com,directory,price comparison
+fresha.com,directory,booking platform
+setmore.com,directory,booking platform
+topdoctors.pe,directory,
+directoriomedico.pe,directory,
+paginasamarillas.com.pe,directory,
+elcomercio.pe,press,
+larepublica.pe,press,
+rpp.pe,press,
+infobae.com,press,
+gestion.pe,press,
+peru21.pe,press,
+trome.pe,press,
+diariocorreo.pe,press,
+exitosanoticias.pe,press,
+americatv.com.pe,press,
+latina.pe,press,
+panamericana.pe,press,
+wikipedia.org,other,
+sites.google.com,other,sites hosted on Google Sites (own website only if it is a market clinic's web)

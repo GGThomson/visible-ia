@@ -41,7 +41,7 @@
 - **Rama:** `feat/C4-T02-matching`
 
 ### C4-T03 · Clasificación de fuentes
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** `extractor/fuentes.py`, que clasifica cada dominio en: ficha de Google, Doctoralia, web propia, redes, directorio/ranking, prensa u otra.
   - Usa una tabla de dominios conocidos (en `data/`).
   - Marca "web propia" si coincide con el `web` de una clínica del mercado.
