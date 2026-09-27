@@ -20,9 +20,26 @@ class ModelRate:
 
 
 @dataclass(frozen=True)
+class CallEstimate:
+    model: str
+    searches_per_call: int
+    input_tokens_per_call: int
+    output_tokens_per_call: int
+
+
+@dataclass(frozen=True)
 class OpenAIRates:
     models: dict[str, ModelRate]
     web_search_per_call: float
+    estimate: CallEstimate | None = None
+
+    def estimated_call_cost(self) -> float:
+        """Conservative cost of one ChatGPT call, from the [openai.estimate] profile."""
+        if self.estimate is None:
+            raise KeyError(f"Falta la sección [openai.estimate] en {RATES_TOML.name}")
+        e = self.estimate
+        usage = Usage(input_tokens=e.input_tokens_per_call, output_tokens=e.output_tokens_per_call)
+        return self.cost(e.model, usage, e.searches_per_call)
 
     def model(self, name: str) -> ModelRate:
         try:
@@ -49,7 +66,8 @@ def load_openai_rates(path: Path = RATES_TOML) -> OpenAIRates:
         )
         for name, m in data["models"].items()
     }
-    return OpenAIRates(models, data["web_search"]["per_call"])
+    estimate = CallEstimate(**data["estimate"]) if "estimate" in data else None
+    return OpenAIRates(models, data["web_search"]["per_call"], estimate)
 
 
 @cache

@@ -42,7 +42,8 @@ class Settings(BaseSettings):
     openai_api_key: SecretStr | None = None
     serpapi_api_key: SecretStr | None = None
 
-    monthly_budget_usd: float = 10.0
+    # OpenAI cap approved by the Director on 2026-09-26 (US$5 prepaid, auto-recharge off).
+    monthly_budget_usd: float = 5.0
     serpapi_monthly_quota: int = 250
 
     @field_validator("supabase_url_dev", "supabase_url_prod", mode="before")

@@ -22,6 +22,12 @@ clinicas_app = typer.Typer(help="Clínicas de cada mercado y sus alias.", no_arg
 app.add_typer(clinicas_app, name="clinicas")
 alias_app = typer.Typer(help="Alias de una clínica.", no_args_is_help=True)
 clinicas_app.add_typer(alias_app, name="alias")
+presupuesto_app = typer.Typer(
+    help="Presupuesto de OpenAI y cuota de SerpApi.", no_args_is_help=True
+)
+app.add_typer(presupuesto_app, name="presupuesto")
+
+SURFACES_API = ("chatgpt_api", "google_ai_mode")
 
 
 def _confirm_prod(target: str) -> None:
@@ -334,3 +340,50 @@ def alias_quitar(
     with _connect_or_exit(target) as conn:
         removed = remove_alias(conn, clinica, alias)
     typer.echo("Alias quitado." if removed else "La clínica no tenía ese alias.")
+
+
+def _parse_surfaces(value: str) -> list[str]:
+    surfaces = [s.strip() for s in value.split(",") if s.strip()]
+    unknown = [s for s in surfaces if s not in SURFACES_API]
+    if not surfaces or unknown:
+        typer.echo(f"Superficies no válidas: {value} (usa {','.join(SURFACES_API)}).")
+        raise typer.Exit(code=2)
+    return surfaces
+
+
+def _serpapi_account_used(settings) -> int | None:
+    from visible_ia.motor.google_ai_mode import SerpApiError, account_usage
+
+    key = settings.serpapi_api_key
+    if key is None or not key.get_secret_value().strip():
+        return None
+    try:
+        return account_usage(key.get_secret_value())
+    except (SerpApiError, OSError) as exc:
+        typer.echo(f"Aviso: no se pudo leer la cuenta de SerpApi ({exc}); se usa la base.")
+        return None
+
+
+@presupuesto_app.command("ver")
+def presupuesto_ver(
+    preguntas: int = typer.Option(10, help="Preguntas por corrida."),
+    reps: int = typer.Option(3, help="Repeticiones por pregunta."),
+    superficies: str = typer.Option(",".join(SURFACES_API), help="Superficies separadas por coma."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Muestra el gasto del mes y si una corrida entraría en el presupuesto (no llama a OpenAI)."""
+    from visible_ia.motor.presupuesto import RunPlan, check, month_usage
+
+    settings = get_settings()
+    plan = RunPlan.for_market(preguntas, reps, _parse_surfaces(superficies))
+    with _connect_or_exit(_resolve_env(env)) as conn:
+        usage = month_usage(conn, serpapi_account_used=_serpapi_account_used(settings))
+    result = check(
+        plan,
+        usage,
+        budget_usd=settings.monthly_budget_usd,
+        serpapi_quota=settings.serpapi_monthly_quota,
+    )
+    typer.echo(result.explain())
+    if not result.ok:
+        raise typer.Exit(code=1)

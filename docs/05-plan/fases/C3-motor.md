@@ -6,13 +6,13 @@
 - Además, se pueden cargar muestras manuales de las apps (Gemini y ChatGPT).
 
 **Historias que cubre:** HU-04, HU-05, HU-06
-**Estado:** ⚪ pendiente
+**Estado:** 🟡 en curso
 **Depende de (Director):** cuenta de SerpApi (plan gratis) y **facturación de OpenAI aprobada y activada**, con las claves en `.env` y en Secrets.
 
 ## Tareas
 
 ### C3-T01 · Cliente de ChatGPT (Responses API + web search)
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** `motor/chatgpt_api.py` con una función `consultar(pregunta) -> RespuestaMotor`.
   - Usa el SDK oficial `openai`: Responses API, modelo `gpt-5-mini`, herramienta `web_search` con `user_location` aproximada (`country="PE"`, `city="Lima"`, `region="Lima"`, `timezone="America/Lima"`).
   - Devuelve el texto, las citas (URL y título), el n.º de búsquedas hechas, los tokens, el costo estimado y el JSON crudo.
@@ -29,7 +29,7 @@
   - No usar la app de ChatGPT ni navegar su web (ADR-002).
 
 ### C3-T02 · Cliente de Google Modo IA (SerpApi)
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** `motor/google_ai_mode.py`, con la misma interfaz que C3-T01.
   - Parámetros: `engine=google_ai_mode`, `q`, `location="Lima, Peru"`, `hl=es`, `gl=pe`.
   - El texto sale de los bloques de texto (o del markdown reconstruido); las fuentes, de `references`.
@@ -44,7 +44,7 @@
 - **Notas para Claude Code:** usar `httpx` directamente (sin el SDK de SerpApi) para tener control de los reintentos.
 
 ### C3-T03 · Presupuesto y cuota (HU-05)
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** `motor/presupuesto.py`.
   - Antes de una corrida calcula su costo estimado (OpenAI) y cuántas búsquedas consume (SerpApi).
   - Suma lo gastado en el mes calendario (zona America/Lima).
