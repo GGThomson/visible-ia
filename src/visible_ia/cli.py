@@ -174,9 +174,9 @@ def plantillas_cargar(env: str = typer.Option(None, help="dev o prod.")) -> None
     typer.echo(f"Entorno: {target} · plantillas cargadas: {n}")
 
 
-def _connect_or_exit(target: str):
+def _connect_or_exit(target: str, *, autocommit: bool = False):
     try:
-        return db.connect(get_settings(), target)
+        return db.connect(get_settings(), target, autocommit=autocommit)
     except db.MissingDatabaseUrl as exc:
         typer.echo(str(exc))
         raise typer.Exit(code=1) from None
@@ -492,7 +492,7 @@ def corrida_lanzar(
     target = _resolve_env(env)
     _confirm_prod(target)
     settings = get_settings()
-    with _connect_or_exit(target) as conn:
+    with _connect_or_exit(target, autocommit=True) as conn:
         try:
             questions = list_questions(conn, mercado)
         except MarketError as exc:
@@ -526,7 +526,7 @@ def corrida_reanudar(
     target = _resolve_env(env)
     _confirm_prod(target)
     settings = get_settings()
-    with _connect_or_exit(target) as conn:
+    with _connect_or_exit(target, autocommit=True) as conn:
         try:
             calls = pending_calls(conn, corrida)
         except RunError as exc:
@@ -691,7 +691,7 @@ def extraer(
     target = _resolve_env(env)
     _confirm_prod(target)
     settings = get_settings()
-    with _connect_or_exit(target) as conn:
+    with _connect_or_exit(target, autocommit=True) as conn:
         pending = pending_answers(conn, corrida)
         if not pending:
             typer.echo(f"La corrida {corrida} no tiene respuestas pendientes de extraer.")
@@ -771,7 +771,7 @@ def revisar_corrida(
     console = Console()
     target = _resolve_env(env)
     _confirm_prod(target)
-    with _connect_or_exit(target) as conn:
+    with _connect_or_exit(target, autocommit=True) as conn:
         by_response: dict[int, list] = {}
         for row in revision.run_mentions(conn, corrida):
             by_response.setdefault(row.response_id, []).append(row)
