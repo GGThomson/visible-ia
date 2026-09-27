@@ -5,12 +5,12 @@
 - La calidad se mide de forma automática contra un conjunto etiquetado.
 
 **Historias que cubre:** HU-07, HU-08, HU-09
-**Estado:** ⚪ pendiente
+**Estado:** 🟡 en curso
 
 ## Tareas
 
 ### C4-T01 · Extracción de menciones con gpt-5-nano
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** `extractor/llm.py`.
   - Envía el texto de la respuesta a `gpt-5-nano` con **salida estructurada** (JSON Schema): una lista de `{nombre_tal_cual, orden, es_establecimiento_o_profesional}`.
   - Devuelve las menciones en el orden en que aparecen, sin inventar nombres.
@@ -28,7 +28,7 @@
   - **Hallazgo de la corrida 1 (26/09, Google Modo IA):** cuando Google muestra fichas de clínicas, SerpApi **no incluye el nombre de la ficha** en el texto (quedan "Ubicación: …", "Enfoque: …"). El nombre solo viene en el texto de los enlaces (`snippet_links[].text`, p. ej. "Dental Pérez Yance"), dentro de `raw.text_blocks`. El extractor de Google debe leer también esos textos de enlace, en su orden de aparición. En `references` los enlaces son `google.com/searchviewer/...` (C4-T03).
 
 ### C4-T02 · Asociación con las clínicas del mercado
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** `extractor/matching.py`.
   - Para cada mención busca la clínica del mercado: primero una coincidencia exacta con un alias (sin tildes, en minúsculas, sin puntuación) y después `rapidfuzz` (`token_set_ratio`) con umbral configurable (por defecto 90).
   - Si no hay coincidencia, marca la mención como "nueva" (HU-09).
