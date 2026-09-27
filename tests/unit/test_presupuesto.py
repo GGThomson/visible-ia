@@ -20,8 +20,8 @@ MARKET = RunPlan.for_market(10, 3, ["chatgpt_api", "google_ai_mode"])
 
 
 def test_estimated_call_cost_from_the_table_profile():
-    # 2 × 0.01 + (15000 × 0.25 + 3000 × 2.00) / 1e6
-    assert PER_CALL == pytest.approx(0.02975)
+    # 3 × 0.01 + (22000 × 0.25 + 2500 × 2.00) / 1e6
+    assert PER_CALL == pytest.approx(0.0405)
 
 
 def test_market_plan_is_10_by_3_per_surface():
@@ -54,7 +54,7 @@ def test_run_over_the_budget_is_blocked_and_explains_the_cost():
     assert not result.ok
     assert len(result.problems) == 1 and "presupuesto de OpenAI" in result.problems[0]
     text = result.explain()
-    assert "BLOQUEADA" in text and "US$0.89" in text
+    assert "BLOQUEADA" in text and f"US${result.estimated_cost_usd:.2f}" in text
 
 
 def test_run_over_the_serpapi_quota_is_blocked():

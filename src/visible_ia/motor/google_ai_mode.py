@@ -116,7 +116,12 @@ def blocks_to_text(blocks: list[dict[str, Any]]) -> str:
 def _block_lines(blocks: list[dict[str, Any]], depth: int) -> list[str]:
     lines: list[str] = []
     indent = "  " * depth
+    previous = None
     for block in blocks:
+        # Place cards come twice in a row, identical: keep one.
+        if block == previous:
+            continue
+        previous = block
         kind = block.get("type")
         snippet = CARD_BUTTONS.sub("", (block.get("snippet") or "").strip())
         title = (block.get("title") or "").strip()
