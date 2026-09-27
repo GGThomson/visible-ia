@@ -25,7 +25,7 @@
 - **Notas para Claude Code:** no agregar `scipy` ni `statsmodels`. La CDF normal se calcula con `math.erf`.
 
 ### C5-T02 · Índice mensual del mercado (HU-10, HU-11)
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** `puntaje/indice.py` y el comando `visible-ia puntaje calcular <corrida_id>`.
   - Por clínica y superficie calcula: respuestas, apariciones, índice, límites de Wilson, posición media y cuota de menciones.
   - Calcula también el **combinado** (promedio de ChatGPT y Google).
