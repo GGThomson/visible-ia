@@ -156,7 +156,7 @@ def test_empty_answer_is_saved_as_no_answer(tx):
         assert cur.fetchone()[0] is True
 
 
-def test_at_most_three_concurrent_calls_per_surface(tx):
+def test_concurrency_is_three_for_chatgpt_and_one_for_google(tx):
     run_id = _run(tx, reps=1)
     active = {s: 0 for s in SURFACES}
     peak = {s: 0 for s in SURFACES}
@@ -175,7 +175,7 @@ def test_at_most_three_concurrent_calls_per_surface(tx):
         return call
 
     execute(tx, run_id, {s: engine(s) for s in SURFACES})
-    assert peak == {"chatgpt_api": 3, "google_ai_mode": 3}
+    assert peak == {"chatgpt_api": 3, "google_ai_mode": 1}
 
 
 def test_missing_client_and_unknown_run_are_errors(tx):

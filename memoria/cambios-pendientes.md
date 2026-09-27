@@ -9,7 +9,7 @@
 ## Sin clasificar
 | ID | Fecha | Tipo | Descripción | Impacto | Destino |
 |---|---|---|---|---|---|
-| — | | | | | |
+| C-006 | 2026-09-26 | 🐛 calidad de datos (SerpApi) | En la corrida 1, 2 de 30 respuestas de Google Modo IA (ids 21 y 41) recomiendan clínicas en **fichas sin nombre**: SerpApi no trae el nombre ni en el texto ni en los enlaces (solo "Ubicado en Calle Elías Aguirre…"). Esas clínicas no se pueden contar y bajarían su índice en Google. Opciones: aceptarlo y declararlo en la nota de método, completar a mano en la revisión, o probar otro proveedor (DataForSEO) | Medio (afecta el índice de Google) | Por decidir (Director) antes de publicar el primer informe (C5/C6) |
 
 ## Clasificados (historial)
 | ID | Fecha | Tipo | Descripción | Impacto | Destino | Estado |

@@ -21,12 +21,23 @@ BACKOFF_SECONDS = (2, 4, 8)
 TIMEOUT_SECONDS = 120
 # SerpApi answers HTTP 200 with an "error" field when Google shows no AI answer.
 NO_ANSWER_MARKERS = ("hasn't returned any results",)
+# Google sometimes returns HTTP 200 with a rate-limit notice as the AI answer (run 1, 26/09).
+RATE_LIMIT_MARKERS = (
+    "alcanzaste el límite de solicitudes de respuestas de ia",
+    "you've reached the limit",
+)
+# Concurrent AI Mode searches trigger that limit: one at a time (the plan allows up to 3).
+MAX_CONCURRENCY = 1
 # Place cards leak their button labels into the snippet ("LlamarCómo llegarSitio web...").
 CARD_BUTTONS = re.compile(r"^(?:Llamar|Cómo llegar|Sitio web|Call|Directions|Website)+\s*")
 MARKDOWN_REFERENCES = re.compile(r"\n#+\s*References\s*\n.*\Z", re.DOTALL)
 
 
 class SerpApiError(RuntimeError):
+    pass
+
+
+class GoogleRateLimited(SerpApiError):
     pass
 
 
@@ -86,6 +97,9 @@ def parse_response(raw: dict[str, Any]) -> EngineResponse:
         blocks_to_text(blocks)
         or MARKDOWN_REFERENCES.sub("", raw.get("reconstructed_markdown") or "").strip()
     )
+    if any(marker in text.lower() for marker in RATE_LIMIT_MARKERS):
+        # Google answered with its own limit message: not an answer, the call must be redone.
+        raise GoogleRateLimited(f"Google limitó las respuestas de IA: {text[:120]}")
     citations: list[Citation] = []
     seen: set[str] = set()
     # Inline links carry the clinics' real websites; references are often Google viewer URLs.
