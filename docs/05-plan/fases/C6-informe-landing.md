@@ -78,7 +78,7 @@
 - **Rama:** `feat/C6-T04-prospect-alerts`
 
 ### C6-T05 · Plan B: vender el 05/10 con informes semiautomáticos (solo si C1–C5 se atrasan)
-- **Estado:** ⚪ (contingencia; decidido por el Director el 26/09)
+- **Estado:** ✅ guía escrita como respaldo; **no se activa** (27/09: C1–C5 y C6-T01/T02 listos antes del control del 02/10)
 - **Cuándo se activa:** en el **control del jueves 02/10 al final del día**. Si C5 (puntaje) no está completo, o si se ve que C6-T02 (PDF) no llegará al 04/10, se activa el nivel que corresponda. La decisión queda en la bitácora.
 - **Qué:** preparar lo mínimo para que el **05/10** se puedan enviar los primeros informes gratis igual:
   - **Nivel 1 (C3–C5 listos; faltan C6-T01/T02):**
