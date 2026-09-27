@@ -1,4 +1,57 @@
-# 🧭 Plantilla de Proyecto con Equipo de IAs
+# visible-ia
+
+Mide cada mes si **ChatGPT** y **Google (Modo IA)** recomiendan a una clínica de Lima cuando un paciente pregunta por su especialidad y distrito, frente a su competencia. Especificación: [PRD](docs/03-especificacion/prd.md) · arquitectura: [arquitectura.md](docs/04-arquitectura/arquitectura.md) · plan: [roadmap](docs/05-plan/roadmap.md) · estado: [ESTADO](memoria/ESTADO.md).
+
+## Guía técnica
+
+### Requisitos
+- Python (cualquier versión reciente) y [`uv`](https://docs.astral.sh/uv/): `python -m pip install --user uv`. `uv` descarga solo Python 3.12 para el proyecto (`.python-version`).
+- Opcional: [GitHub CLI](https://cli.github.com/) (`gh`) para PRs y Secrets.
+
+### Instalar y configurar
+```powershell
+uv sync                              # instala dependencias (uv.lock)
+Copy-Item .env.example .env          # luego pega los valores en .env (nunca se sube a Git)
+uv run visible-ia config check       # dice qué variables faltan, sin mostrar valores
+uv run visible-ia config check --env prod
+```
+Si `uv` no se reconoce en la terminal, usa `python -m uv`.
+
+### Pruebas y estilo
+```powershell
+uv run ruff check .                  # estilo
+uv run ruff format .                 # formato
+uv run pytest                        # pruebas unitarias (las que usa la CI)
+uv run pytest -m integration         # contra Supabase dev (necesita SUPABASE_DB_URL_DEV)
+```
+Las pruebas `live` llaman a APIs de pago y solo se corren a mano (`-m live`).
+
+### Base de datos (Supabase)
+```powershell
+uv run visible-ia db status --env dev
+uv run visible-ia db migrate --env dev          # aplica supabase/migrations/NNNN_*.sql en orden
+uv run visible-ia db migrate --env prod         # pide escribir SI
+```
+Todas las tablas tienen RLS activado; las políticas se agregan en migraciones propias.
+
+### Automatizaciones (GitHub Actions)
+| Workflow | Cuándo | Qué hace |
+|---|---|---|
+| `ci.yml` | push a `main`, PRs | ruff + pytest |
+| `diario.yml` | cada día 07:17 (Lima) y a mano | latido en Supabase dev y prod para que no se pausen; si falla, abre un issue |
+| `web.yml` | cambios en `web/` | publica `web/` en Cloudflare Pages: `main` → producción, PR → URL de vista previa |
+
+**GitHub Secrets** que usan: `SUPABASE_URL_DEV/PROD`, `SUPABASE_SERVICE_ROLE_KEY_DEV/PROD`, `SUPABASE_DB_URL_DEV/PROD`, `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`. Para cargar uno desde tu `.env` sin copiarlo a mano:
+```powershell
+uv run python -c "from visible_ia.config import get_settings; print(get_settings().supabase_url_dev)" | gh secret set SUPABASE_URL_DEV
+```
+
+### Web
+`web/` es un sitio estático (HTML + Pico CSS, sin build). Para verlo en local: `python -m http.server -d web 8000` y abrir http://localhost:8000.
+
+---
+
+# 🧭 Método de trabajo: plantilla de proyecto con equipo de IAs
 
 Sistema reutilizable para llevar **cualquier proyecto de programación** desde la idea hasta el mantenimiento. El equipo de planificación está formado por **tú + Claude + Gemini**, y **Claude Code** es el ejecutor.
 
