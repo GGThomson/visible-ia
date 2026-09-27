@@ -15,6 +15,8 @@ from pathlib import Path
 
 import psycopg
 
+from visible_ia.mercados.alias import add_derived_aliases
+
 REQUIRED = ("nombre", "distrito", "maps_url")
 OPTIONAL = ("direccion", "rating", "resenas", "web", "instagram")
 
@@ -119,8 +121,8 @@ def read_clinics_csv(path: Path) -> tuple[list[ClinicRow], list[RowError]]:
 def import_clinics(
     conn: psycopg.Connection, market_id: int, rows: list[ClinicRow], data_date: date
 ) -> tuple[int, int]:
-    """Create or update clinics by maps_url and link them to the market.
-    Returns (created, updated)."""
+    """Create or update clinics by maps_url, link them to the market and add automatic,
+    non-generic aliases derived from the name (HU-03). Returns (created, updated)."""
     created = updated = 0
     with conn.transaction(), conn.cursor() as cur:
         cur.execute("select 1 from public.markets where id = %s", (market_id,))
@@ -150,6 +152,7 @@ def import_clinics(
             clinic_id, inserted = cur.fetchone()
             created += inserted
             updated += not inserted
+            add_derived_aliases(conn, clinic_id, row.name)
             cur.execute(
                 "insert into public.clinic_markets (clinic_id, market_id) values (%s, %s) "
                 "on conflict do nothing",
