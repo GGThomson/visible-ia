@@ -20,6 +20,8 @@ mercado_app = typer.Typer(help="Mercados (rubro + distrito) y sus preguntas.", n
 app.add_typer(mercado_app, name="mercado")
 clinicas_app = typer.Typer(help="Clínicas de cada mercado y sus alias.", no_args_is_help=True)
 app.add_typer(clinicas_app, name="clinicas")
+alias_app = typer.Typer(help="Alias de una clínica.", no_args_is_help=True)
+clinicas_app.add_typer(alias_app, name="alias")
 
 
 def _confirm_prod(target: str) -> None:
@@ -283,3 +285,52 @@ def clinicas_listar(
         for clinic_id, name, rating, reviews, data_date in list_market_clinics(conn, mercado):
             stars = f"{rating}★" if rating is not None else "sin ★"
             typer.echo(f"{clinic_id}  {name}  ({stars}, {reviews or 0} reseñas, dato {data_date})")
+
+
+@alias_app.command("agregar")
+def alias_agregar(
+    clinica: int = typer.Argument(..., help="Id de la clínica."),
+    alias: str = typer.Argument(..., help="Otro nombre con que la IA la menciona."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Agrega un alias a la clínica."""
+    from visible_ia.mercados.alias import AliasError, add_alias
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target) as conn:
+        try:
+            added = add_alias(conn, clinica, alias)
+        except AliasError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    typer.echo("Alias agregado." if added else "La clínica ya tenía ese alias.")
+
+
+@alias_app.command("listar")
+def alias_listar(
+    clinica: int = typer.Argument(..., help="Id de la clínica."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Lista los alias de la clínica."""
+    from visible_ia.mercados.alias import list_aliases
+
+    with _connect_or_exit(_resolve_env(env)) as conn:
+        for alias in list_aliases(conn, clinica):
+            typer.echo(alias)
+
+
+@alias_app.command("quitar")
+def alias_quitar(
+    clinica: int = typer.Argument(..., help="Id de la clínica."),
+    alias: str = typer.Argument(..., help="Alias a quitar."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Quita un alias de la clínica."""
+    from visible_ia.mercados.alias import remove_alias
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target) as conn:
+        removed = remove_alias(conn, clinica, alias)
+    typer.echo("Alias quitado." if removed else "La clínica no tenía ese alias.")

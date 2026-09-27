@@ -7,7 +7,7 @@
 
 ## Dónde estamos
 - **Fase actual:** 5 · Construcción. Fase 4 aprobada el 26/09: arquitectura + plan (tags `fase-4-completa`, `plan-aprobado`)
-- **Tarea actual:** **C2-T04**, alias de clínicas (C1 ✅ salvo la verificación a 8 días y la demo; C2-T01 a C2-T03 ✅; landing en https://visible-ia.pages.dev)
+- **Tarea actual:** **demo de C2** (Director) → luego **C3-T01**, cliente de ChatGPT (C1 ✅ salvo la verificación a 8 días y la demo; C2 ✅ (plantillas, mercados, clínicas, alias); landing en https://visible-ia.pages.dev)
 - **Rama de trabajo:** cada tarea en `feat/C<n>-T<nn>-...` desde `main` (las fases 1–4 ya están en `main`)
 - **Avance general:** █████░░░░░ 45 %
 - **Calendario:** construcción del 28/09 al 08/11 · **v1.0 "Vender" el 04/10** · ventas desde el 05/10 · control del Plan B el **jue 02/10** (C6-T05)
@@ -27,7 +27,7 @@
 
 ## Próximos 3 pasos
 1. **Director:** revisar la landing en el celular; anotar el ~04/10 que Supabase dev sigue activo (C1-T05)
-2. `/siguiente` → C2-T03 y C2-T04 (clínicas y alias) → demo de C2
+2. **Director:** demo de C2 en dev (crear "IMP · Miraflores", importar un CSV real de ~10 clínicas, agregar un alias). Antes de C3: cuenta de SerpApi y **aprobar la facturación de OpenAI**
 3. **Director (29/09):** cuenta de SerpApi y **aprobar la facturación de OpenAI** (≈ US$4/mes, tope US$10) antes de C3. En paralelo: lista de 40 clínicas, trámites de WhatsApp y pasarela, tareas legales
 
 ## Bloqueos / esperando decisión

@@ -2,7 +2,7 @@
 
 **Objetivo:** el operador puede crear un mercado (rubro + distrito) con sus 10 preguntas generadas desde las plantillas aprobadas, importar la lista de clínicas desde un CSV y registrar alias.
 **Historias que cubre:** HU-01, HU-02, HU-03
-**Estado:** 🟡 en curso
+**Estado:** 🟡 tareas ✅; falta la demo con el Director
 
 ## Tareas
 
@@ -57,7 +57,7 @@
   - Aceptar el separador `,` y `;` (Excel en español guarda con `;`) y la codificación UTF-8 con o sin BOM.
 
 ### C2-T04 · Alias de clínicas (HU-03)
-- **Estado:** ⚪
+- **Estado:** ✅ (26/09). **Aclaración:** el ejemplo del plan incluía el alias "Implantes Dental", pero choca con el criterio de no crear alias genéricos; se aplicó el criterio. De ese nombre salen "Perez Yance" y "Americadent". Un alias de una sola palabra necesita ≥ 8 letras ("Americadent" sí; "Alemana" no → "Dental Alemana")
 - **Qué:**
   - `visible-ia clinicas alias agregar <clinica_id> "<alias>"`, `... listar` y `... quitar`.
   - Al importar, se crea automáticamente un alias con el nombre corto: el texto antes de `|`, ` - ` o `(`. Ejemplo: "Implantes Dental | Perez Yance / Clínicas Dentales Americadent" → alias "Implantes Dental", "Perez Yance" y "Americadent".
