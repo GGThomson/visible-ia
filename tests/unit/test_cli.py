@@ -16,3 +16,9 @@ def test_budget_rejects_unknown_surfaces_before_touching_the_database():
     result = runner.invoke(app, ["presupuesto", "ver", "--superficies", "chatgpt_app_manual"])
     assert result.exit_code == 2
     assert "Superficies no válidas" in result.stdout
+
+
+def test_run_rejects_unknown_surfaces_before_touching_the_database():
+    result = runner.invoke(app, ["corrida", "lanzar", "--mercado", "1", "--superficies", "gemini"])
+    assert result.exit_code == 2
+    assert "Superficies no válidas" in result.stdout

@@ -58,7 +58,7 @@
 - **Rama:** `feat/C3-T03-budget-guard`
 
 ### C3-T04 · Corrida reanudable (HU-04)
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** `motor/corrida.py` y el comando `visible-ia corrida lanzar --mercado <id> [--superficies chatgpt_api,google_ai_mode] [--reps 3]`.
   - Crea la corrida, ejecuta las llamadas que faltan y guarda cada `respuesta` y sus `fuente` apenas llegan.
   - Marca la corrida como `completa` o `incompleta`.
