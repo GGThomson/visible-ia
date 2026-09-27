@@ -24,5 +24,11 @@ def tx(dev_conn):
     dev_conn.commit()
     with dev_conn.transaction(force_rollback=True):
         with dev_conn.cursor() as cur:
+            # Runs (and their responses, by cascade) go first: dev keeps manual samples in
+            # DER markets. The transaction is rolled back, so nothing is really deleted.
+            cur.execute(
+                "delete from public.runs where market_id in "
+                "(select id from public.markets where category_code = 'DER')"
+            )
             cur.execute("delete from public.markets where category_code = 'DER'")
         yield dev_conn

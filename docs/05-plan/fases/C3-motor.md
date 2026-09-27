@@ -6,7 +6,7 @@
 - Además, se pueden cargar muestras manuales de las apps (Gemini y ChatGPT).
 
 **Historias que cubre:** HU-04, HU-05, HU-06
-**Estado:** 🟡 en curso
+**Estado:** 🟡 tareas ✅; falta la demo del Director (la corrida real ya se hizo: corrida 1 en prod, 60/60, US$0.97)
 **Depende de (Director):** cuenta de SerpApi (plan gratis) y **facturación de OpenAI aprobada y activada**, con las claves en `.env` y en Secrets.
 
 ## Tareas
@@ -77,10 +77,11 @@
   - Los dominios de las fuentes se guardan normalizados (sin `www.` y sin parámetros `utm_*`).
 
 ### C3-T05 · Carga de muestras manuales (HU-06)
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** comando `visible-ia muestra cargar --mercado <id> --pregunta <n> --superficie gemini_app_manual|chatgpt_app_manual`.
   - Abre el editor, o lee de un archivo, para pegar la respuesta y las fuentes.
   - La guarda en una corrida de tipo `manual`.
+  - **Cambio aprobado por el Director (26/09):** se agrega la superficie `google_ai_mode_manual` (migración 0003) para las respuestas de Google Modo IA hechas a mano. La muestra de la fase 1 se importa en **dev** (31 filas; se crean sus mercados como inactivos; las 6 de "Lima" van a la pregunta de Miraflores, marcadas y fuera de la calibración).
   - Otra opción: importar desde un CSV con el formato de `registro.csv` de la fase 1.
 - **Archivos probables:** `src/visible_ia/motor/manual.py`, `tests/unit/test_manual.py`
 - **Criterios de aceptación:**

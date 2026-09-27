@@ -4,7 +4,14 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
-Surface = Literal["chatgpt_api", "google_ai_mode", "chatgpt_app_manual", "gemini_app_manual"]
+Surface = Literal[
+    "chatgpt_api",
+    "google_ai_mode",
+    "chatgpt_app_manual",
+    "gemini_app_manual",
+    "google_ai_mode_manual",
+]
+MANUAL_SURFACES = ("chatgpt_app_manual", "gemini_app_manual", "google_ai_mode_manual")
 
 
 class Citation(BaseModel):
