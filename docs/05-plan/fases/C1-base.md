@@ -53,7 +53,8 @@
   - Las claves se tipan como `SecretStr`.
 
 ### C1-T03 · Migración inicial del esquema + RLS activado
-- **Estado:** ⚪
+- **Estado:** ✅ (26/09, aplicada en **dev**; prod pendiente de confirmación del Director)
+- **Cambio de método (26/09):** en lugar de `supabase db push` (requiere instalar la CLI de Supabase), las migraciones se aplican con `visible-ia db migrate [--env dev|prod] [--dry-run]`, que registra las versiones en `ops.schema_migrations` y en prod exige escribir "SI". La semilla de rubros va dentro de `0001_initial.sql`.
 - **Qué:** crear `supabase/migrations/0001_initial.sql` con las tablas del modelo de datos de la arquitectura:
   - `rubro`, `plantilla`, `mercado`, `pregunta`, `clinica`, `clinica_mercado`, `alias`, `corrida`, `respuesta`, `mencion`, `fuente`, `puntaje_mensual`
   - `cliente`, `sede`, `usuario`, `tarea`, `informe`, `prospecto`, `pago`, `latido`
