@@ -43,4 +43,4 @@
 - 2026-09-26 · Construcción: Claude Code fusiona cada PR con la CI en verde; se detiene solo si toca producción, cuesta dinero o requiere decisión. Migraciones con `visible-ia db migrate`; web publicada desde Actions
 
 ## Bandeja de pendientes
-- Ver `memoria/cambios-pendientes.md` (**1 sin clasificar: C-006**)
+- Ver `memoria/cambios-pendientes.md` (0 sin clasificar)

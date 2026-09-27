@@ -17,6 +17,7 @@
   4. Brecha Maps vs IA.
   5. 3 recomendaciones (del checklist base: ficha de Google, Doctoralia, web/schema, según lo que falte).
   6. Nota de método: qué se midió, cuántas veces, la diferencia detectable y "no garantizamos un puesto #1".
+     - **C-006 (Director, 26/09):** declarar que algunas respuestas de Google Modo IA muestran fichas de clínicas cuyo nombre no llega por SerpApi (corrida 1: 2 de 30), y que esas menciones no se cuentan.
 - **Archivos probables:** `src/visible_ia/informes/plantillas/diagnostico.html.j2`, `src/visible_ia/informes/estilos.css`, `src/visible_ia/informes/contexto.py`
 - **Criterios de aceptación:**
   - [ ] Se lee bien en el celular (letra ≥ 11 pt, gráficos de barras con su valor en texto).

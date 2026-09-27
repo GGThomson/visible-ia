@@ -3,7 +3,12 @@ from pathlib import Path
 
 import pytest
 
-from visible_ia.mercados.clinicas import import_clinics, list_market_clinics, read_clinics_csv
+from visible_ia.mercados.clinicas import (
+    ClinicRow,
+    import_clinics,
+    list_market_clinics,
+    read_clinics_csv,
+)
 from visible_ia.mercados.mercado import create_market
 
 pytestmark = pytest.mark.integration
@@ -28,3 +33,18 @@ def test_same_clinic_can_belong_to_two_markets(tx):
     import_clinics(tx, surco, rows[:1], date(2026, 9, 26))
     import_clinics(tx, miraflores, rows[:1], date(2026, 9, 26))
     assert list_market_clinics(tx, surco)[0][0] == list_market_clinics(tx, miraflores)[0][0]
+
+
+def test_import_adds_the_alias_column(tx):
+    from visible_ia.mercados.alias import list_aliases
+
+    market = create_market(tx, "DER", "Surco")
+    row = ClinicRow(
+        name="Dr. Aldo | Implantes Dentales y Rehabilitación Oral",
+        district="Surco",
+        maps_url="https://maps.google.com/?cid=test-alias-col-1",
+        aliases=("Dr. Aldo Implants", "Aldo Implants"),
+    )
+    import_clinics(tx, market, [row], date(2026, 9, 26))
+    clinic_id = list_market_clinics(tx, market)[0][0]
+    assert {"Dr. Aldo Implants", "Aldo Implants"} <= set(list_aliases(tx, clinic_id))

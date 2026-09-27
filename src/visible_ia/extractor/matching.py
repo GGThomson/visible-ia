@@ -3,7 +3,10 @@
 1. Exact: the folded mention equals the folded name or an alias of one clinic.
 2. Fuzzy: rapidfuzz token_set_ratio >= threshold, computed on the *specific* words only
    (category words, districts and honorifics removed); otherwise "Clínica Dental" would score
-   100 against "Clínica Dental Cano".
+   100 against "Clínica Dental Cano". token_set_ratio also gives 100 when one name is contained
+   in the other, so a mention with a distinctive word the clinic lacks is rejected ("Digital
+   Smiles" is not "Smiles Peru"); the reverse is fine ("Pérez Yance" is short for "Perez
+   Yance Americadent").
 A tie between two clinics is never resolved automatically: the mention goes to review.
 Without a match, the mention is a "new" clinic.
 """
@@ -18,7 +21,12 @@ from visible_ia.mercados.alias import GENERIC, fold
 
 DEFAULT_THRESHOLD = 90
 HONORIFICS = {"dr", "dra", "doctor", "doctora", "od", "cd"}
-IGNORED = GENERIC | HONORIFICS
+# The AI answers often use English names ("Vicich Dental Clinic", "Dr. Aldo Implants").
+ENGLISH_GENERIC = {
+    "clinic", "clinics", "dental", "implant", "implants", "oral", "rehabilitation",
+    "center", "centre", "dentistry", "dentist", "dentists", "care", "group",
+}  # fmt: skip
+IGNORED = GENERIC | HONORIFICS | ENGLISH_GENERIC
 
 Status = Literal["matched", "new", "review"]
 
@@ -70,7 +78,7 @@ def match(
         for name in clinic.names:
             other = specific(name)
             if other:
-                best[clinic.id] = max(best.get(clinic.id, 0.0), fuzz.token_set_ratio(core, other))
+                best[clinic.id] = max(best.get(clinic.id, 0.0), _score(core, other, threshold))
     if not best:
         return MatchResult("new")
     top = max(best.values())
@@ -80,6 +88,15 @@ def match(
     if len(winners) > 1:
         return MatchResult("review", score=top, via="fuzzy", tied=tuple(winners))
     return MatchResult("matched", winners[0], top, "fuzzy")
+
+
+def _score(core: str, other: str, threshold: float) -> float:
+    score = fuzz.token_set_ratio(core, other)
+    if score < threshold:
+        return score
+    other_words = other.split()
+    extra = [w for w in core.split() if not any(fuzz.ratio(w, o) >= threshold for o in other_words)]
+    return 0.0 if extra else score
 
 
 def load_market_clinics(conn: psycopg.Connection, market_id: int) -> list[ClinicCandidate]:

@@ -1,6 +1,7 @@
 """Clinic import from a CSV built by hand from Google Maps (HU-02). No scraping.
 
-Minimum columns: nombre, distrito, maps_url. Optional: direccion, rating, resenas, web, instagram.
+Minimum columns: nombre, distrito, maps_url. Optional: direccion, rating, resenas, web, instagram
+and alias (extra names separated by ';', e.g. the variants seen in the AI answers).
 Accepts ',' or ';' as separator (Excel in Spanish saves with ';'), UTF-8 with or without BOM,
 decimal commas ("4,5") and thousands separators ("1.020" / "1,020").
 """
@@ -15,10 +16,10 @@ from pathlib import Path
 
 import psycopg
 
-from visible_ia.mercados.alias import add_derived_aliases
+from visible_ia.mercados.alias import add_alias, add_derived_aliases
 
 REQUIRED = ("nombre", "distrito", "maps_url")
-OPTIONAL = ("direccion", "rating", "resenas", "web", "instagram")
+OPTIONAL = ("direccion", "rating", "resenas", "web", "instagram", "alias")
 
 
 @dataclass(frozen=True)
@@ -31,6 +32,7 @@ class ClinicRow:
     review_count: int | None = None
     website: str | None = None
     instagram: str | None = None
+    aliases: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -107,6 +109,9 @@ def parse_clinics_csv(text: str) -> tuple[list[ClinicRow], list[RowError]]:
                     review_count=_parse_count(get.get("resenas")),
                     website=_optional(get.get("web")),
                     instagram=_optional(get.get("instagram")),
+                    aliases=tuple(
+                        a.strip() for a in (get.get("alias") or "").split(";") if a.strip()
+                    ),
                 )
             )
         except ValueError as exc:
@@ -153,6 +158,8 @@ def import_clinics(
             created += inserted
             updated += not inserted
             add_derived_aliases(conn, clinic_id, row.name)
+            for alias in row.aliases:
+                add_alias(conn, clinic_id, alias)
             cur.execute(
                 "insert into public.clinic_markets (clinic_id, market_id) values (%s, %s) "
                 "on conflict do nothing",
