@@ -23,9 +23,9 @@ NANO = _json("extractor_nano_response.json")
 
 def test_prompt_is_versioned():
     prompt = llm.load_prompt()
-    assert prompt.version == "1"
-    assert prompt.extractor_version == "gpt-5-nano/prompt-v1"
-    assert not prompt.text.startswith("<!--") and "tal cual" in prompt.text
+    assert prompt.version == "2"
+    assert prompt.extractor_version == "gpt-5-nano/prompt-v2"
+    assert not prompt.text.startswith("<!--") and "solo el nombre" in prompt.text
 
 
 def test_parse_keeps_literal_clinics_in_text_order():
@@ -36,7 +36,7 @@ def test_parse_keeps_literal_clinics_in_text_order():
         (3, "Clínica Miraflores"),
         (4, "V&C Odontólogos"),
     ]
-    assert result.extractor_version == "gpt-5-nano/prompt-v1"
+    assert result.extractor_version == "gpt-5-nano/prompt-v2"
 
 
 def test_invented_names_and_platforms_are_discarded():
