@@ -7,7 +7,7 @@ from visible_ia.mercados.mercado import create_market, list_questions
 from visible_ia.motor.corrida import Call, create_run, save_response
 from visible_ia.motor.manual import save_manual
 from visible_ia.motor.modelos import EngineResponse
-from visible_ia.puntaje.indice import ScoreError, calculate, ranking
+from visible_ia.puntaje.indice import ScoreError, calculate, month_shift, ranking
 
 pytestmark = pytest.mark.integration
 
@@ -103,3 +103,26 @@ def test_scores_are_saved_and_ranked(tx):
     with tx.cursor() as cur:
         cur.execute("select count(*) from public.monthly_scores where market_id = %s", (market,))
         assert cur.fetchone()[0] == 9
+
+
+def test_second_month_gets_change_and_window(tx):
+    market, run_id, ids = _setup(tx)
+    with tx.cursor() as cur:
+        cur.execute("update public.runs set status = 'reviewed' where id = %s", (run_id,))
+    _, month, _ = calculate(tx, run_id)
+    with tx.cursor() as cur:
+        # Pretend this month's scores belong to the previous month, then score again.
+        cur.execute(
+            "update public.monthly_scores set month = %s where market_id = %s",
+            (month_shift(month, -1), market),
+        )
+    calculate(tx, run_id)
+    with tx.cursor() as cur:
+        cur.execute(
+            "select change, window3_index, detectable_diff from public.monthly_scores "
+            "where market_id = %s and month = %s and clinic_id = %s and surface = 'combined'",
+            (market, month, ids["Clínica Dos"]),
+        )
+        change, window, detectable = cur.fetchone()
+    assert change == "no_clear_change"
+    assert float(window) == 45.0 and detectable is not None

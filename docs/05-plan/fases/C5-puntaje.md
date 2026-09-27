@@ -42,7 +42,7 @@
 - **Rama:** `feat/C5-T02-monthly-index`
 
 ### C5-T03 · Cambio mensual y ventana de 3 meses (ADR-003)
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** al calcular un mes:
   - Compara el **combinado** con el mes anterior usando la prueba de 2 proporciones (α = 0.05): "sube", "baja" o "sin cambio claro".
   - Calcula el índice de la **ventana móvil de 3 meses**, con su intervalo.
