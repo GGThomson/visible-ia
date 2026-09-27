@@ -4,8 +4,9 @@
   A predicted name counts as a labelled one when both fold to the same text, one contains
   the other as whole words ("Dr. Aldo" / "Dr. Aldo | Implantes Dentales…"), or `match`
   associates them.
-- Association (answers of a market with a clinic list): the predicted name is matched to the
-  labelled clinic.
+- Association (answers of a market with a clinic list): among the labelled mentions the
+  extractor found, the share matched to the labelled clinic. Mentions it missed are already
+  counted by recall and are not counted twice.
 - Domains: the source domains computed from the cited URLs.
 
 Only answers the Director confirmed count, unless `include_proposed` is set.
@@ -91,6 +92,21 @@ def _words(text: str) -> str:
     return f" {fold(text)} "
 
 
+def best_hit(names: list[str], labelled: str) -> str | None:
+    """The extracted name that corresponds to a label: identical first, then contained, then
+    matched (so "Smiles Perú" is not taken for the label "Digital Smiles")."""
+    target = fold(labelled)
+    for test in (
+        lambda n: fold(n) == target,
+        lambda n: _words(n) in _words(labelled) or _words(labelled) in _words(n),
+        lambda n: same_name(n, labelled),
+    ):
+        hit = next((n for n in names if test(n)), None)
+        if hit:
+            return hit
+    return None
+
+
 def same_name(predicted: str, labelled: str) -> bool:
     a, b = _words(predicted), _words(labelled)
     if a.strip() == b.strip() or a in b or b in a:
@@ -128,16 +144,12 @@ def score(
         if clinics:
             by_id = {c.id: c.name for c in clinics}
             for g in labelled:
-                if not g.get("clinica"):
+                hit = best_hit(names, g["nombre"]) if g.get("clinica") else None
+                if hit is None:
                     continue
                 scores.association_total += 1
-                hit = next((n for n in names if same_name(n, g["nombre"])), None)
-                result = match(hit, clinics) if hit else None
-                if (
-                    result
-                    and result.status == "matched"
-                    and by_id[result.clinic_id] == g["clinica"]
-                ):
+                result = match(hit, clinics)
+                if result.status == "matched" and by_id[result.clinic_id] == g["clinica"]:
                     scores.association_ok += 1
 
         expected = set(item.get("dominios") or [])
