@@ -33,8 +33,10 @@ def database_url(settings: Settings, env: Env) -> str:
     return value.get_secret_value()
 
 
-def connect(settings: Settings, env: Env) -> psycopg.Connection:
-    return psycopg.connect(database_url(settings, env), connect_timeout=15)
+def connect(settings: Settings, env: Env, *, autocommit: bool = False) -> psycopg.Connection:
+    """autocommit=True makes every `conn.transaction()` block a real, committed transaction:
+    long commands (runs, extraction, review) must not lose paid work if they stop halfway."""
+    return psycopg.connect(database_url(settings, env), connect_timeout=15, autocommit=autocommit)
 
 
 def migration_files(directory: Path = MIGRATIONS_DIR) -> list[Path]:
