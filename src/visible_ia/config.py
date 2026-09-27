@@ -5,7 +5,7 @@ Secrets are typed as SecretStr so they never show up in reprs or logs.
 
 from typing import Literal
 
-from pydantic import SecretStr
+from pydantic import SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 Env = Literal["dev", "prod"]
@@ -44,6 +44,19 @@ class Settings(BaseSettings):
 
     monthly_budget_usd: float = 10.0
     serpapi_monthly_quota: int = 250
+
+    @field_validator("supabase_url_dev", "supabase_url_prod", mode="before")
+    @classmethod
+    def _normalize_url(cls, value: object) -> object:
+        # Values pasted into GitHub Secrets often lack the scheme or carry quotes/spaces.
+        if not isinstance(value, str):
+            return value
+        cleaned = value.strip().strip("\"'").strip().rstrip("/")
+        if not cleaned:
+            return None
+        if not cleaned.startswith(("https://", "http://")):
+            cleaned = f"https://{cleaned}"
+        return cleaned
 
     def value(self, name: str) -> object:
         """Return the raw field for an env var name (e.g. 'SUPABASE_URL_DEV')."""
