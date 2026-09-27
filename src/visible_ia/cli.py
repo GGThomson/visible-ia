@@ -895,3 +895,22 @@ def revisar_cerrar(
             typer.echo(str(exc))
             raise typer.Exit(code=1) from None
     typer.echo(f"Corrida {corrida}: revisada.")
+
+
+@revisar_app.command("reasociar")
+def revisar_reasociar(
+    corrida: int = typer.Argument(..., help="Id de la corrida."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Vuelve a asociar las menciones automáticas tras cambiar la lista de clínicas (sin costo)."""
+    from visible_ia.extractor.revision import reassociate
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target, autocommit=True) as conn:
+        counts = reassociate(conn, corrida)
+    typer.echo(
+        f"Corrida {corrida}: {counts['matched']} asociadas, {counts['new']} nuevas, "
+        f"{counts['review']} a revisar · {counts['changed']} menciones cambiaron · "
+        f"{counts['sources_changed']} fuentes reclasificadas"
+    )

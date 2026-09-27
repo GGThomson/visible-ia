@@ -180,3 +180,36 @@ def apply_csv_rows(tx, run_id, rows):
     from visible_ia.extractor.revision import apply_corrections
 
     return apply_corrections(tx, run_id, rows)
+
+
+def test_reassociate_after_the_clinic_list_grows(tx):
+    market, run_id = _setup(tx)
+    extract_run(tx, run_id, fake_extractor)
+    from visible_ia.extractor.revision import discard, reassociate
+
+    rows = {r.raw_name: r for r in run_mentions(tx, run_id)}
+    discard(tx, run_id, rows["Clínica Nueva Sonrisa X"].mention_id)
+    import_clinics(
+        tx,
+        market,
+        [
+            ClinicRow(
+                name="Odontonova",
+                district="Surco",
+                maps_url="https://maps.google.com/?cid=test-rev-4",
+                aliases=("Odontonova Centro",),
+            ),
+            ClinicRow(
+                name="Nueva Sonrisa X",
+                district="Surco",
+                maps_url="https://maps.google.com/?cid=test-rev-5",
+            ),
+        ],
+        date(2026, 9, 27),
+    )
+    counts = reassociate(tx, run_id)
+    after = {r.raw_name: r for r in run_mentions(tx, run_id)}
+    assert after["Odontonova"].clinic_name == "Odontonova"
+    assert after["Clínica Nueva Sonrisa X"].status == "discarded"  # manual decisions stay
+    assert after["Clínica Nueva Sonrisa X"].clinic_id is None
+    assert counts["changed"] == 1
