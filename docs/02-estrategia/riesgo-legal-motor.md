@@ -70,6 +70,9 @@ El producto necesita **consultar a las IAs de forma repetida, guardar las respue
 1. **OpenAI:** revisar los *Service Terms* y la política de *web search*, y confirmar que guardar y analizar los resultados de la herramienta no tiene restricciones adicionales.
 2. **DataForSEO:** confirmar que nuestro uso (informes de visibilidad para clínicas) no se considera "compete with or adversely affect" a Google. Confirmar también que admite ubicación Lima y español en AI Mode.
 3. **SerpApi:** confirmar que el Modo IA consume 1 crédito y seguir la demanda corregida de Google.
+   - ✅ **Verificado el 26/09/2026 (C3-T02)** con una llamada real (`engine=google_ai_mode`, `no_cache=true`): la cuenta pasó de 0 a **1 búsqueda usada** (249 de 250 restantes en el plan Free; límite de 250 por hora). Acepta Lima y español: `location_used = "Lima Province,Peru"`, `hl=es`, `gl=pe`, y la respuesta vino en español con clínicas de Miraflores.
+   - Hallazgo: las fuentes de `references` llegan como enlaces intermedios de Google (`google.com/searchviewer/...`). Las webs reales de las clínicas vienen en los enlaces del texto (`snippet_links`), que también se guardan. A tener en cuenta en la clasificación de fuentes (C4).
+   - Sigue pendiente: seguir la demanda corregida de Google.
 4. **Google (opción E):** preguntar si existe una vía (Vertex AI u otra) que permita analizar respuestas con grounding para medir la visibilidad.
 5. **Ley 29733:** hacer una consulta corta con un abogado de datos.
 6. **Segunda opinión:** llevar esto a Gemini con `/contexto "riesgo legal del motor de medición"`.

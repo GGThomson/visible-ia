@@ -4,6 +4,7 @@ httpx is used directly (no SerpApi SDK) to keep control of the retries. Every re
 must be a fresh answer, so SerpApi's 1-hour cache is disabled (no_cache=true).
 """
 
+import re
 import time
 from collections.abc import Callable
 from typing import Any
@@ -19,6 +20,9 @@ BACKOFF_SECONDS = (2, 4, 8)
 TIMEOUT_SECONDS = 120
 # SerpApi answers HTTP 200 with an "error" field when Google shows no AI answer.
 NO_ANSWER_MARKERS = ("hasn't returned any results",)
+# Place cards leak their button labels into the snippet ("LlamarCómo llegarSitio web...").
+CARD_BUTTONS = re.compile(r"^(?:Llamar|Cómo llegar|Sitio web|Call|Directions|Website)+\s*")
+MARKDOWN_REFERENCES = re.compile(r"\n#+\s*References\s*\n.*\Z", re.DOTALL)
 
 
 class SerpApiError(RuntimeError):
@@ -61,16 +65,21 @@ def parse_response(raw: dict[str, Any]) -> EngineResponse:
     error = raw.get("error")
     if error and not _is_no_answer(error):
         raise SerpApiError(f"SerpApi: {error}")
-    text = (raw.get("reconstructed_markdown") or "").strip() or blocks_to_text(
-        raw.get("text_blocks") or []
+    blocks = raw.get("text_blocks") or []
+    # text_blocks first: reconstructed_markdown escapes characters and appends the references.
+    text = (
+        blocks_to_text(blocks)
+        or MARKDOWN_REFERENCES.sub("", raw.get("reconstructed_markdown") or "").strip()
     )
     citations: list[Citation] = []
     seen: set[str] = set()
-    for ref in raw.get("references") or []:
-        url = ref.get("link")
+    # Inline links carry the clinics' real websites; references are often Google viewer URLs.
+    links = [(x.get("link"), x.get("text")) for x in _snippet_links(blocks)]
+    links += [(r.get("link"), r.get("title")) for r in raw.get("references") or []]
+    for url, title in links:
         if url and url not in seen:
             seen.add(url)
-            citations.append(Citation(url=url, title=ref.get("title")))
+            citations.append(Citation(url=url, title=title))
     return EngineResponse(
         surface="google_ai_mode",
         provider="serpapi",
@@ -94,7 +103,7 @@ def _block_lines(blocks: list[dict[str, Any]], depth: int) -> list[str]:
     indent = "  " * depth
     for block in blocks:
         kind = block.get("type")
-        snippet = (block.get("snippet") or "").strip()
+        snippet = CARD_BUTTONS.sub("", (block.get("snippet") or "").strip())
         title = (block.get("title") or "").strip()
         if kind == "heading" and snippet:
             lines.append(f"{indent}## {snippet}")
@@ -102,7 +111,8 @@ def _block_lines(blocks: list[dict[str, Any]], depth: int) -> list[str]:
             if snippet:
                 lines.append(f"{indent}{snippet}")
             for item in block.get("list") or []:
-                head = " ".join(p for p in (item.get("title"), item.get("snippet")) if p).strip()
+                item_snippet = CARD_BUTTONS.sub("", (item.get("snippet") or "").strip())
+                head = " ".join(p for p in (item.get("title"), item_snippet) if p).strip()
                 if head:
                     lines.append(f"{indent}- {head}")
                 if item.get("list"):
@@ -112,16 +122,24 @@ def _block_lines(blocks: list[dict[str, Any]], depth: int) -> list[str]:
     return lines
 
 
+def _snippet_links(blocks: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    links: list[dict[str, Any]] = []
+    for block in blocks:
+        links.extend(block.get("snippet_links") or [])
+        links.extend(_snippet_links(block.get("list") or []))
+    return links
+
+
 def _is_no_answer(error: str) -> bool:
     lowered = error.lower()
     return any(marker in lowered for marker in NO_ANSWER_MARKERS)
 
 
 def _without_secrets(raw: dict[str, Any]) -> dict[str, Any]:
-    # search_parameters never carries the key, but the metadata URLs might: drop them.
+    # search_parameters never carries the key; the metadata URLs are private links: drop them.
     clean = dict(raw)
     metadata = dict(clean.get("search_metadata") or {})
-    for key in ("json_endpoint", "raw_html_file", "prettify_html_file"):
+    for key in ("json_endpoint", "markdown_endpoint", "raw_html_file", "prettify_html_file"):
         metadata.pop(key, None)
     if metadata:
         clean["search_metadata"] = metadata

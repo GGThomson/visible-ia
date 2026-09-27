@@ -8,6 +8,7 @@ import pytest
 from visible_ia.motor import google_ai_mode
 
 FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "serpapi_ai_mode.json"
+REAL = FIXTURE.with_name("serpapi_ai_mode_real.json")
 
 
 def load_fixture() -> dict:
@@ -40,9 +41,30 @@ def test_parse_takes_references_without_duplicates():
     assert result.citations[2].title == "Implantólogos en Miraflores - Doctoralia"
 
 
-def test_reconstructed_markdown_wins_when_present():
-    raw = {**load_fixture(), "reconstructed_markdown": "1. **Sonrisa Andina**\n2. Larco"}
+def test_markdown_is_the_fallback_without_blocks_and_drops_references():
+    raw = {
+        "text_blocks": [],
+        "reconstructed_markdown": "1. **Sonrisa Andina**\n2. Larco\n\n### References\n\n[0] x",
+    }
     assert google_ai_mode.parse_response(raw).text == "1. **Sonrisa Andina**\n2. Larco"
+
+
+def test_real_answer_drops_card_buttons_and_keeps_clinic_websites():
+    """Recorded on 2026-09-26 from the verification call (C3-T02)."""
+    raw = json.loads(REAL.read_text(encoding="utf-8"))
+    result = google_ai_mode.parse_response(raw)
+
+    assert "Llamar" not in result.text and "Cómo llegar" not in result.text
+    assert "### References" not in result.text
+    assert result.text.splitlines()[1].startswith("Destacado por su alta puntuación")
+    urls = [c.url for c in result.citations]
+    assert urls[:3] == [
+        "https://www.tusimplantesdentalesmiraflores.com/",
+        "https://dentalperezyance.com/",
+        "https://www.implantesdentalesmiraflores.com/",
+    ]
+    assert len(urls) == 6  # 3 inline links + 3 references (Google viewer URLs)
+    assert raw["search_parameters"]["location_used"] == "Lima Province,Peru"
 
 
 def test_raw_drops_metadata_urls():

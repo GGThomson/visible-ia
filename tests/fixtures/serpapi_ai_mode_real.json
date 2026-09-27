@@ -1,0 +1,105 @@
+{
+  "search_metadata": {
+    "id": "6ab88854822c5fd1d33adf13",
+    "status": "Success",
+    "created_at": "2026-09-27 03:07:00 UTC",
+    "processed_at": "2026-09-27 03:07:00 UTC",
+    "google_ai_mode_url": "https://www.google.com/search?q=%C2%BFQu%C3%A9+cl%C3%ADnica+me+recomiendas+para+implantes+dentales+en+Miraflores%3F&udm=50&gl=pe&hl=es&uule=w+CAIQICISTGltYSBQcm92aW5jZSxQZXJ1",
+    "total_time_taken": 6.57
+  },
+  "search_parameters": {
+    "engine": "google_ai_mode",
+    "q": "¿Qué clínica me recomiendas para implantes dentales en Miraflores?",
+    "hl": "es",
+    "gl": "pe",
+    "location_requested": "Lima, Peru",
+    "location_used": "Lima Province,Peru",
+    "device": "desktop"
+  },
+  "text_blocks": [
+    {
+      "type": "paragraph",
+      "snippet": "Miraflores cuenta con excelentes opciones y especialistas reconocidos en implantología oral. Algunas de las alternativas mejor valoradas por los pacientes en la zona son:"
+    },
+    {
+      "type": "paragraph",
+      "snippet": "LlamarCómo llegarSitio webDestacado por su alta puntuación y buenas referencias en tratamientos personalizados de rehabilitación e implantes dentales. Puedes revisar más detalles en su sitio web Dr. Aldo Implants.",
+      "snippet_links": [
+        {
+          "text": "Dr. Aldo Implants",
+          "link": "https://www.tusimplantesdentalesmiraflores.com/"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "snippet": "LlamarCómo llegarSitio webCuentan con una trayectoria sólida de más de 25 años enfocados en implantología y técnicas avanzadas como All on Four. Conoce más sobre sus servicios en Dental Pérez Yance.",
+      "snippet_links": [
+        {
+          "text": "Dental Pérez Yance",
+          "link": "https://dentalperezyance.com/"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "snippet": "LlamarCómo llegarSitio webDirigido por el Dr. Alonso Moreno Mejía, cuenta con excelentes calificaciones de pacientes por intervenciones quirúrgicas y colocación de implantes. Puedes ver la información de la clínica en Implantes Dentales Miraflores.",
+      "snippet_links": [
+        {
+          "text": "Implantes Dentales Miraflores",
+          "link": "https://www.implantesdentalesmiraflores.com/"
+        }
+      ],
+      "reference_indexes": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "type": "paragraph",
+      "snippet": "Para recomendarte la opción que mejor se ajuste a lo que buscas, ¿me podrías contar:"
+    },
+    {
+      "type": "list",
+      "list": [
+        {
+          "snippet": "¿Necesitas unidades individuales o una rehabilitación completa (como All-on-4)?"
+        },
+        {
+          "snippet": "¿Requieres algún tratamiento previo como injerto de hueso o elevación de seno maxilar?"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "title": "Dr. Aldo | Implantes Dentales y Rehabilitación Oral",
+      "link": "https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVhwbk1YSjBlbVJ1GAo",
+      "snippet": "La Clinica Odontológica del Dr. ALDO IMPLANTS \\u0026 ORAL REHABILITATION\\nEXPERT CARE WITH HUMAN TOUCH\\nUbicada en el distrito de Miraflo...",
+      "source": "Google",
+      "thumbnail": "https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVhwbk1YSjBlbVJ1GAo",
+      "source_icon": "https://encrypted-tbn1.gstatic.com/faviconV2?url=https://www.google.com&client=AIM&size=128&type=FAVICON&fallback_opts=TYPE,SIZE,URL",
+      "index": 0
+    },
+    {
+      "title": "Implantes Dental | Perez Yance / Clínicas Dentales Americadent",
+      "link": "https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVd4bU9HcHlNRzA0GAo",
+      "snippet": "Dental Pérez Yance en Lima Miraflores es un centro especializado en implantes dentales con más de 25 años de experiencia. Ofrecen ...",
+      "source": "Google",
+      "thumbnail": "https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVd4bU9HcHlNRzA0GAo",
+      "source_icon": "https://encrypted-tbn1.gstatic.com/faviconV2?url=https://www.google.com&client=AIM&size=128&type=FAVICON&fallback_opts=TYPE,SIZE,URL",
+      "index": 1
+    },
+    {
+      "title": "Implantes Dentales - Mejor Clinica dental Elisseum",
+      "link": "https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVhCNWVuTXlaM1p3GAo",
+      "snippet": "La Clinica Odontológica del Dr. ALDO IMPLANTS \\u0026 ORAL REHABILITATION EXPERT CARE WITH HUMAN TOUCH Ubicada en el distrito de Miraflores, ofrece un servicio con 17 años de experiencia y tratamientos personalizados en los servicios de Implantes Dentales y Rehabilitation Oral a Peruanos y Extranjeros. Además cuenta con un equipo de colegas que ofrecen también, Emergencias, Endodoncias, Cirugía, Ortodoncia, Odontopediatría. Nuestro diferencial es la calidad humana que brindamos a cada persona que se atiende con nosotros. Demás está decir que contamos con la tecnología necesaria para ofrecer tratamientos de alta precisión, calidad y garantía. Además se ofrece el Servicio de atención de Emergencias Dentales en miraflores",
+      "source": "Google",
+      "thumbnail": "https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVhCNWVuTXlaM1p3GAo",
+      "source_icon": "https://encrypted-tbn1.gstatic.com/faviconV2?url=https://www.google.com&client=AIM&size=128&type=FAVICON&fallback_opts=TYPE,SIZE,URL",
+      "index": 2
+    }
+  ],
+  "reconstructed_markdown": "Miraflores cuenta con excelentes opciones y especialistas reconocidos en implantología oral. Algunas de las alternativas mejor valoradas por los pacientes en la zona son:\n\nLlamarCómo llegarSitio webDestacado por su alta puntuación y buenas referencias en tratamientos personalizados de rehabilitación e implantes dentales. Puedes revisar más detalles en su sitio web [Dr. Aldo Implants](https://www.tusimplantesdentalesmiraflores.com/).\n\nLlamarCómo llegarSitio webCuentan con una trayectoria sólida de más de 25 años enfocados en implantología y técnicas avanzadas como All on Four. Conoce más sobre sus servicios en [Dental Pérez Yance](https://dentalperezyance.com/).\n\nLlamarCómo llegarSitio webDirigido por el Dr. Alonso Moreno Mejía, cuenta con excelentes calificaciones de pacientes por intervenciones quirúrgicas y colocación de implantes. Puedes ver la información de la clínica en [Implantes Dentales Miraflores](https://www.implantesdentalesmiraflores.com/). [0] [1] [2]\n\nPara recomendarte la opción que mejor se ajuste a lo que buscas, ¿me podrías contar:\n\n- ¿Necesitas unidades individuales o una rehabilitación completa \\(como All\\-on\\-4\\)?\n- ¿Requieres algún tratamiento previo como injerto de hueso o elevación de seno maxilar?\n\n\n### References\n\n[0] [Dr. Aldo \\| Implantes Dentales y Rehabilitación Oral](https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVhwbk1YSjBlbVJ1GAo) — La Clinica Odontológica del Dr. ALDO IMPLANTS \\u0026 ORAL REHABILITATION\\nEXPERT CARE WITH HUMAN TOUCH\\nUbicada en el distrito de Miraflo...\n\n[1] [Implantes Dental \\| Perez Yance / Clínicas Dentales Americadent](https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVd4bU9HcHlNRzA0GAo) — Dental Pérez Yance en Lima Miraflores es un centro especializado en implantes dentales con más de 25 años de experiencia. Ofrecen ...\n\n[2] [Implantes Dentales \\- Mejor Clinica dental Elisseum](https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVhCNWVuTXlaM1p3GAo) — La Clinica Odontológica del Dr. ALDO IMPLANTS \\u0026 ORAL REHABILITATION EXPERT CARE WITH HUMAN TOUCH Ubicada en el distrito de Miraflores, ofrece un servicio con 17 años de experiencia y tratamientos personalizados en los servicios de Implantes Dentales y Rehabilitation Oral a Peruanos y Extranjeros. Además cuenta con un equipo de colegas que ofrecen también, Emergencias, Endodoncias, Cirugía, Ortodoncia, Odontopediatría. Nuestro diferencial es la calidad humana que brindamos a cada persona que se atiende con nosotros. Demás está decir que contamos con la tecnología necesaria para ofrecer tratamientos de alta precisión, calidad y garantía. Además se ofrece el Servicio de atención de Emergencias Dentales en miraflores\n"
+}
