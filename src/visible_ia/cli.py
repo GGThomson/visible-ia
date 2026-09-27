@@ -34,6 +34,8 @@ muestra_app = typer.Typer(
     help="Muestras manuales de las apps (no entran al índice).", no_args_is_help=True
 )
 app.add_typer(muestra_app, name="muestra")
+revisar_app = typer.Typer(help="Revisión de las menciones extraídas.", no_args_is_help=True)
+app.add_typer(revisar_app, name="revisar")
 
 SURFACES_API = ("chatgpt_api", "google_ai_mode")
 
@@ -656,3 +658,240 @@ def muestra_importar(
     typer.echo(f"Importadas: {result.imported} · ya estaban: {result.already_there}")
     for skipped in result.skipped:
         typer.echo(f"  omitida: {skipped}")
+
+
+# --- extractor (C4) ------------------------------------------------------------------------
+
+
+def _openai_key(settings) -> str:
+    key = settings.openai_api_key
+    if key is None or not key.get_secret_value().strip():
+        typer.echo("Falta OPENAI_API_KEY en .env")
+        raise typer.Exit(code=1)
+    return key.get_secret_value()
+
+
+@app.command("extraer")
+def extraer(
+    corrida: int = typer.Argument(..., help="Id de la corrida."),
+    forzar: bool = typer.Option(False, "--forzar", help="Permite superar el tope (pide SI)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Extrae, asocia y clasifica las respuestas pendientes de una corrida (gpt-5-nano)."""
+    import openai
+
+    from visible_ia.extractor import llm
+    from visible_ia.extractor.extraccion import (
+        ESTIMATED_COST_PER_ANSWER,
+        extract_run,
+        pending_answers,
+    )
+    from visible_ia.motor.presupuesto import month_usage
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    settings = get_settings()
+    with _connect_or_exit(target) as conn:
+        pending = pending_answers(conn, corrida)
+        if not pending:
+            typer.echo(f"La corrida {corrida} no tiene respuestas pendientes de extraer.")
+            return
+        usage = month_usage(conn)
+        estimated = len(pending) * ESTIMATED_COST_PER_ANSWER
+        budget = settings.monthly_budget_usd
+        typer.echo(
+            f"Extractor (gpt-5-nano): {len(pending)} respuestas × ≤ US${ESTIMATED_COST_PER_ANSWER} "
+            f"= ≤ US${estimated:.3f}\n  Gastado este mes: US${usage.spent_usd:.2f} de "
+            f"US${budget:.2f} → quedaría en ≤ US${usage.spent_usd + estimated:.2f}"
+        )
+        if usage.spent_usd + estimated > budget:
+            if not forzar:
+                typer.echo("BLOQUEADA: superaría el presupuesto. Para forzarla: --forzar.")
+                raise typer.Exit(code=1)
+            if typer.prompt("Escribe SI para superar el presupuesto").strip() != "SI":
+                typer.echo("Cancelado.")
+                raise typer.Exit(code=1)
+        client = openai.OpenAI(
+            api_key=_openai_key(settings), max_retries=0, timeout=llm.TIMEOUT_SECONDS
+        )
+        prompt = llm.load_prompt()
+
+        def extractor(text, links):
+            return llm.extract(text, link_texts=links, client=client, prompt=prompt)
+
+        def progress(answer, extraction, error):
+            if error is not None:
+                typer.echo(f"  ✗ respuesta {answer.response_id}: {type(error).__name__}: {error}")
+            else:
+                names = ", ".join(m.raw_name for m in extraction.mentions) or "(ninguna)"
+                typer.echo(f"  ✓ {answer.response_id} {answer.surface:<15} {names[:110]}")
+
+        result = extract_run(conn, corrida, extractor, on_progress=progress)
+    typer.echo(
+        f"Extraídas: {result.extracted} respuestas · {result.mentions} menciones "
+        f"({result.matched} asociadas, {result.new} nuevas, {result.review} a revisar) · "
+        f"costo US${result.cost_usd:.4f}"
+    )
+    if result.failures:
+        typer.echo(
+            f"{len(result.failures)} fallaron; vuelve a ejecutar extraer para reintentarlas."
+        )
+        raise typer.Exit(code=1)
+
+
+def _mentions_table(rows):
+    from rich.table import Table
+
+    table = Table(show_lines=False)
+    for column in ("id", "pos", "nombre en la respuesta", "clínica", "estado"):
+        table.add_column(column)
+    for r in rows:
+        clinic = f"{r.clinic_id}: {r.clinic_name}" if r.clinic_id else "— nueva —"
+        table.add_row(str(r.mention_id), str(r.position), r.raw_name, clinic, r.status)
+    return table
+
+
+REVIEW_HELP = (
+    "Enter = seguir · a <id> <clínica> = asociar · n <id> [nombre] = nueva clínica · "
+    "d <id> = descartar · u <id> <id_destino> = unir · q = salir"
+)
+
+
+@revisar_app.command("corrida")
+def revisar_corrida(
+    corrida: int = typer.Argument(..., help="Id de la corrida."),
+    todas: bool = typer.Option(False, "--todas", help="Muestra también las respuestas sin dudas."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Revisa las menciones respuesta por respuesta (por defecto, solo las nuevas o dudosas)."""
+    from rich.console import Console
+
+    from visible_ia.extractor import revision
+
+    console = Console()
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target) as conn:
+        by_response: dict[int, list] = {}
+        for row in revision.run_mentions(conn, corrida):
+            by_response.setdefault(row.response_id, []).append(row)
+        for response_id, rows in by_response.items():
+            doubtful = any(r.status == "review" or r.clinic_id is None for r in rows)
+            if not todas and not doubtful:
+                continue
+            while True:
+                rows = [
+                    r for r in revision.run_mentions(conn, corrida) if r.response_id == response_id
+                ]
+                first = rows[0]
+                console.rule(
+                    f"Respuesta {response_id} · {first.surface} · "
+                    f"{first.template_id} rep {first.repetition}"
+                )
+                console.print(" ".join(first.text.split())[:600])
+                console.print(_mentions_table([r for r in rows if r.status != "discarded"]))
+                command = typer.prompt(REVIEW_HELP, default="", show_default=False).strip()
+                if not command:
+                    break
+                if command == "q":
+                    return
+                parts = command.split(maxsplit=2)
+                try:
+                    if parts[0] == "a":
+                        revision.associate(conn, corrida, int(parts[1]), int(parts[2]))
+                    elif parts[0] == "n":
+                        name = parts[2] if len(parts) > 2 else None
+                        revision.create_clinic_for(conn, corrida, int(parts[1]), name)
+                    elif parts[0] == "d":
+                        revision.discard(conn, corrida, int(parts[1]))
+                    elif parts[0] == "u":
+                        revision.merge(conn, corrida, int(parts[1]), int(parts[2]))
+                    else:
+                        console.print("Comando no válido.")
+                except (revision.ReviewError, ValueError, IndexError) as exc:
+                    console.print(f"[red]{exc}[/red]")
+        left = revision.pending_review(conn, corrida)
+    typer.echo(
+        f"Fin. Menciones en revisión: {left}. Para cerrar: visible-ia revisar cerrar {corrida}"
+    )
+
+
+@revisar_app.command("exportar")
+def revisar_exportar(
+    corrida: int = typer.Argument(..., help="Id de la corrida."),
+    archivo: Path = typer.Option(None, help="CSV de salida (por defecto, revision-<id>.csv)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Exporta las menciones a un CSV para revisarlas en Excel (columna 'accion')."""
+    from visible_ia.extractor.revision import export_csv
+
+    archivo = archivo or Path(f"revision-{corrida}.csv")
+    with _connect_or_exit(_resolve_env(env)) as conn:
+        n = export_csv(conn, corrida, archivo)
+    typer.echo(
+        f"{n} menciones en {archivo}. En 'accion' escribe ok, asociar (con clinica_destino), "
+        "nueva (nombre_nueva opcional), descartar o unir (con unir_con)."
+    )
+
+
+@revisar_app.command("importar")
+def revisar_importar(
+    corrida: int = typer.Argument(..., help="Id de la corrida."),
+    archivo: Path = typer.Argument(..., exists=True, dir_okay=False, help="CSV revisado."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Aplica las correcciones de un CSV exportado con 'revisar exportar'."""
+    from visible_ia.extractor.revision import apply_csv
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target) as conn:
+        result = apply_csv(conn, corrida, archivo)
+    for action, count in sorted(result.by_action.items()):
+        typer.echo(f"  {action:<10} {count}")
+    for clinic in result.clinics_created:
+        typer.echo(f"  clínica creada: {clinic}")
+    for error in result.errors:
+        typer.echo(f"  error: {error}")
+    if result.errors:
+        raise typer.Exit(code=1)
+
+
+@revisar_app.command("nuevas")
+def revisar_nuevas(
+    mercado: int = typer.Argument(..., help="Id del mercado."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Clínicas mencionadas que no están en el mercado, con sus apariciones (HU-09)."""
+    from rich.console import Console
+    from rich.table import Table
+
+    from visible_ia.extractor.revision import new_clinics
+
+    with _connect_or_exit(_resolve_env(env)) as conn:
+        rows = new_clinics(conn, mercado)
+    table = Table(title=f"Clínicas nuevas · mercado {mercado}")
+    for column in ("nombre", "respuestas", "menciones"):
+        table.add_column(column)
+    for name, responses, mentions in rows:
+        table.add_row(name, str(responses), str(mentions))
+    Console().print(table)
+
+
+@revisar_app.command("cerrar")
+def revisar_cerrar(
+    corrida: int = typer.Argument(..., help="Id de la corrida."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Marca la corrida como revisada (si no queda nada en revisión)."""
+    from visible_ia.extractor.revision import ReviewError, close_review
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target) as conn:
+        try:
+            close_review(conn, corrida)
+        except ReviewError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    typer.echo(f"Corrida {corrida}: revisada.")

@@ -33,9 +33,15 @@ def test_month_usage_sums_only_the_lima_month(tx):
         _response(cur, run_id, q, "chatgpt_api", 2, 0.03, "2026-10-01 06:00+00")
         _response(cur, run_id, q, "chatgpt_api", 3, 0.02, "2026-10-20 12:00+00")
         _response(cur, run_id, q, "google_ai_mode", 2, 0, "2026-10-20 12:00+00")
+        # Extraction cost counts in the month it ran (October), whatever the answer's date.
+        cur.execute(
+            "update public.responses set extraction_cost_usd = 0.0002, "
+            "extracted_at = '2026-10-22 12:00+00' where run_id = %s and repetition = 1",
+            (run_id,),
+        )
 
     now = datetime(2026, 10, 25, tzinfo=UTC)
     usage = month_usage(tx, now)
-    assert usage.spent_usd == pytest.approx(0.05)
+    assert usage.spent_usd == pytest.approx(0.05 + 2 * 0.0002)
     assert usage.serpapi_used == 1
     assert month_usage(tx, now, serpapi_account_used=9).serpapi_used == 9
