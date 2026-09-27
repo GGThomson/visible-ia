@@ -1,0 +1,22 @@
+# Prices of the paid APIs, used to estimate the cost of each call and of each run.
+# Review them at every phase close (docs/04-arquitectura/arquitectura.md, costs section).
+# Search content tokens are billed as input tokens at the model's rate.
+
+[openai.models."gpt-5-mini"]
+input_per_mtok = 0.25
+cached_input_per_mtok = 0.025
+output_per_mtok = 2.00
+checked_on = 2026-09-26
+source = "https://developers.openai.com/api/docs/pricing"
+
+[openai.models."gpt-5-nano"]
+input_per_mtok = 0.05
+cached_input_per_mtok = 0.005
+output_per_mtok = 0.40
+checked_on = 2026-09-26
+source = "https://developers.openai.com/api/docs/pricing"
+
+[openai.web_search]
+per_call = 0.01
+checked_on = 2026-09-26
+source = "https://developers.openai.com/api/docs/pricing"
