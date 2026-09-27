@@ -159,3 +159,24 @@ def test_live_single_call():
     print(f"vacía={result.empty} fuentes={len(result.citations)}")
     print(result.text[:500])
     assert result.raw.get("search_metadata", {}).get("status") == "Success"
+
+
+def test_identical_consecutive_blocks_are_kept_once():
+    card = {
+        "type": "list",
+        "list": [
+            {"snippet": "Ubicación: Av. José Pardo 434, Miraflores."},
+            {
+                "snippet": "Referencia: más detalles en Dental Pérez Yance.",
+                "snippet_links": [
+                    {"link": "https://dentalperezyance.com/", "text": "Dental Pérez Yance"}
+                ],
+            },
+        ],
+    }
+    result = google_ai_mode.parse_response({"text_blocks": [card, dict(card)]})
+    assert result.text.splitlines() == [
+        "- Ubicación: Av. José Pardo 434, Miraflores.",
+        "- Referencia: más detalles en Dental Pérez Yance.",
+    ]
+    assert [c.url for c in result.citations] == ["https://dentalperezyance.com/"]

@@ -22,9 +22,10 @@ checked_on = 2026-09-26
 source = "https://developers.openai.com/api/docs/pricing"
 
 # Conservative profile of one ChatGPT call, used to estimate a run before launching it.
-# The verification call of 2026-09-26 used 2 searches, 13,290 input and 2,339 output tokens.
+# Run 1 in prod (2026-09-26, 30 calls) averaged 2.6 searches, 20,813 input and 2,334 output
+# tokens: US$0.032 per call (max US$0.061). This profile keeps a ~25 % margin over that mean.
 [openai.estimate]
 model = "gpt-5-mini"
-searches_per_call = 2
-input_tokens_per_call = 15000
-output_tokens_per_call = 3000
+searches_per_call = 3
+input_tokens_per_call = 22000
+output_tokens_per_call = 2500

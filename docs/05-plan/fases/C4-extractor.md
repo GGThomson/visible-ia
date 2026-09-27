@@ -25,6 +25,7 @@
 - **Notas para Claude Code:**
   - La instrucción al modelo vive en un archivo aparte (`prompt.md`), versionado; su versión se guarda con cada extracción.
   - Temperatura mínima o determinista si el modelo lo permite.
+  - **Hallazgo de la corrida 1 (26/09, Google Modo IA):** cuando Google muestra fichas de clínicas, SerpApi **no incluye el nombre de la ficha** en el texto (quedan "Ubicación: …", "Enfoque: …"). El nombre solo viene en el texto de los enlaces (`snippet_links[].text`, p. ej. "Dental Pérez Yance"), dentro de `raw.text_blocks`. El extractor de Google debe leer también esos textos de enlace, en su orden de aparición. En `references` los enlaces son `google.com/searchviewer/...` (C4-T03).
 
 ### C4-T02 · Asociación con las clínicas del mercado
 - **Estado:** ⚪
