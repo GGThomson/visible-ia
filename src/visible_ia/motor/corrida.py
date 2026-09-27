@@ -16,10 +16,13 @@ import psycopg
 from psycopg.types.json import Jsonb
 
 from visible_ia.mercados.mercado import current_version, list_questions
+from visible_ia.motor import google_ai_mode
 from visible_ia.motor.modelos import EngineResponse
 from visible_ia.motor.presupuesto import RunPlan, month_bounds
 
 MAX_CONCURRENCY_PER_SURFACE = 3
+# Lower caps for surfaces that rate-limit parallel calls.
+SURFACE_CONCURRENCY = {"google_ai_mode": google_ai_mode.MAX_CONCURRENCY}
 
 Client = Callable[[str], EngineResponse]
 
@@ -268,7 +271,10 @@ def execute(
     by_surface: dict[str, list[Call]] = {}
     for call in calls:
         by_surface.setdefault(call.surface, []).append(call)
-    pools = {s: ThreadPoolExecutor(max_workers=concurrency) for s in by_surface}
+    pools = {
+        s: ThreadPoolExecutor(max_workers=min(concurrency, SURFACE_CONCURRENCY.get(s, concurrency)))
+        for s in by_surface
+    }
     try:
         futures = [pools[c.surface].submit(work, c) for c in calls]
         for future in as_completed(futures):

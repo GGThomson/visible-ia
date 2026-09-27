@@ -180,3 +180,18 @@ def test_identical_consecutive_blocks_are_kept_once():
         "- Referencia: más detalles en Dental Pérez Yance.",
     ]
     assert [c.url for c in result.citations] == ["https://dentalperezyance.com/"]
+
+
+def test_google_rate_limit_notice_is_an_error_not_an_answer():
+    raw = {
+        "search_metadata": {"status": "Success"},
+        "text_blocks": [
+            {
+                "type": "paragraph",
+                "snippet": "Alcanzaste el límite de solicitudes de respuestas de IA por ahora. "
+                "Vuelve a intentarlo más tarde.",
+            }
+        ],
+    }
+    with pytest.raises(google_ai_mode.GoogleRateLimited, match="limitó"):
+        google_ai_mode.parse_response(raw)
