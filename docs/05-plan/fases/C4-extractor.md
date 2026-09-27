@@ -80,6 +80,7 @@
     - las 20 de la API de Gemini (`registro-api.csv`);
     - respuestas de la primera corrida real.
   - Claude Code propone las etiquetas y **el Director las confirma o corrige** (tarea del Director).
+  - **Regla aprobada por el Director (27/09):** revisa una muestra de 15 respuestas variadas. Con ≤ 1 corrección, las 63 se dan por confirmadas "por muestreo" (queda anotado); con más, Claude revisa las 48 restantes con el criterio de las correcciones y presenta otra muestra.
   - Prueba `tests/eval/test_extractor_quality.py`, que calcula precisión, exhaustividad y asociación.
 - **Archivos probables:** `data/eval/extractor-gold.jsonl`, `tests/eval/test_extractor_quality.py`, `scripts/etiquetar.py` (ayuda de la CLI)
 - **Criterios de aceptación:**
