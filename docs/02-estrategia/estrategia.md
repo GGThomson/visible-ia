@@ -26,7 +26,15 @@
 | Setup | **S/ 490** (auditoría + schema + perfiles) | S/ 0 (la agencia ejecuta los checklists) |
 | Entregables | Reporte por WhatsApp, alertas y soporte | Reportes PDF con el logo de la agencia |
 
-> 💡 **Hipótesis C-004 (26/09): plan Gestionado.** Además de medir, nosotros ejecutamos los arreglos del checklist. Se valida con las primeras 40 clínicas (H9); por ahora no se ofrece como plan ni se construye nada. **Contenido y precio: por definir por el Director.** Si se valida: `/decision` para fijar el precio y revisar el PRD §7, que hoy excluye editar los perfiles del cliente dentro del producto (el servicio sería manual).
+> 💡 **Hipótesis C-004 (26/09): plan Gestionado.** Además de medir, nosotros ejecutamos los arreglos del checklist. Se valida con las primeras 40 clínicas (H9); por ahora no se ofrece como plan ni se construye nada. 
+>
+> | Plan Gestionado (tentativo) | Precio | Incluye |
+> |---|---|---|
+> | Puesta a punto | **S/ 990**, pago único | Ficha de Google, Doctoralia, web y plan de reseñas |
+> | Mensual | **S/ 790/mes** | Medición, reporte, 3 mejoras al mes y una llamada corta |
+>
+> Referencia: el plan base es S/ 490 de setup + S/ 349/mes. **Son precios para preguntar en las llamadas, no definitivos** (Director, 26/09). La duda del IGV (régimen pendiente) aplica igual.
+> Si se valida: `/decision` para fijar el precio y revisar el PRD §7, que hoy excluye editar los perfiles del cliente dentro del producto (el servicio sería manual).
 
 **Costo variable por cliente al mes** (estimado; precios del 26/09/2026). La pasarela aplica solo a pagos con tarjeta; con Yape o transferencia el costo baja a ≈ S/ 4 por clínica:
 
