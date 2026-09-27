@@ -7,7 +7,7 @@
 
 ## Dónde estamos
 - **Fase actual:** 5 · Construcción. Fase 4 aprobada el 26/09: arquitectura + plan (tags `fase-4-completa`, `plan-aprobado`)
-- **Tarea actual:** **C1-T04**, CI en GitHub Actions (C1-T01 a C1-T03 ✅; esquema aplicado en dev, falta prod)
+- **Tarea actual:** **C1-T05**, job diario que mantiene activos Supabase dev y prod (C1-T01 a C1-T04 ✅; esquema aplicado en dev, falta prod)
 - **Rama de trabajo:** cada tarea en `feat/C<n>-T<nn>-...` desde `main` (las fases 1–4 ya están en `main`)
 - **Avance general:** █████░░░░░ 45 %
 - **Calendario:** construcción del 28/09 al 08/11 · **v1.0 "Vender" el 04/10** · ventas desde el 05/10 · control del Plan B el **jue 02/10** (C6-T05)
@@ -26,8 +26,8 @@
 <!-- ⚪ pendiente · 🟡 en curso · ✅ completa · ⏭️ omitida (explicar por qué en el brief) -->
 
 ## Próximos 3 pasos
-1. **Director:** revisar el PR de C1-T03 y aplicar el esquema en prod con `uv run visible-ia db migrate --env prod`
-2. `/siguiente` → C1-T04 (CI) … C1-T06. Luego C2 (mercados)
+1. **Director:** aplicar el esquema en prod con `uv run visible-ia db migrate --env prod`
+2. `/siguiente` → C1-T05 (job diario) y C1-T06 (landing + README). Luego C2 (mercados)
 3. **Director (29/09):** cuenta de SerpApi y **aprobar la facturación de OpenAI** (≈ US$4/mes, tope US$10) antes de C3. En paralelo: lista de 40 clínicas, trámites de WhatsApp y pasarela, tareas legales
 
 ## Bloqueos / esperando decisión
