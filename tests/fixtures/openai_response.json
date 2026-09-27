@@ -1,0 +1,83 @@
+{
+  "id": "resp_fixture_0001",
+  "object": "response",
+  "created_at": 1790000000,
+  "status": "completed",
+  "model": "gpt-5-mini-2025-08-07",
+  "output": [
+    {
+      "id": "rs_fixture_1",
+      "type": "reasoning",
+      "summary": []
+    },
+    {
+      "id": "ws_fixture_1",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "query": "mejores clínicas de implantes dentales Miraflores Lima"
+      }
+    },
+    {
+      "id": "ws_fixture_2",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.doctoralia.pe/implantologia/lima"
+      }
+    },
+    {
+      "id": "ws_fixture_3",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "query": "clínica dental implantes Miraflores reseñas"
+      }
+    },
+    {
+      "id": "msg_fixture_1",
+      "type": "message",
+      "status": "completed",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "Estas son algunas clínicas de implantes en Miraflores:\n\n1. Clínica Dental Sonrisa Andina: especialistas en implantología con tomografía propia.\n2. Centro Odontológico Larco: atención los sábados y financiamiento.\n3. Implant Studio Lima: buenas reseñas en Doctoralia.",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "start_index": 56,
+              "end_index": 130,
+              "url": "https://www.sonrisaandina.pe/implantes?utm_source=openai",
+              "title": "Implantes dentales | Sonrisa Andina"
+            },
+            {
+              "type": "url_citation",
+              "start_index": 131,
+              "end_index": 200,
+              "url": "https://www.doctoralia.pe/implantologia/lima",
+              "title": "Implantólogos en Lima - Doctoralia"
+            },
+            {
+              "type": "url_citation",
+              "start_index": 201,
+              "end_index": 260,
+              "url": "https://www.doctoralia.pe/implantologia/lima",
+              "title": "Implantólogos en Lima - Doctoralia"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 12000,
+    "input_tokens_details": { "cached_tokens": 2000 },
+    "output_tokens": 1500,
+    "output_tokens_details": { "reasoning_tokens": 1024 },
+    "total_tokens": 13500
+  }
+}
