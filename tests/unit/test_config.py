@@ -76,3 +76,26 @@ def test_env_example_lists_every_variable():
     example = (Path(__file__).parents[2] / ".env.example").read_text(encoding="utf-8")
     for name in ALL_VARS:
         assert f"{name}=" in example
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
+        "abc123.supabase.co",
+        " https://abc123.supabase.co/ ",
+        '"https://abc123.supabase.co"',
+        "'abc123.supabase.co'\n",
+    ],
+)
+def test_supabase_url_is_normalized(monkeypatch, raw):
+    from visible_ia.config import Settings
+
+    monkeypatch.setenv("SUPABASE_URL_DEV", raw)
+    assert Settings().supabase_url_dev == "https://abc123.supabase.co"
+
+
+def test_blank_supabase_url_counts_as_missing(monkeypatch):
+    from visible_ia.config import Settings
+
+    monkeypatch.setenv("SUPABASE_URL_DEV", "  ")
+    assert "SUPABASE_URL_DEV" in Settings().missing_required("dev")
