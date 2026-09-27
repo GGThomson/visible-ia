@@ -36,11 +36,11 @@
 - 🔽 Prueba API Gemini (informativa, baja prioridad): config. B, 1 de 10 hecha (rama `chore/prueba-api-gemini`)
 
 ## Decisiones recientes (últimas 5)
+- 2026-09-27 · C4-T05: el Director revisa 15 de 63 etiquetas; con ≤ 1 corrección se confirman las 63 por muestreo, si no, Claude revisa el resto y hay otra muestra. Lista IMP · Miraflores confirmada (34 clínicas) e importada en prod
 - 2026-09-27 · C-006 → se declara en la nota de método (3 de 30 respuestas de Google con fichas sin nombre). Bug corregido: la CLI no confirmaba cada respuesta (se perdió 1 crédito); ahora `autocommit`. SerpApi: 37/250 usadas; OpenAI ≈ US$1.01/5
 - 2026-09-26 · C4: extractor con gpt-5-nano y prompt v2 (la v1 descartaba todo con razonamiento mínimo); migraciones 0003 y 0004 en prod; `dentum.com.pe` = web de clínica. Gasto del mes ≈ US$1.01 de US$5
 - 2026-09-26 · C-005: superficie `google_ai_mode_manual` (migración 0003) y muestra de la fase 1 importada en **dev** (31 filas, 8 mercados inactivos; las de "Lima" fuera de la calibración). Corrida 1 real en prod aprobada y hecha (US$0.97)
 - 2026-09-26 · Motor: OpenAI aprobado con **tope de US$5** (prepago, sin recarga automática; `MONTHLY_BUDGET_USD` por defecto = 5). SerpApi Free (250 búsquedas/mes). Cada corrida real necesita el OK del Director con la estimación del motor
-- 2026-09-26 · C-004: plan Gestionado como hipótesis H9 (S/ 990 de puesta a punto + S/ 790/mes, tentativos, para preguntar en las llamadas); sin código
 
 ## Bandeja de pendientes
 - Ver `memoria/cambios-pendientes.md` (0 sin clasificar)
