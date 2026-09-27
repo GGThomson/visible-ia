@@ -73,7 +73,7 @@
 - **Notas para Claude Code:** en la terminal, usar `rich` para las tablas. Es la única dependencia nueva permitida en esta tarea.
 
 ### C4-T05 · Conjunto de evaluación y prueba de calidad (PRD §5.3)
-- **Estado:** ⚪
+- **Estado:** 🟡 código listo; falta que el Director confirme las etiquetas y aprobar grabar las salidas (≈ US$0.007)
 - **Qué:**
   - Armar `data/eval/extractor-gold.jsonl` con ≥ 60 respuestas y sus menciones correctas:
     - las 31 de la muestra del 26/09 (importadas en C3-T05);
