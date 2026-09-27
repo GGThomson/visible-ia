@@ -49,9 +49,16 @@ SCHEMA = {
             "items": {
                 "type": "object",
                 "properties": {
-                    "nombre_tal_cual": {"type": "string"},
-                    "orden": {"type": "integer"},
-                    "es_establecimiento_o_profesional": {"type": "boolean"},
+                    "nombre_tal_cual": {
+                        "type": "string",
+                        "description": "Solo el nombre, copiado del texto, sin sede ni descripción",
+                    },
+                    "orden": {"type": "integer", "description": "1, 2, 3… por primera aparición"},
+                    "es_establecimiento_o_profesional": {
+                        "type": "boolean",
+                        "description": "true si atiende pacientes (clínica, centro o profesional); "
+                        "false si es plataforma, directorio, marca, técnica o lugar",
+                    },
                 },
                 "required": ["nombre_tal_cual", "orden", "es_establecimiento_o_profesional"],
                 "additionalProperties": False,
