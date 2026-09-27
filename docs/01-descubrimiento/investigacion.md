@@ -14,7 +14,9 @@
 | H7 | Las agencias ven valor en revender con **marca blanca** | ≥ 2 de 10 agencias piden piloto o precio | ⚪ |
 | H8 | Los pacientes de ticket alto en Lima **ya usan IA** para elegir clínica | Proxy: ≥ 3 clínicas dicen en las llamadas que algún paciente mencionó ChatGPT/Gemini, o el intake "¿Cómo nos conociste? → IA" registra casos | ⚪ (hipótesis más débil; sin datos Latam) |
 
-H1–H4 se prueban con la **prueba de fuentes** (sin clientes). H5–H8 se prueban con la **venta** (semanas 2–6).
+H1–H4 se prueban con la **prueba de fuentes** (sin clientes). | H9 | Una parte de las clínicas prefiere un plan **Gestionado** (nosotros ejecutamos los arreglos) frente a solo medir y recibir el checklist (C-004, 26/09) | Propuesta: ≥ 3 de las primeras 10 clínicas interesadas eligen o piden precio del plan Gestionado (se confirma al definir su contenido y precio) | ⚪ (se pregunta en las llamadas con las 40 clínicas; sin código) |
+
+H5–H9 se prueban con la **venta** (semanas 2–6).
 
 ## Usuarios / actores
 | Actor | Qué necesita | Qué le duele hoy | Cómo lo resuelve hoy |

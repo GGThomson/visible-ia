@@ -14,6 +14,7 @@
 ## Clasificados (historial)
 | ID | Fecha | Tipo | Descripción | Impacto | Destino | Estado |
 |---|---|---|---|---|---|---|
+| C-004 | 2026-09-26 | 💡 idea (hipótesis de negocio) | Plan **Gestionado**: nosotros ejecutamos los arreglos (ficha de Google, Doctoralia, web/schema, redes) además de medir. Se valida con las primeras 40 clínicas. Sin cambios de código por ahora | Bajo (sin código; toca hipótesis y precios) | Validación comercial, semanas 2–6 → **H9** en `investigacion.md` | ✅ Registrado; contenido y precio por definir por el Director |
 | C-002 | 2026-09-26 | 🔁 cambio de alcance | Reemplazar la prueba manual de 270 consultas por las primeras corridas reales + calibración manual | Medio | Construcción (C3–C5) | ✅ Decidido por el Director |
 | C-003 | 2026-09-26 | ✨ mejora | Plan B de la v1.0: informes semiautomáticos si C1–C5 se atrasan | Bajo | C6-T05 | ✅ Decidido por el Director |
 | C-001 | 2026-09-26 | ❓ pregunta | Riesgo legal del motor de medición (los términos de grounding de Gemini prohíben "analyze") | Alto | Fase 2 | ✅ Resuelto: ADR-002 (opción C) |

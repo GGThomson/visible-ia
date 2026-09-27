@@ -49,6 +49,7 @@
 | Armar la lista de 40 clínicas (CSV) de los mercados a vender | C2 / ventas | Semana 1 |
 | Iniciar los trámites sin costo de WhatsApp Business API y de la pasarela de pagos | C11 / C12 | Semana 1 |
 | Tareas legales de la estrategia (términos de OpenAI, SerpApi, Ley 29733, RUC con contador) | Antes del primer cobro | Semanas 1–2 |
+| Validar la hipótesis **H9 / plan Gestionado** (C-004) en las llamadas con las primeras 40 clínicas; definir antes su contenido y precio tentativo | Ventas | Semanas 2–6 |
 
 ## Definición de Terminado (DoD) para cada tarea
 - [ ] Cumple sus criterios de aceptación
