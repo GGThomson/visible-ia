@@ -79,3 +79,70 @@
 - Llevar el contexto y `riesgo-legal-motor.md` a Gemini → `/acta` → decidir el motor (ADR-002).
 - Opcional: las 9 llamadas que faltan de la config. B.
 - Regenerar la clave de Gemini en AI Studio: quedó en el historial del chat.
+
+---
+
+# Sesión 2026-09-26 (3.ª parte) · Fases 2–4 aprobadas y construcción de C1–C2
+
+- **Fase / tareas:** F2 estrategia · F3 PRD · F4 arquitectura y plan · construcción C1-T01…C1-T06 y C2-T01…C2-T04
+- **Rama(s):** `docs/F2-estrategia`, `docs/F3-especificacion`, `docs/F4-arquitectura` (fusionadas, con tags) y una rama `feat/`/`fix/` por tarea, cada una fusionada por PR
+- **Commits en `main` (primer padre, desde el cierre anterior):**
+  - `c2026f6` fase 2 completa · `74eaf34` fase 3 completa · `2af50ea` fase 4 completa, plan aprobado
+  - `af1c2d8` C1-T01 (#1) · `6bbc3b4` C1-T02 (#2) · `cae970e` C1-T03 (#3) · `bec66f3` C1-T04 (#4)
+  - `57193ac` C1-T05 (#5) · `7dde1b8` fix URL (#8) · `747ac1f` fix diagnóstico (#9)
+  - `fe4ed4f` C1-T06 (#10) · `5c34e07` docs C1 (#11)
+  - `0c08e9a` C2-T01 (#12) · `77030ec` C2-T02 (#13) · `0fd02ea` C2-T03 (#14) · `c0e6d92` C2-T04 (#15)
+  - Tags: `fase-2-completa`, `fase-3-completa`, `fase-4-completa`, `plan-aprobado`
+
+## Qué se hizo
+- **Acta C-001:** Claude (claude.ai) coincidió con la opción C. El Director aprobó el ADR-002, el plan gratis de SerpApi y la marca blanca.
+- **Fase 2 (estrategia):** propuesta de valor, precios con margen (≈ 94–95 %), go-to-market y métrica norte. IGV pendiente del régimen.
+- **Fase 3 (PRD v1 congelado):**
+  - 27 historias en 3 entregas.
+  - 40 plantillas.
+  - Índice = % con margen de Wilson.
+  - La §5.5 muestra que con 30 respuestas casi no se detectan cambios.
+- **Fase 4 (arquitectura aprobada):**
+  - ADR-003: 3 repeticiones + prueba de 2 proporciones + ventana de 3 meses.
+  - ADR-004: Python sin servidor (Supabase + GitHub Actions + Cloudflare Pages).
+  - Job diario (una vez por semana no basta, según la documentación de Supabase).
+  - Webhooks en Edge Functions.
+  - Plan C1–C12 (46 tareas) con Plan B para vender el 05/10 (C6-T05).
+- **Construcción C1 (base):**
+  - Paquete `uv` y CLI.
+  - Config por entorno.
+  - Esquema con RLS en 20 tablas (dev y prod).
+  - CI.
+  - Job diario OK en Actions.
+  - Landing "Próximamente" en https://visible-ia.pages.dev.
+- **Construcción C2 (mercados):**
+  - 40 plantillas cargadas en dev.
+  - `mercado crear/listar/preguntas/editar-pregunta` con banco versionado.
+  - `clinicas importar/listar` (CSV con `,` o `;`, decimales con coma).
+  - Alias automáticos no genéricos + manuales.
+  - 60 pruebas unitarias y 13 de integración (con rollback).
+
+## Qué se decidió (y dónde quedó registrado)
+- Fases 2, 3 y 4 aprobadas (documentos de cada fase, ADR-002 a ADR-004, roadmap).
+- **Fusión automática de PRs con la CI en verde; parar solo por producción, dinero o decisiones del Director** (memoria de Claude Code, 26/09).
+- **Migraciones con `visible-ia db migrate`** en vez de `supabase db push` (C1-base.md).
+- **Web publicada desde Actions (wrangler)** en vez de la integración Git de Cloudflare (C1-base.md).
+- **Alias genéricos nunca automáticos**, aunque el ejemplo del plan dijera "Implantes Dental" (C2-mercados.md).
+
+## Problemas y cómo se resolvieron
+- **CI:** `setup-uv` no publica la etiqueta `v10`; se fijó `v10.2.0`.
+- **Secrets de GitHub con valores distintos al `.env`:**
+  - URL sin forma `https://<id>.supabase.co` → PR #8 (normaliza) y PR #9 (diagnostica sin mostrar el valor).
+  - Claves `service_role` inválidas.
+  - Solución: el Director recargó los Secrets desde el `.env`. Issues #6 y #7 cerrados.
+- **Cloudflare:** el primer token no veía ninguna cuenta (403). El Director creó uno con *Cloudflare Pages: Edit*.
+- **Certificado SSL** de `*.pages.dev`: tarda unos minutos en emitirse al crear el proyecto.
+- **Claude no puede leer ni escribir `.env`** (regla de permisos). El Director lo crea con `Copy-Item .env.example .env`.
+
+## Para la próxima sesión
+- **Director:**
+  - Demo de C2 en dev con un CSV real.
+  - Revisar la landing en el celular.
+  - Crear la cuenta de SerpApi y **decidir la facturación de OpenAI** (≈ US$4/mes, tope US$10).
+- **Claude Code:** C3 (motor). Sin la facturación aprobada, avanzar con respuestas grabadas, sin llamadas reales.
+- **Hacia el 04/10:** confirmar que Supabase dev no se pausó. **Jue 02/10:** control del Plan B.
