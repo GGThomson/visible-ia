@@ -1450,3 +1450,33 @@ def mensual_correr(
         _post_issue(f"{ESTIMATE_PREFIX} ", None, "Aprobada y ejecutada: ver " + title, close=True)
     if any(r.failures for r in results):
         raise typer.Exit(code=1)
+
+
+# --- checklist (C8-T03) --------------------------------------------------------------------
+
+checklist_app = typer.Typer(help="Checklist priorizado de cada sede.", no_args_is_help=True)
+app.add_typer(checklist_app, name="checklist")
+
+
+@checklist_app.command("generar")
+def checklist_generar(
+    sede: int = typer.Argument(None, help="Id de la sede (sin id: todas las sedes activas)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Crea o actualiza el checklist priorizado (las tareas hechas se mantienen)."""
+    from visible_ia.checklist import generate
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target, autocommit=True) as conn:
+        if sede is None:
+            with conn.cursor() as cur:
+                cur.execute("select id from public.sites where active_to is null order by id")
+                sites = [r[0] for r in cur.fetchall()]
+        else:
+            sites = [sede]
+        for site_id in sites:
+            tasks = generate(conn, site_id)
+            typer.echo(f"Sede {site_id}: " + " → ".join(t.code for t in tasks))
+    if not sites:
+        typer.echo("No hay sedes activas.")
