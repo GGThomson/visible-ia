@@ -24,7 +24,7 @@
 - **Rama:** `feat/C7-T01-clients-sites`
 
 ### C7-T02 · Políticas RLS de lectura por cliente + pruebas
-- **Estado:** ⚪
+- **Estado:** ✅ (migración 0006 en dev; en prod con el OK del Director)
 - **Qué:** migración `0006_client_read_policies.sql` (0003 ya estaba usado).
   - El usuario de una clínica lee `monthly_scores`, `mentions`, `sources`, `reports` y `tasks` **solo** de los mercados y sedes de su cliente.
   - Vistas de solo lectura para el panel (`v_panel_*`) que no exponen el texto crudo de otras clínicas.
