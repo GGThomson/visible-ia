@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>visible-ia · Entrar a tu panel</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <style>main { max-width: 28rem; padding-top: 3rem; } #aviso[hidden], #error[hidden] { display: none; }</style>
+</head>
+<body>
+  <main class="container">
+    <h1>Entra a tu panel</h1>
+    <p>Escribe el correo con el que te registramos. Te enviaremos un enlace para entrar, sin contraseña.</p>
+    <form id="acceso" novalidate>
+      <label>Correo
+        <input type="email" name="email" required autocomplete="email" placeholder="tu@clinica.pe">
+      </label>
+      <button type="submit" id="enviar">Enviarme el enlace</button>
+    </form>
+    <article id="aviso" hidden>Listo: revisa tu correo (también la carpeta de spam) y abre el enlace desde este mismo teléfono o computadora.</article>
+    <p id="error" role="alert" hidden></p>
+    <small>¿Te llegó el enlace por WhatsApp? Ábrelo directamente: te trae a tu panel.</small>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+  <script src="../config.js"></script>
+  <script src="comun.js"></script>
+  <script>
+    (async function () {
+      var client = panelClient();
+      var form = document.getElementById("acceso");
+      var error = document.getElementById("error");
+      if (!client) { error.textContent = "El acceso no está disponible en este momento."; error.hidden = false; form.hidden = true; return; }
+      var session = (await client.auth.getSession()).data.session;
+      if (session) { window.location.replace("./"); return; }
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        error.hidden = true;
+        var email = form.email.value.trim().toLowerCase();
+        if (!form.checkValidity()) { error.textContent = "Escribe un correo válido."; error.hidden = false; return; }
+        var button = document.getElementById("enviar");
+        button.disabled = true; button.setAttribute("aria-busy", "true");
+        // shouldCreateUser: false -> only clinics we invited can sign in.
+        var result = await client.auth.signInWithOtp({
+          email: email,
+          options: { shouldCreateUser: false, emailRedirectTo: panelUrl() }
+        });
+        button.disabled = false; button.removeAttribute("aria-busy");
+        if (result.error) {
+          error.textContent = /signups not allowed|not found|Signups/i.test(result.error.message)
+            ? "Ese correo no tiene acceso. Escríbenos por WhatsApp para dártelo."
+            : "No pudimos enviar el enlace. Inténtalo de nuevo en unos minutos.";
+          error.hidden = false;
+          return;
+        }
+        form.hidden = true;
+        document.getElementById("aviso").hidden = false;
+      });
+    })();
+  </script>
+</body>
+</html>

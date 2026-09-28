@@ -127,13 +127,15 @@ def world():
             user_id = created.json()["id"]
             users[side] = user_id
             link_user(conn, user_id, client)
-            token = httpx.post(
+            session = httpx.post(
                 f"{url}/auth/v1/token", params={"grant_type": "password"},
                 json={"email": email, "password": password}, headers={"apikey": anon},
-            ).json()["access_token"]  # fmt: skip
+            ).json()  # fmt: skip
+            token = session["access_token"]
             ids[side] = {
                 "market": market, "clinic": clinic, "competitor": clinics[f"Competidor {side}"],
                 "client": client, "site": site, "run": run, "token": token, "user": user_id,
+                "refresh": session["refresh_token"],
             }  # fmt: skip
         yield {"url": url, "anon": anon, "ids": ids}
     finally:
