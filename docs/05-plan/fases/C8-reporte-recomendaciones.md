@@ -40,7 +40,7 @@
 - **Rama:** `feat/C8-T02-monthly-report`
 
 ### C8-T03 · Checklist priorizado (HU-17)
-- **Estado:** ⚪
+- **Estado:** ✅ (catálogo en `data/checklist.toml` en vez de YAML, para no sumar dependencias; migración 0007 en dev, en prod con OK)
 - **Qué:**
   - Catálogo de tareas en `data/checklist.yaml`, en este orden: ficha de Google → Doctoralia → web con schema → redes → Bing Places. Cada tarea tiene su condición.
   - Prioriza según lo que le falta a la sede y según las fuentes que más cita su mercado.

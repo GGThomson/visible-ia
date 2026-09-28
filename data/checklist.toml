@@ -1,0 +1,54 @@
+# Base checklist of a clinic (HU-17). Base order from the plan: Google profile -> Doctoralia ->
+# website with schema -> social -> Bing Places. The generator (src/visible_ia/checklist.py)
+# keeps the tasks whose condition applies and raises the ones whose sources the market's AI
+# answers cite the most. Everything here follows Google's guidelines: never add keywords to
+# the business name, never create fake or incentivised reviews, one profile per location.
+# {tratamiento} and {distrito} are filled in per site.
+
+[[tarea]]
+codigo = "ficha_google"
+orden = 1
+fuente = "google_profile"
+condicion = "siempre"
+titulo = "Completa tu ficha de Google"
+detalle = "Categoría principal y secundarias correctas, servicios ({tratamiento}), horario, teléfono, web y fotos reales de la clínica y del equipo. Usa el nombre real de tu clínica tal como figura en tu letrero: Google prohíbe agregarle palabras clave o el distrito."
+
+[[tarea]]
+codigo = "resenas"
+orden = 2
+fuente = "google_profile"
+condicion = "pocas_resenas"
+titulo = "Pide reseñas a tus pacientes"
+detalle = "Pide la reseña al terminar el tratamiento, con el enlace directo de tu ficha por WhatsApp. Que cuenten su experiencia con sus palabras; no ofrezcas nada a cambio ni las escribas tú (Google lo prohíbe). Responde cada reseña."
+
+[[tarea]]
+codigo = "doctoralia"
+orden = 3
+fuente = "doctoralia"
+condicion = "mercado_cita_doctoralia"
+titulo = "Completa tu perfil de Doctoralia"
+detalle = "Perfil de la clínica y de cada especialista, con {tratamiento} como servicio, dirección en {distrito}, horarios y opiniones verificadas. La IA cita Doctoralia en tu mercado."
+
+[[tarea]]
+codigo = "web_schema"
+orden = 4
+fuente = "own_website"
+condicion = "web_no_citada"
+titulo = "Una página de {tratamiento} en tu web, con schema"
+detalle = "Página dedicada: quién atiende, tecnología, precios de referencia, preguntas frecuentes y cómo llegar. Agrega el schema JSON-LD de tu clínica (lo generamos por ti) para que buscadores e IA la entiendan."
+
+[[tarea]]
+codigo = "redes"
+orden = 5
+fuente = "social"
+condicion = "sin_redes"
+titulo = "Conecta tus redes con tu ficha y tu web"
+detalle = "Instagram o Facebook con el mismo nombre, dirección y teléfono que tu ficha de Google, y enlaces entre ellos. Publica casos y explicaciones de {tratamiento} (sin datos de pacientes)."
+
+[[tarea]]
+codigo = "bing_places"
+orden = 6
+fuente = "other"
+condicion = "siempre"
+titulo = "Registra tu clínica en Bing Places"
+detalle = "ChatGPT busca en la web con Bing: registra tu clínica en Bing Places (puedes importarla desde tu ficha de Google) con los mismos datos."

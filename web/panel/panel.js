@@ -108,7 +108,11 @@
       evo.appendChild(tr);
     });
 
-    var tasks = await query(client.from("tasks").select("*").eq("site_id", site.id).order("id"));
+    // Ordered by priority (migration 0007); falls back to creation order where it is missing.
+    var ordered = await client.from("tasks").select("*").eq("site_id", site.id).order("priority").order("id");
+    var tasks = ordered.error
+      ? await query(client.from("tasks").select("*").eq("site_id", site.id).order("id"))
+      : ordered.data;
     var list = $("tareas");
     list.replaceChildren();
     if (!tasks.length) list.appendChild(el("p", "Tu checklist aparecerá con tu primer reporte mensual."));
@@ -125,8 +129,10 @@
         if (result.error || !result.data.length) { box.checked = !box.checked; alert("No se pudo guardar. Inténtalo de nuevo."); }
       });
       label.appendChild(box);
-      label.appendChild(document.createTextNode(" " + (TASKS[t.code] || t.code)));
+      label.appendChild(document.createTextNode(" "));
+      label.appendChild(el("strong", t.title || TASKS[t.code] || t.code));
       list.appendChild(label);
+      if (t.detail) list.appendChild(el("p", t.detail, "detalle-tarea"));
     });
   }
 
