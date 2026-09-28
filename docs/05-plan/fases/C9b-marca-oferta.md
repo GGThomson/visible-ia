@@ -69,6 +69,21 @@
   - el Plan Medir compara con 3 competidores.
 - Los planes y los ganchos ya quedaron en `docs/02-estrategia/estrategia.md` al procesar el acta.
 
+### C9b · Rediseño de la landing (pedido del Director, 28/09)
+- **Estado:** ✅ en el PR #67, pendiente de la aprobación del Director.
+- **Skills** en `.claude/skills/`: frontend-design, ui-ux-pro-max, copywriting, copy-editing, cro y marketing-psychology.
+- **Guías:** `docs/marca/VOZ.md` y `docs/marca/DESIGN.md`; en `CLAUDE.md`, la sección «Web y textos de venta».
+- **Landing rehecha** con CSS propio, sin Pico (el panel sigue con Pico):
+  - contenedor de 1120 px y encabezado fijo;
+  - primera pantalla en dos columnas, con el chat animado;
+  - una sola sección en Tinta (los datos);
+  - imagen real de la página 1 del informe, con clínicas ficticias (`scripts/imagen_informe_landing.py`);
+  - planes de igual altura con un solo botón principal;
+  - formulario en una tarjeta de 640 px;
+  - pie en Tinta.
+- **Animaciones:** solo 3, que se apagan con `prefers-reduced-motion`.
+- **Pendiente:** la foto del Director (`web/marca/gianpol.jpg`).
+
 ## Demo de la fase
 - El Director ve en la vista previa del PR la landing nueva en su celular y en la computadora, el panel y un PDF de ejemplo con la marca Eminia.
 - Si los aprueba, se publica en Cloudflare Pages al fusionar a `main`.
