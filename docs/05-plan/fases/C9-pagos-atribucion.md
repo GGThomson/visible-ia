@@ -2,7 +2,7 @@
 
 **Objetivo:** el operador registra los pagos manuales y ve qué clientes están al día. La clínica recibe un kit para atribuir los pacientes que llegan por la IA.
 **Historias que cubre:** HU-23, HU-25
-**Estado:** 🟡 tareas ✅; falta la demo de v1.1 (y la migración 0008 en prod)
+**Estado:** ✅ completa (27/09) · demo de v1.1 aprobada · migración 0008 en dev y prod · tag `v1.1`
 **Nota:** las tareas se refinan al empezar la fase, sin cambiar su alcance.
 
 ## Tareas
@@ -31,7 +31,7 @@
 
 ### C9-T02 · Kit de atribución (HU-25)
 - **Estado:** ✅
-  - Migración **0008**: tabla `attributions` (sede × mes), en dev; en prod, con el OK del Director.
+  - Migración **0008**: tabla `attributions` (sede × mes), en dev y prod.
   - Panel: sección «Pacientes que llegan por la IA».
   - Anexo: `informe kit --sede` genera un PDF local de 1 página para enviar por WhatsApp.
   - `atribucion registrar` sirve cuando la clínica manda el número por WhatsApp.
@@ -52,3 +52,8 @@
 ## Demo de la fase (= demo de la v1.1)
 - El Director registra un pago, ve el estado de los clientes, y una clínica de prueba carga "3 pacientes por IA" que aparecen en su reporte mensual.
 - **Al aprobar:** tag `v1.1`.
+- **Hecha (27/09) en prod** con un cliente de prueba sobre Clínica Odontologists:
+  - pago de S/ 349 por setiembre → `pagos estado` lo mostró en «vence pronto» (octubre vence el 06/10);
+  - acceso al panel con enlace; se cargaron 3 pacientes por IA en setiembre;
+  - kit en PDF y reporte de setiembre con los 3 pacientes en la sección 6.
+  - Después se borraron el cliente 4, su sede, el pago, el conteo y el usuario.
