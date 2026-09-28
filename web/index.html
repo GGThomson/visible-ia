@@ -57,7 +57,7 @@
         <h2 id="h-datos" class="datos-titulo">Tus pacientes ya le preguntan a la IA</h2>
         <div class="datos">
           <div class="dato">
-            <span class="cifra">23 %</span>
+            <span class="cifra" data-contar="23" data-formato="{n} %">23 %</span>
             <p>de las personas en Lima Metropolitana ya usa herramientas de IA: casi 1 de cada 4.</p>
             <span class="fuente">Fuente: <a href="https://dplnews.com/16-peruanos-usa-herramientas-inteligencia-artificial-erestel/" rel="noopener" target="_blank">Osiptel, ERESTEL 2025</a></span>
           </div>
@@ -67,7 +67,7 @@
             <span class="fuente">Fuente: <a href="https://www.brightlocal.com/research/lcrs-ai-trust/" rel="noopener" target="_blank">BrightLocal, marzo 2026</a></span>
           </div>
           <div class="dato">
-            <span class="cifra">30 de 30</span>
+            <span class="cifra" data-contar="30" data-formato="{n} de 30">30 de 30</span>
             <p>respuestas de la IA nombraron clínicas concretas cuando preguntamos como un paciente en Lima.</p>
             <span class="fuente">Fuente: medición propia, setiembre 2026</span>
           </div>
@@ -95,7 +95,52 @@
       </div>
     </section>
 
-    <section id="fuentes" class="seccion niebla" aria-labelledby="h-fuentes">
+    <section id="recibes" class="seccion niebla" aria-labelledby="h-recibes">
+      <div class="envoltura aparece">
+        <h2 id="h-recibes">Qué recibes cada mes</h2>
+        <ul class="recibe-grilla">
+          <li class="recibe"><span class="icono-caja"><svg class="icono" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22a11 11 0 0 1 22 0"/><path d="M16 22l6-7"/><circle cx="16" cy="22" r="1.6"/><path d="M5 26h22"/></svg></span><h3>Tu Índice Eminia con su rango</h3><p>Cuánto te nombra la IA en ChatGPT y Google, frente a las clínicas de tu distrito.</p></li>
+          <li class="recibe"><span class="icono-caja"><svg class="icono" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 26V16h6v10M13 26V8h6v18M21 26V12h6v14"/><path d="M4 26h24"/></svg></span><h3>Tu ranking y tus competidores</h3><p>Quién te gana, en qué IA, y si subiste o bajaste: solo te lo decimos cuando el cambio es claro.</p></li>
+          <li class="recibe"><span class="icono-caja"><svg class="icono" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 28s-8-7.2-8-13a8 8 0 0 1 16 0c0 5.8-8 13-8 13z"/><circle cx="16" cy="15" r="3"/></svg></span><h3>Las fuentes que mira la IA</h3><p>Google Maps, Doctoralia, webs y redes: las que más pesan en tu mercado.</p></li>
+          <li class="recibe"><span class="icono-caja"><svg class="icono" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="6" width="5" height="5" rx="1"/><path d="m6.5 8.6 1.2 1.2 2.2-2.4"/><path d="M14 8.5h13"/><rect x="5" y="14" width="5" height="5" rx="1"/><path d="M14 16.5h13"/><rect x="5" y="22" width="5" height="5" rx="1"/><path d="M14 24.5h9"/></svg></span><h3>Tu lista de arreglos en orden</h3><p>Qué hacer primero, y lo marcas como hecho en tu panel.</p></li>
+          <li class="recibe"><span class="icono-caja"><svg class="icono" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m11 10-6 6 6 6M21 10l6 6-6 6M18 7l-4 18"/></svg></span><h3>Código listo para tu web</h3><p>El código de tu clínica (JSON-LD) para que la IA entienda quién eres.</p></li>
+          <li class="recibe"><span class="icono-caja"><svg class="icono" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="11" r="4.5"/><path d="M5 26c0-4.4 3.6-8 8-8s8 3.6 8 8"/><path d="M24 11v8M20 15h8"/></svg></span><h3>Cuántos pacientes llegan por la IA</h3><p>El kit «¿Cómo nos conociste?» y el conteo del mes en tu reporte.</p></li>
+        </ul>
+
+        <div class="recorrido">
+          <div class="pestanas" role="tablist" aria-label="Recorrido por lo que recibes">
+            <button type="button" role="tab" id="pestana-diagnostico" aria-controls="vista-diagnostico" aria-selected="true" tabindex="0">Diagnóstico</button>
+            <button type="button" role="tab" id="pestana-panel" aria-controls="vista-panel" aria-selected="false" tabindex="-1">Panel</button>
+            <button type="button" role="tab" id="pestana-mensual" aria-controls="vista-mensual" aria-selected="false" tabindex="-1">Informe mensual</button>
+            <button type="button" role="tab" id="pestana-checklist" aria-controls="vista-checklist" aria-selected="false" tabindex="-1">Checklist</button>
+            <button type="button" role="tab" id="pestana-kit" aria-controls="vista-kit" aria-selected="false" tabindex="-1">Kit</button>
+          </div>
+          <div role="tabpanel" id="vista-diagnostico" aria-labelledby="pestana-diagnostico" class="vista" tabindex="0">
+            <div class="marco"><div class="marco-barra" aria-hidden="true"><span></span><span></span><span></span><em>eminia · diagnóstico</em></div><div class="marco-pantalla"><picture><source srcset="marca/producto-diagnostico.webp" type="image/webp"><img src="marca/producto-diagnostico.jpg" width="900" height="1273" loading="lazy" alt="Página 1 de un diagnóstico de ejemplo: el Índice Eminia de cada clínica de implantes de un distrito, con la clínica del ejemplo destacada."></picture></div></div>
+            <p class="nota leyenda">El diagnóstico gratis: tu Índice Eminia frente a tu competencia, en PDF.</p>
+          </div>
+          <div role="tabpanel" id="vista-panel" aria-labelledby="pestana-panel" class="vista" tabindex="0" hidden>
+            <div class="marco"><div class="marco-barra" aria-hidden="true"><span></span><span></span><span></span><em>eminia · panel</em></div><div class="marco-pantalla"><video class="video-panel" muted playsinline preload="none" width="1200" height="750" poster="marca/producto-panel.webp" aria-label="Video corto: recorrido por el panel de una clínica de ejemplo"><source src="marca/producto-panel.webm" type="video/webm"></video><noscript><picture><source srcset="marca/producto-panel.webp" type="image/webp"><img src="marca/producto-panel.jpg" width="1200" height="750" loading="lazy" alt="Panel de una clínica de ejemplo: Índice Eminia de 25 % (entre 16 % y 37 %), subió frente al mes anterior, y el ranking frente a su competencia."></picture></noscript><button type="button" class="boton secundario repetir" hidden>Ver de nuevo</button></div></div>
+            <p class="nota leyenda">Tu panel: tu índice, si subiste o bajaste, y tu ranking, siempre a mano.</p>
+          </div>
+          <div role="tabpanel" id="vista-mensual" aria-labelledby="pestana-mensual" class="vista" tabindex="0" hidden>
+            <div class="marco"><div class="marco-barra" aria-hidden="true"><span></span><span></span><span></span><em>eminia · informe mensual</em></div><div class="marco-pantalla"><picture><source srcset="marca/producto-mensual.webp" type="image/webp"><img src="marca/producto-mensual.jpg" width="900" height="1134" loading="lazy" alt="Primera página del informe mensual de una clínica de ejemplo: el Índice Eminia del mes y su evolución."></picture></div></div>
+            <p class="nota leyenda">Cada mes, un informe en PDF con tu evolución y lo que cambió.</p>
+          </div>
+          <div role="tabpanel" id="vista-checklist" aria-labelledby="pestana-checklist" class="vista" tabindex="0" hidden>
+            <div class="marco"><div class="marco-barra" aria-hidden="true"><span></span><span></span><span></span><em>eminia · checklist</em></div><div class="marco-pantalla"><picture><source srcset="marca/producto-checklist.webp" type="image/webp"><img src="marca/producto-checklist.jpg" width="1200" height="750" loading="lazy" alt="Checklist del panel de una clínica de ejemplo: la primera tarea marcada como hecha y las siguientes en orden de prioridad."></picture></div></div>
+            <p class="nota leyenda">Tu lista de arreglos en orden, que marcas como hechos en el panel.</p>
+          </div>
+          <div role="tabpanel" id="vista-kit" aria-labelledby="pestana-kit" class="vista" tabindex="0" hidden>
+            <div class="marco"><div class="marco-barra" aria-hidden="true"><span></span><span></span><span></span><em>eminia · kit</em></div><div class="marco-pantalla"><picture><source srcset="marca/producto-kit.webp" type="image/webp"><img src="marca/producto-kit.jpg" width="900" height="1134" loading="lazy" alt="Kit de atribución de una clínica de ejemplo: la pregunta «¿Cómo nos conociste?», enlaces con UTM y un cupón sugerido."></picture></div></div>
+            <p class="nota leyenda">El kit para contar cuántos pacientes llegan por la IA.</p>
+          </div>
+        </div>
+        <p class="cierre-recibe">En el Plan Gestionado, además, nosotros hacemos los arreglos. <a href="#planes">Ver planes</a></p>
+      </div>
+    </section>
+
+    <section id="fuentes" class="seccion" aria-labelledby="h-fuentes">
       <div class="envoltura aparece">
         <h2 id="h-fuentes">Qué mira la IA para elegir una clínica</h2>
         <p>Antes de responder, la IA busca en internet. En nuestra prueba con ChatGPT, Gemini y Google Modo IA, esto fue lo que más consultó:</p>
@@ -109,7 +154,7 @@
       </div>
     </section>
 
-    <section class="seccion informe" aria-labelledby="h-informe">
+    <section class="seccion niebla informe" aria-labelledby="h-informe">
       <div class="envoltura aparece">
         <div>
           <h2 id="h-informe">Así se ve tu diagnóstico</h2>
@@ -118,12 +163,12 @@
             <div class="barra"><span class="nombre">Clínica A</span><div><div class="riel"><div class="relleno" style="--valor:50%"></div></div><div class="rango">50 % (entre 38 % y 62 %)</div></div></div>
             <div class="barra"><span class="nombre">Clínica B</span><div><div class="riel"><div class="relleno" style="--valor:37%"></div></div><div class="rango">37 % (entre 26 % y 49 %)</div></div></div>
             <div class="barra"><span class="nombre">Clínica C</span><div><div class="riel"><div class="relleno" style="--valor:30%"></div></div><div class="rango">30 % (entre 20 % y 43 %)</div></div></div>
-            <div class="barra tu"><span class="nombre">Tu clínica</span><div><div class="riel"><div class="relleno" style="--valor:10%"></div></div><div class="rango">10 % (entre 5 % y 20 %)</div></div></div>
+            <div class="barra tu"><span class="nombre">Tu clínica</span><div><div class="riel-envoltura"><div class="riel"><div class="relleno" style="--valor:10%"></div></div><span class="aqui" style="--valor:10%"><svg viewBox="0 0 20 12" width="20" height="12" aria-hidden="true"><path d="M19 6H2M7 1 2 6l5 5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Aquí es donde trabajamos</span></div><div class="rango">10 % (entre 5 % y 20 %)</div></div></div>
           </div>
           <p class="nota">Barras de ejemplo, con nombres cambiados.</p>
           <p class="caso"><strong>Un caso real, sin nombre:</strong> una clínica de implantes de Lima con 4.9 estrellas y más de 1,100 reseñas en Google Maps aparecía en solo 1 de cada 10 respuestas de la IA (setiembre 2026).</p>
           <ul class="hallazgos">
-            <li>En 60 respuestas, la IA nombró <strong>34 clínicas distintas</strong>.</li>
+            <li>En <span data-contar="60" data-formato="{n}">60</span> respuestas, la IA nombró <strong><span data-contar="34" data-formato="{n}">34</span> clínicas distintas</strong>.</li>
             <li>La más nombrada aparece en <strong>1 de cada 2 respuestas</strong>.</li>
             <li><strong>5 de 9</strong> clínicas con 4.5 estrellas o más y más de 100 reseñas aparecen en 1 de cada 10 respuestas o menos.</li>
           </ul>
@@ -137,7 +182,7 @@
       </div>
     </section>
 
-    <section id="planes" class="seccion niebla" aria-labelledby="h-planes">
+    <section id="planes" class="seccion" aria-labelledby="h-planes">
       <div class="envoltura aparece">
         <h2 id="h-planes">Te ayudamos a que la IA te recomiende</h2>
         <p class="intro">Nuestro servicio principal es el Plan Gestionado: medimos cada mes y nosotros hacemos los arreglos. Si prefieres que los haga tu equipo, está el Plan Medir. Para empezar, el diagnóstico es gratis.</p>
@@ -195,7 +240,7 @@
       </div>
     </section>
 
-    <section class="seccion" aria-labelledby="h-despues">
+    <section class="seccion niebla" aria-labelledby="h-despues">
       <div class="envoltura aparece dos-bloques">
         <div>
           <h2 id="h-despues">Qué pasa después de pedirlo</h2>
@@ -228,7 +273,7 @@
     </section>
     -->
 
-    <section id="preguntas" class="seccion niebla" aria-labelledby="h-preguntas">
+    <section id="preguntas" class="seccion" aria-labelledby="h-preguntas">
       <div class="envoltura aparece">
         <h2 id="h-preguntas">Preguntas frecuentes</h2>
         <div class="preguntas">
@@ -260,7 +305,7 @@
       </div>
     </section>
 
-    <section class="seccion" aria-labelledby="h-quien">
+    <section class="seccion niebla" aria-labelledby="h-quien">
       <div class="envoltura aparece">
         <div class="persona">
           <!-- Director's photo goes here as web/marca/gianpol.jpg (square): <img class="foto" src="marca/gianpol.jpg" alt="Gianpol Rosazza"> -->
@@ -274,7 +319,7 @@
       </div>
     </section>
 
-    <section id="pedir" class="seccion niebla pedir" aria-labelledby="h-pedir">
+    <section id="pedir" class="seccion pedir" aria-labelledby="h-pedir">
       <div class="envoltura">
         <h2 id="h-pedir">Pide tu diagnóstico gratis</h2>
         <p class="intro">Te lo enviamos por WhatsApp en 3 días hábiles. Por ahora medimos implantología, estética dental, medicina estética y dermatología en Miraflores, San Isidro y Surco.</p>

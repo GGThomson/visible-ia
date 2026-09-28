@@ -100,7 +100,7 @@ Escala (base 16 px; interlineado del texto 1.6, de los títulos 1.15):
 | Nivel | Uso | Sombra |
 |---|---|---|
 | 0 | Casi todo: secciones, tarjetas, campos | Ninguna (borde 1 px línea) |
-| 1 | Tarjeta de chat de ejemplo, tarjeta del formulario | `0 8px 24px rgba(15, 27, 45, 0.08)` |
+| 1 | Tarjeta de chat de ejemplo, tarjeta del formulario, tarjetas al pasar el mouse, marco de las capturas | `0 8px 24px rgba(15, 27, 45, 0.08)` |
 | 2 | Imagen del informe (inclinada 2–3°) | `0 16px 40px rgba(15, 27, 45, 0.14)` |
 
 Radios: 4 px (barras), 8 px (botones y campos), 12 px (tarjetas), 16 px (foto de la persona).
@@ -114,7 +114,7 @@ Radios: 4 px (barras), 8 px (botones y campos), 12 px (tarjetas), 16 px (foto de
 | Una acción por sección | Varios botones principales compitiendo |
 | Etiquetas en minúsculas normales | Etiquetas en MAYÚSCULAS con espaciado |
 | Ejemplos marcados como ejemplo | Testimonios o logos de clientes inventados |
-| Tres animaciones con propósito (§8) | Animaciones en bucle, en cada tarjeta o al pasar el cursor por todo |
+| Movimiento corto y con propósito, solo de la lista de §8 | Animaciones en bucle, parallax, carruseles automáticos o efectos fuera de la lista |
 | Degradados: nunca | Degradados, brillos, emojis |
 
 ## 8. Responsive Behavior
@@ -125,11 +125,19 @@ Radios: 4 px (barras), 8 px (botones y campos), 12 px (tarjetas), 16 px (foto de
   - el encabezado muestra solo el logo y el botón;
   - las columnas pasan a una;
   - el botón del formulario va a ancho completo.
-- **Animaciones permitidas (solo tres, de 200 a 600 ms, nada en bucle):**
-  1. el chat de ejemplo: aparece la pregunta, la respuesta se escribe línea por línea y al final aparece «Tu clínica no aparece»;
-  2. las barras del informe crecen de 0 a su valor al entrar en pantalla;
-  3. una aparición suave de las secciones al bajar (opacidad y 16 px de desplazamiento).
-- **`prefers-reduced-motion: reduce` las apaga todas** y muestra el estado final.
+- **Movimiento permitido** (ampliado por el Director el 28/09; de 150 a 900 ms, **nada en bucle**, sin degradados):
+  1. **Chat de ejemplo:** aparece la pregunta, la respuesta se escribe línea por línea y al final aparece «Tu clínica no aparece».
+  2. **Barras del informe:** crecen de 0 a su valor al entrar en pantalla. Al terminar la de «tu clínica», aparece la etiqueta cobalto «Aquí es donde trabajamos».
+  3. **Aparición suave de secciones** al bajar (opacidad y 16 px de desplazamiento, 500 ms).
+  4. **Contadores:** las cifras suben de 0 a su valor una sola vez al entrar en pantalla (600 a 900 ms). Solo cifras reales con su fuente.
+  5. **Botones:**
+     - el principal, al pasar el mouse o tocar, se oscurece, sube 2 px y gana sombra suave; al hacer clic se hunde;
+     - el secundario se rellena de Niebla;
+     - 150 a 200 ms.
+  6. **Tarjetas** de planes y de «Qué recibes»: suben 4 px con sombra al pasar el mouse. Nada más.
+  7. **Pestañas del recorrido del producto:** la imagen cambia con un fundido de 250 ms.
+  8. **Encabezado:** al bajar, gana una sombra fina.
+- **`prefers-reduced-motion: reduce` apaga todo** y muestra el estado final (cifras finales, barras llenas, sin desplazamientos).
 - **Accesibilidad:** foco visible en todo lo que se puede tocar, textos alternativos en las imágenes, contraste AA.
 
 ## 9. Agent Prompt Guide

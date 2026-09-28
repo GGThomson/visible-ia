@@ -49,7 +49,8 @@
 h1, h2, h3, h4 { font-family: var(--eminia-serif); font-weight: 600; }
 
 /* Figures and labels: percentages, ranges, months. */
-.cifra, .valor, .indice, td.num { font-family: var(--eminia-mono); font-weight: 500; }
+.cifra, .valor, td.num { font-family: var(--eminia-mono); font-weight: 500; }
+.indice { font-family: var(--eminia-serif); font-weight: 600; }
 
 /* Header with the logo. */
 .logo { display: inline-flex; align-items: center; }
