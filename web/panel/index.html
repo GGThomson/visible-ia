@@ -75,11 +75,20 @@
         <h2 id="h-tareas">Tu checklist</h2>
         <div id="tareas"></div>
       </section>
+
+      <section aria-labelledby="h-schema">
+        <h2 id="h-schema">Schema para tu web</h2>
+        <p>Pega este código en tu web (dentro de <code>&lt;head&gt;</code>) para que buscadores e IA entiendan quién eres. Si tu web la hace otra persona, envíaselo. Agrega tu teléfono y horario si no aparecen.</p>
+        <textarea id="schema" rows="12" readonly></textarea>
+        <button id="copiar-schema" class="secondary">Copiar</button>
+        <small id="copiado" hidden>Copiado.</small>
+      </section>
     </div>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
   <script src="../config.js"></script>
   <script src="comun.js"></script>
+  <script src="jsonld.js"></script>
   <script src="panel.js"></script>
 </body>
 </html>

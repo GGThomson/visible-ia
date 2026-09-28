@@ -53,7 +53,7 @@
 - **Rama:** `feat/C8-T03-checklist`
 
 ### C8-T04 · Generador de schema JSON-LD (HU-18)
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** comando y botón en el panel que generan el JSON-LD `Dentist`/`MedicalClinic` de la sede (nombre, dirección, teléfono, horario, `sameAs` hacia la ficha de Google, Doctoralia e Instagram), listo para copiar.
 - **Criterios de aceptación:**
   - [ ] El JSON es válido según schema.org. Hay una prueba con un validador local de estructura.
