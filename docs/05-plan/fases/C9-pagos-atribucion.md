@@ -2,13 +2,13 @@
 
 **Objetivo:** el operador registra los pagos manuales y ve qué clientes están al día. La clínica recibe un kit para atribuir los pacientes que llegan por la IA.
 **Historias que cubre:** HU-23, HU-25
-**Estado:** ⚪ pendiente
+**Estado:** 🟡 en curso (T01 ✅)
 **Nota:** las tareas se refinan al empezar la fase, sin cambiar su alcance.
 
 ## Tareas
 
 ### C9-T01 · Registro de pagos y estado "al día" (HU-23)
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:**
   - `visible-ia pago registrar <cliente> --monto --medio link|yape|transferencia --periodo aaaa-mm --ref`.
   - `visible-ia pagos estado`: al día / vence pronto / atrasado.
@@ -17,6 +17,15 @@
   - [ ] Los criterios de HU-23 del PRD.
   - [ ] Montos en soles. La inclusión del IGV queda configurable, porque todavía está pendiente del régimen (estrategia).
 - **Pruebas:** unitarias por escenario de fechas.
+- **Refinamiento (27/09, por confirmar en la demo; todo ajustable por configuración):**
+  - Cada pago cubre un mes (`--periodo`), por adelantado.
+  - Un mes vence el día 1, o el día en que se creó el cliente si es posterior, más **5 días de gracia** (`PAGO_DIAS_GRACIA`).
+  - **Atrasado:** el mes actual sin pagar y vencido.
+  - **Vence pronto:** el mes actual sin pagar pero dentro de la gracia, o pagado con el siguiente sin pagar y a **7 días o menos** (`PAGO_AVISO_DIAS`).
+  - **Al día:** el resto.
+  - Las clínicas de una agencia no se listan (se cobra a la agencia).
+  - `PAGOS_INCLUYEN_IGV` (por defecto `false` mientras el contador no defina el régimen) solo cambia el neto que se muestra.
+  - El job diario usa el secret `SUPABASE_DB_URL_PROD`, que ya existe.
 - **Depende de:** C7-T01
 - **Rama:** `feat/C9-T01-manual-payments`
 

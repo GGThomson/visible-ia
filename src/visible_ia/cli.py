@@ -1570,3 +1570,125 @@ def informe_mensual(
                     (sede, month, stored),
                 )
                 typer.echo(f"Subido ({stored}) y registrado como informe {cur.fetchone()[0]}.")
+
+
+# --- manual payments (C9-T01) --------------------------------------------------------------
+
+pago_app = typer.Typer(help="Registro de pagos manuales.", no_args_is_help=True)
+app.add_typer(pago_app, name="pago")
+pagos_app = typer.Typer(help="Estado de pagos de los clientes.", no_args_is_help=True)
+app.add_typer(pagos_app, name="pagos")
+
+
+def _parse_day(value: str | None) -> date | None:
+    if not value:
+        return None
+    try:
+        return date.fromisoformat(value)
+    except ValueError:
+        typer.echo(f"Fecha no válida: {value} (usa AAAA-MM-DD)")
+        raise typer.Exit(code=2) from None
+
+
+@pago_app.command("registrar")
+def pago_registrar(
+    cliente: int = typer.Argument(..., help="Id del cliente (visible-ia cliente listar)."),
+    monto: str = typer.Option(..., help="Monto cobrado en soles, p. ej. 349."),
+    medio: str = typer.Option(..., help="link, yape o transferencia."),
+    periodo: str = typer.Option(..., help="Mes que paga, AAAA-MM."),
+    ref: str = typer.Option(None, help="N.º de operación o referencia."),
+    fecha: str = typer.Option(None, help="Fecha del pago, AAAA-MM-DD (por defecto, hoy)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Registra un pago manual (link de pago, Yape o transferencia)."""
+    from visible_ia.pagos import (
+        PaymentError,
+        month_name,
+        parse_amount,
+        register_payment,
+        today_lima,
+    )
+
+    target = _resolve_env(env)
+    period = _parse_month(periodo)
+    paid_on = _parse_day(fecha) or today_lima()
+    try:
+        amount = parse_amount(monto)
+    except PaymentError as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=2) from None
+    _confirm_prod(target)
+    with _connect_or_exit(target, autocommit=True) as conn:
+        try:
+            payment_id, repeated = register_payment(
+                conn, cliente, amount, medio.lower(), period, paid_on=paid_on, reference=ref
+            )
+        except PaymentError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    typer.echo(
+        f"Pago {payment_id} registrado: cliente {cliente}, S/ {amount:.2f} por "
+        f"{month_name(period)} ({medio.lower()}, {paid_on:%d/%m/%Y})."
+    )
+    if repeated:
+        typer.echo(f"Ojo: {month_name(period)} ya tenía otro pago de este cliente.")
+
+
+@pagos_app.command("estado")
+def pagos_estado(
+    fecha: str = typer.Option(None, help="Calcular a esta fecha, AAAA-MM-DD (por defecto, hoy)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Muestra qué clientes están al día, cuáles vencen pronto y cuáles están atrasados."""
+    from rich.console import Console
+    from rich.table import Table
+
+    from visible_ia.pagos import client_statuses, month_name, month_total, net_of_igv, today_lima
+
+    target = _resolve_env(env)
+    settings = get_settings()
+    today = _parse_day(fecha) or today_lima()
+    with _connect_or_exit(target) as conn:
+        statuses = client_statuses(
+            conn, today, grace_days=settings.pago_dias_gracia, notice_days=settings.pago_aviso_dias
+        )
+        total = month_total(conn, today.replace(day=1))
+    if not statuses:
+        typer.echo("No hay clientes activos que paguen directamente.")
+    else:
+        table = Table(title=f"Pagos al {today:%d/%m/%Y} ({target})")
+        for column in ("id", "cliente", "estado", "detalle"):
+            table.add_column(column)
+        colors = {"al día": "green", "vence pronto": "yellow", "atrasado": "red"}
+        for s in statuses:
+            table.add_row(str(s.client_id), s.name, f"[{colors[s.status]}]{s.status}[/]", s.detail)
+        Console().print(table)
+    net = net_of_igv(total, includes_igv=settings.pagos_incluyen_igv)
+    igv_note = "sin IGV" if settings.pagos_incluyen_igv else "los montos se toman sin IGV"
+    typer.echo(
+        f"Cobrado en {month_name(today.replace(day=1))}: S/ {total:.2f} · neto S/ {net:.2f} "
+        f"({igv_note}; ajusta PAGOS_INCLUYEN_IGV cuando el contador defina el régimen)"
+    )
+
+
+@pagos_app.command("aviso")
+def pagos_aviso(env: str = typer.Option("prod", help="dev o prod.")) -> None:
+    """Abre, actualiza o cierra el issue "Pagos atrasados (n)" (para el job diario)."""
+    from visible_ia.pagos import ISSUE_PREFIX, client_statuses, overdue_issue, today_lima
+
+    target = _resolve_env(env)
+    settings = get_settings()
+    with _connect_or_exit(target) as conn:
+        statuses = client_statuses(
+            conn,
+            today_lima(),
+            grace_days=settings.pago_dias_gracia,
+            notice_days=settings.pago_aviso_dias,
+        )
+    notice = overdue_issue(statuses)
+    late = sum(s.status == "atrasado" for s in statuses)
+    typer.echo(f"Clientes con pago atrasado ({target}): {late}")
+    if notice is None:
+        _post_issue(f"{ISSUE_PREFIX} ", None, "Ya no hay pagos atrasados.", close=True)
+    else:
+        _post_issue(f"{ISSUE_PREFIX} ", *notice)
