@@ -92,6 +92,7 @@ def test_missing_pages_skip_own_websites_and_pages_cited_with_the_clinic():
         ("https://www.doctoralia.pe/clinicas/sonrisa-larco", "doctoralia.pe", "doctoralia"),
         ("https://sonrisalarco.pe/implantes", "sonrisalarco.pe", "own_website"),
         ("https://limadentalrating.com/top", "limadentalrating.com", "directory"),
+        ("https://www.google.com/maps/place/Sonrisa+Larco", "google.com", "google_profile"),
     ]
     answers = [
         _answer(1, TEXT_A, {LARCO}, urls=urls_rival),

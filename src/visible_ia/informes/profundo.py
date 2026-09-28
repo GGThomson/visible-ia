@@ -5,8 +5,8 @@
    numbers (it never writes text), and every pick is checked to be a literal substring of its
    answer. Without the API (no key, error, budget) the first sentences that name it are used.
 2. Where you are missing: pages cited in answers that name those competitors and never in
-   answers that name the clinic, by type; clinics' own websites are left out (you cannot
-   "be" on a competitor's site) and summarised in one line.
+   answers that name the clinic, by type, only where the clinic can be: clinics' own
+   websites and Google profiles are left out (summarised in one line for websites).
 3. In which questions you appear: for each of the 10 questions, how many of its answers name
    the clinic and the leader, grouped by the question's form.
 """
@@ -25,8 +25,9 @@ MAX_REASONS = 3
 MAX_CANDIDATES = 40
 MAX_PAGES = 8
 FORM_LABELS = {"M": "Mejor", "R": "Recomendación", "C": "Criterio", "P": "Procedimiento"}
-PAGE_TYPES = {  # source_type -> label; own_website is left out on purpose
-    "google_profile": "Google",
+# source_type -> label. Left out on purpose, because you cannot "be" there: clinics' own
+# websites (own_website) and other clinics' Google profiles (google_profile; yours is your own).
+PAGE_TYPES = {
     "doctoralia": "Doctoralia",
     "directory": "Directorio o ranking",
     "press": "Prensa",
@@ -195,6 +196,8 @@ def missing_pages(
             if kind == "own_website":
                 if with_rival:
                     own_rivals.add(a.id)
+                continue
+            if kind == "google_profile":  # another clinic's Google profile: not for you
                 continue
             if not with_rival or url in mine or kind not in PAGE_TYPES:
                 continue

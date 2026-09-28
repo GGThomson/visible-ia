@@ -96,7 +96,7 @@
 - **Migración 0009** (`prospects.consent_version`), en dev y prod. Queda **opcional** hasta publicar la landing nueva. **Pendiente:** al publicar, una migración que la haga obligatoria.
 
 ### C9b-C008 · Diagnóstico más profundo (cambio C-008, 28/09)
-- **Estado:** ✅ en el PR #67 (falta el OK para la migración 0010 en prod).
+- **Estado:** ✅ en el PR #67; migración 0010 en dev y prod (28/09). «Dónde te falta estar» excluye también las fichas de Google de otras clínicas (Director, 28/09).
 - **Tres secciones nuevas** en el diagnóstico gratis, solo con respuestas guardadas y sin corridas nuevas:
   - «Por qué la IA eligió a tu competencia»: frases **literales**; gpt-5-nano solo elige números, se valida que la frase esté tal cual en la respuesta y hay respaldo sin IA;
   - «En qué preguntas apareces»: tabla por forma;
@@ -104,6 +104,15 @@
 - **Costo real:** 3 llamadas, US$0.0001 por diagnóstico. Se registra en el presupuesto mensual (migración **0010**, `llm_costs`). Opción `--sin-ia`.
 - **Plantilla** `docs/06-lanzamiento/auditoria-puesta-a-punto.md`.
 - **Ejemplo:** `scripts/ejemplo_diagnostico.py` (demo ficticio en dev). El diagnóstico queda en **5 páginas**; la landing y la estrategia ya lo dicen.
+
+### C9b · Cambios de conversión 1, 3 y 5 (revisión CRO, Director 28/09)
+- **1.** «Pídelo por WhatsApp» con mensaje ya escrito, en la portada y junto al botón del formulario.
+- **3.** La oferta concreta sobre el botón: «Gratis y en 3 días hábiles: tu Índice Eminia frente a 3 competidores de tu distrito, y 3 arreglos concretos». Botón en primera persona: «Quiero mi diagnóstico gratis».
+- **5.** Formulario:
+  - «1 minuto · Sin compromiso · Te respondemos por WhatsApp»;
+  - se quitó el distrito «Otro»;
+  - al enviar: plazo y enlace para adelantarlo por WhatsApp.
+- Los pedidos por WhatsApp no quedan en la base con su consentimiento: se registran a mano.
 
 ## Demo de la fase
 - El Director ve en la vista previa del PR la landing nueva en su celular y en la computadora, el panel y un PDF de ejemplo con la marca Eminia.
