@@ -3,7 +3,7 @@
 function instagramUrl(value) {
   if (!value) return null;
   value = value.trim();
-  if (value.indexOf("http") === 0) return value;
+  if (value.indexOf("http") === 0) return value.split(/[?#]/)[0];
   return "https://www.instagram.com/" + value.replace(/^@/, "").replace(/^\/+|\/+$/g, "") + "/";
 }
 

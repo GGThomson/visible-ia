@@ -10,7 +10,7 @@ JS = Path(__file__).resolve().parents[2] / "web" / "panel" / "jsonld.js"
 CASES = [
     dict(name="Clínica Dental Cano", category="IMP", district="Miraflores",
          address="Ca. Schell 343, Miraflores 15074", website="https://clinicadentalcano.pe/",
-         instagram="https://www.instagram.com/clinicadentalcano/",
+         instagram="https://www.instagram.com/clinicadentalcano/?hl=en",
          maps_url="https://maps.app.goo.gl/1cZgomxuEWQYQGSF8"),
     dict(name="Derma Surco", category="DER", district="Surco", instagram="@dermasurco",
          phone="+51 1 234 5678", opening_hours=["Mo-Fr 09:00-19:00", "Sa 09:00-13:00"],
@@ -68,6 +68,9 @@ def test_validator_catches_structure_errors(change, error):
 def test_instagram_handles_and_script_tag():
     assert instagram_url("@clinica") == "https://www.instagram.com/clinica/"
     assert instagram_url(None) is None
+    assert (
+        instagram_url("https://www.instagram.com/x/?hl=es-la#top") == "https://www.instagram.com/x/"
+    )
     tag = script_tag(build(**CASES[2]))
     assert tag.startswith('<script type="application/ld+json">') and "Estética Uno" in tag
     json.loads(tag.split(">", 1)[1].rsplit("<", 1)[0])

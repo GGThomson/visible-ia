@@ -28,7 +28,7 @@ def instagram_url(value: str | None) -> str | None:
         return None
     value = value.strip()
     if value.startswith("http"):
-        return value
+        return re.split(r"[?#]", value, maxsplit=1)[0]  # drop ?hl=en, ?igsh=… and the like
     return f"https://www.instagram.com/{value.lstrip('@').strip('/')}/"
 
 
