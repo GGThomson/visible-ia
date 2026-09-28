@@ -1,10 +1,12 @@
 // Landing form (C6-T03): inserts a prospect with the public anon key; RLS only allows that.
 // config.js is generated at deploy time (web.yml): production -> prod, previews -> dev.
+// POLICY_VERSION is the date of web/privacidad.html: change both together (proof of consent).
 (function () {
   "use strict";
 
   var UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
   var STORE = "visible-ia-utm";
+  var POLICY_VERSION = "2026-09-28";
 
   // Keep the UTM of the first visit of the session, even if the visitor navigates.
   function captureUtm() {
@@ -63,7 +65,8 @@
       district: form.district.value,
       contact: form.contact.value.trim(),
       utm: utm,
-      consent: true
+      consent: true,
+      consent_version: POLICY_VERSION
     };
     fetch(config.supabaseUrl + "/rest/v1/prospects", {
       method: "POST",
