@@ -5,7 +5,7 @@
 - Aplica la regla de cambio del ADR-003.
 
 **Historias que cubre:** HU-10, HU-11, HU-12, HU-13
-**Estado:** 🟡 tareas ✅; falta la demo del Director con la corrida real
+**Estado:** ✅ completa (27/09)
 
 ## Tareas
 
