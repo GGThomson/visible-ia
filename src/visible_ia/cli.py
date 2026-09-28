@@ -1235,3 +1235,117 @@ def prospectos_aviso(env: str = typer.Option("prod", help="dev o prod.")) -> Non
     clinics = unseen_clinics(url, key.get_secret_value())
     result = sync_issue(clinics, repo=repo, token=token)
     typer.echo(f"Prospectos sin revisar ({target}): {len(clinics)} · issue: {result}")
+
+
+# --- clients, sites and panel users (C7) ---------------------------------------------------
+
+cliente_app = typer.Typer(help="Clientes (clínicas y agencias).", no_args_is_help=True)
+app.add_typer(cliente_app, name="cliente")
+sede_app = typer.Typer(help="Sedes de un cliente (clínica × mercado).", no_args_is_help=True)
+app.add_typer(sede_app, name="sede")
+usuario_app = typer.Typer(help="Usuarios del panel.", no_args_is_help=True)
+app.add_typer(usuario_app, name="usuario")
+
+KIND_BY_TIPO = {"clinica": "clinic", "clínica": "clinic", "agencia": "agency"}
+
+
+@cliente_app.command("crear")
+def cliente_crear(
+    nombre: str = typer.Option(..., help="Nombre del cliente."),
+    tipo: str = typer.Option("clinica", help="clinica o agencia."),
+    correo: str = typer.Option(None, help="Correo de contacto."),
+    telefono: str = typer.Option(None, help="WhatsApp o teléfono de contacto."),
+    agencia: int = typer.Option(None, help="Id de la agencia (si la clínica es de una agencia)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Crea un cliente."""
+    from visible_ia.clientes import ClientError, create_client
+
+    kind = KIND_BY_TIPO.get(tipo.lower())
+    if kind is None:
+        typer.echo("Tipo no válido: usa clinica o agencia.")
+        raise typer.Exit(code=2)
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target, autocommit=True) as conn:
+        try:
+            client_id = create_client(
+                conn, kind, nombre, email=correo, phone=telefono, agency_id=agencia
+            )
+        except ClientError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    typer.echo(
+        f"Cliente {client_id} creado: {nombre}. Agrega su sede: "
+        f"visible-ia sede agregar {client_id} --clinica <id> --mercado <id>"
+    )
+
+
+@cliente_app.command("listar")
+def cliente_listar(env: str = typer.Option(None, help="dev o prod.")) -> None:
+    """Lista los clientes con sus sedes activas y usuarios."""
+    from visible_ia.clientes import list_clients
+
+    with _connect_or_exit(_resolve_env(env)) as conn:
+        rows = list_clients(conn)
+    if not rows:
+        typer.echo("No hay clientes.")
+    for cid, kind, name, status, sites, users in rows:
+        tipo = "clínica" if kind == "clinic" else "agencia"
+        typer.echo(f"{cid:>4}  {name}  ({tipo}, {status}) · {sites} sedes · {users} usuarios")
+
+
+@sede_app.command("agregar")
+def sede_agregar(
+    cliente: int = typer.Argument(..., help="Id del cliente."),
+    clinica: int = typer.Option(..., help="Id de la clínica (visible-ia clinicas listar)."),
+    mercado: int = typer.Option(..., help="Id del mercado."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Agrega una sede (una clínica de un mercado) al cliente."""
+    from visible_ia.clientes import ClientError, add_site
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    with _connect_or_exit(target, autocommit=True) as conn:
+        try:
+            site_id, created = add_site(conn, cliente, clinica, mercado)
+        except ClientError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    typer.echo(f"Sede {site_id} {'agregada' if created else 'ya existía'}.")
+
+
+@usuario_app.command("invitar")
+def usuario_invitar(
+    cliente: int = typer.Argument(..., help="Id del cliente."),
+    correo: str = typer.Argument(..., help="Correo del usuario."),
+    enlace: bool = typer.Option(
+        False, "--enlace", help="No enviar correo: mostrar el enlace para mandarlo por WhatsApp."
+    ),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Da acceso al panel: crea el usuario (si no existe) y envía o muestra el enlace mágico."""
+    from visible_ia.clientes import AuthAdmin, ClientError, invite_user
+
+    target = _resolve_env(env)
+    _confirm_prod(target)
+    settings = get_settings()
+    auth = AuthAdmin(
+        settings.value(f"SUPABASE_URL_{target.upper()}"),
+        settings.value(f"SUPABASE_SERVICE_ROLE_KEY_{target.upper()}").get_secret_value(),
+    )
+    with _connect_or_exit(target, autocommit=True) as conn:
+        try:
+            result = invite_user(
+                conn, auth, cliente, correo, site_url=settings.site_url, link_only=enlace
+            )
+        except ClientError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    state = "nuevo" if result.created else "ya existía (no se duplicó)"
+    typer.echo(f"Usuario {result.email}: {state}, vinculado al cliente {cliente}.")
+    if result.link:
+        typer.echo(f"Enlace de acceso (de un solo uso, vence pronto): {result.link}")
+    else:
+        typer.echo("Supabase le envió el enlace por correo.")
