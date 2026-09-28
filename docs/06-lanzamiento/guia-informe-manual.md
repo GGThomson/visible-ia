@@ -6,23 +6,25 @@ Para el Director. Tres caminos, de más a menos automático. **Hoy (27/09) se us
 
 ## A. Informe automático (≈ 10 minutos)
 
-Requisitos, una sola vez en tu PC: `uv sync` y `uv run playwright install chromium`.
+Antes de empezar, abre PowerShell en la carpeta del proyecto y activa el entorno: `.venv\Scriptsctivate` (verás `(visible-ia)` al inicio de la línea). Todos los comandos de esta guía se escriben así, sin `uv run`.
+
+Una sola vez en tu PC: `playwright install chromium` (navegador para los PDF).
 
 1. **¿Ya hay una corrida revisada del mercado este mes?**
-   `uv run visible-ia puntaje ranking <mercado> --env prod` → si muestra el mes actual, salta al paso 5.
+   `visible-ia puntaje ranking <mercado> --env prod` → si muestra el mes actual, salta al paso 5.
 2. **Lanza la corrida** (≈ US$1.2 y 30 créditos de SerpApi; el motor muestra la estimación y se detiene si supera el tope):
-   `uv run visible-ia corrida lanzar --mercado <id> --env prod`
-   Si se corta: `uv run visible-ia corrida reanudar <corrida> --env prod`.
-3. **Extrae las clínicas** (≈ US$0.01): `uv run visible-ia extraer <corrida> --env prod`.
-4. **Revisa y cierra**: `uv run visible-ia revisar corrida <corrida> --env prod` (solo muestra lo dudoso) y luego `uv run visible-ia revisar cerrar <corrida> --env prod`.
-   Si la clínica prospecto no está en la lista del mercado, agrégala antes con `clinicas importar` (o `revisar corrida` → `n <mención>`), y vuelve a asociar: `uv run visible-ia revisar reasociar <corrida> --env prod`.
-5. **Calcula el puntaje** (sin costo): `uv run visible-ia puntaje calcular <corrida> --env prod`.
-6. **Genera el informe**: `uv run visible-ia informe diagnostico --clinica <id> --mercado <id> --env prod`.
+   `visible-ia corrida lanzar --mercado <id> --env prod`
+   Si se corta: `visible-ia corrida reanudar <corrida> --env prod`.
+3. **Extrae las clínicas** (≈ US$0.01): `visible-ia extraer <corrida> --env prod`.
+4. **Revisa y cierra**: `visible-ia revisar corrida <corrida> --env prod` (solo muestra lo dudoso) y luego `visible-ia revisar cerrar <corrida> --env prod`.
+   Si la clínica prospecto no está en la lista del mercado, agrégala antes con `clinicas importar` (o `revisar corrida` → `n <mención>`), y vuelve a asociar: `visible-ia revisar reasociar <corrida> --env prod`.
+5. **Calcula el puntaje** (sin costo): `visible-ia puntaje calcular <corrida> --env prod`.
+6. **Genera el informe**: `visible-ia informe diagnostico --clinica <id> --mercado <id> --env prod`.
    Por defecto compara con los 3 mejores del ranking; para elegir otros: `--competidores 12,15,20`.
    El PDF queda en `salida/` y en el bucket privado `informes`.
 7. **Revísalo antes de enviarlo** (2 minutos): nombres bien escritos, ningún dato de pacientes, y que las recomendaciones tengan sentido para esa clínica. Envíalo por WhatsApp o correo.
 
-Para buscar ids: `uv run visible-ia mercado listar --env prod` y `uv run visible-ia clinicas listar --mercado <id> --env prod`.
+Para buscar ids: `visible-ia mercado listar --env prod` y `visible-ia clinicas listar --mercado <id> --env prod`.
 
 ---
 
@@ -45,8 +47,8 @@ Solo si el PDF automático falla (por ejemplo, Chromium no abre) y hay que envia
 
 Solo si el motor no estuviera disponible.
 
-1. Haz las 10 preguntas del mercado (`uv run visible-ia mercado preguntas <id> --env prod`) **una vez** en la app de ChatGPT y en Google Modo IA, en una ventana de incógnito. **Nunca automatices las apps** (ADR-002): se hace a mano.
-2. Anota cada respuesta en el formato de `docs/01-descubrimiento/prueba-fuentes/registro.csv` y cárgalas con `uv run visible-ia muestra importar <archivo.csv> --env prod`.
+1. Haz las 10 preguntas del mercado (`visible-ia mercado preguntas <id> --env prod`) **una vez** en la app de ChatGPT y en Google Modo IA, en una ventana de incógnito. **Nunca automatices las apps** (ADR-002): se hace a mano.
+2. Anota cada respuesta en el formato de `docs/01-descubrimiento/prueba-fuentes/registro.csv` y cárgalas con `visible-ia muestra importar <archivo.csv> --env prod`.
 3. Arma el informe como en B, contando a mano en cuántas de las 20 respuestas aparece cada clínica.
 4. En la nota de método di claramente: **"muestra preliminar de 1 repetición por pregunta; el margen es muy amplio"**.
 

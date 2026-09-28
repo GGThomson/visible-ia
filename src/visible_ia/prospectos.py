@@ -90,7 +90,7 @@ def issue_text(clinics: list[str]) -> tuple[str, str]:
     body = (
         f"Hay {len(clinics)} pedidos de informe gratis sin revisar:\n\n{names}\n\n"
         "Para ver los datos de contacto y marcarlos como vistos:\n\n"
-        "```\nuv run visible-ia prospectos nuevos --env prod\n```\n\n"
+        "```\nvisible-ia prospectos nuevos --env prod\n```\n\n"
         "_Este aviso no incluye datos de contacto a propósito. Se cierra solo cuando ya no quedan "
         "pedidos sin revisar._"
     )
