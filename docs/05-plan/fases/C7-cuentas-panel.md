@@ -4,13 +4,13 @@
 - Las políticas RLS están probadas de forma automática.
 
 **Historias que cubre:** HU-19, HU-20 (+ HU-11 y HU-12 en el panel)
-**Estado:** ⚪ pendiente
+**Estado:** 🟡 en curso
 **Nota:** las tareas se refinan al empezar la fase (Notas para Claude Code), sin cambiar su alcance.
 
 ## Tareas
 
 ### C7-T01 · Clientes, sedes y usuarios desde la CLI
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:**
   - `visible-ia cliente crear --tipo clinica ...`
   - `visible-ia sede agregar <cliente> --clinica <id> --mercado <id>`
@@ -25,10 +25,10 @@
 
 ### C7-T02 · Políticas RLS de lectura por cliente + pruebas
 - **Estado:** ⚪
-- **Qué:** migración `0003_client_read_policies.sql`.
+- **Qué:** migración `0006_client_read_policies.sql` (0003 ya estaba usado).
   - El usuario de una clínica lee `monthly_scores`, `mentions`, `sources`, `reports` y `tasks` **solo** de los mercados y sedes de su cliente.
   - Vistas de solo lectura para el panel (`v_panel_*`) que no exponen el texto crudo de otras clínicas.
-- **Archivos probables:** `supabase/migrations/0003_client_read_policies.sql`, `tests/rls/test_client_isolation.py`
+- **Archivos probables:** `supabase/migrations/0006_client_read_policies.sql`, `tests/rls/test_client_isolation.py`
 - **Criterios de aceptación:**
   - [ ] El requisito del PRD §6 "cada cliente ve solo sus datos" tiene una prueba por tabla y por vista: el usuario A no ve nada del B.
   - [ ] Los competidores se ven como ranking agregado (nombre e índice), sin acceso a los datos de sus cuentas.

@@ -46,6 +46,9 @@ class Settings(BaseSettings):
     monthly_budget_usd: float = 5.0
     serpapi_monthly_quota: int = 250
 
+    # Public site (landing + panel); sign-in links send clinics to <site_url>/panel/.
+    site_url: str = "https://visible-ia.pages.dev"
+
     @field_validator("supabase_url_dev", "supabase_url_prod", mode="before")
     @classmethod
     def _normalize_url(cls, value: object) -> object:
