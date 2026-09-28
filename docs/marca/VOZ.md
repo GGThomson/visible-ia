@@ -21,6 +21,7 @@ Las mismas del guion (`docs/06-lanzamiento/guion-llamada.md`), en corto:
 | Objeción | Respondemos con |
 |---|---|
 | «Mis pacientes no usan ChatGPT.» | El dato con fuente: 23 % de las personas en Lima Metropolitana ya usa herramientas de IA (Osiptel, ERESTEL 2025), y Google ya muestra respuestas de IA arriba de todo. |
+| «¿Y si lo mido yo?» | Que lo haga, pero una pregunta dice poco porque la IA cambia su respuesta; medimos 10 preguntas, 3 veces cada una, en ChatGPT y Google (60 respuestas al mes), con el mismo método y contra su competencia. Lo que importa es arreglar, y eso lo hacemos en el Gestionado. |
 | «Ya tengo agencia.» | Esto mide algo que su agencia no mide; le mandamos el reporte y la lista para que la trabaje. |
 | «Está caro.» | Sus propios números: un paciente nuevo de su tratamiento paga varios meses. Sin permanencia. **Nunca** precios de agencias sin fuente. |
 | «¿Me garantizas salir primero?» | No. Nadie controla lo que responde la IA; le damos la medición con su rango cada mes. |

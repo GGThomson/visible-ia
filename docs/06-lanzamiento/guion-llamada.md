@@ -22,9 +22,9 @@ Escucha más de lo que hablas:
 «Con lo que me dices, un solo paciente nuevo al mes paga el servicio varias veces. Y hoy la IA manda esos pacientes a [competidor].»
 
 ## 5. Oferta (2 min)
-Dos opciones, nada más:
-- «**Plan Medir:** cada mes te digo cuánto te nombra la IA frente a tus 3 principales competidores, con el ranking completo de tu distrito en tu panel, y te doy la lista exacta de arreglos. Los hace tu equipo. S/ 349 al mes, más S/ 490 de puesta a punto.»
-- «**Plan Gestionado:** además de medir, nosotros hacemos 3 mejoras al mes y te llamo 15 minutos para contarte cómo vas. S/ 790 al mes, más S/ 990 de puesta a punto.»
+Empieza por el servicio principal («te ayudamos a que la IA te recomiende») y deja Medir como alternativa. Dos opciones, nada más:
+- «**Plan Gestionado**, lo que te recomiendo: medimos cada mes y **nosotros hacemos los arreglos**. Son 3 mejoras al mes en tu ficha de Google, Doctoralia, tu web y tus reseñas; además leemos cómo te describe la IA y te llamo 15 minutos para contarte cómo vas. S/ 790 al mes, más S/ 990 de puesta a punto.»
+- «Si prefieres que lo haga tu equipo, está el **Plan Medir**: cada mes te digo cuánto te nombra la IA frente a tus 3 principales competidores, con el ranking completo de tu distrito en tu panel, y te doy la lista exacta de arreglos. S/ 349 al mes, más S/ 490 de puesta a punto.»
 
 Los ganchos (aprobados el 28/09):
 - «**Sin permanencia:** cancelas cuando quieras.»
@@ -47,6 +47,7 @@ Si duda: «¿Qué tendría que pasar para que lo pruebes un mes?»
 | Objeción | Respuesta |
 |---|---|
 | «Mis pacientes no usan ChatGPT.» | «En Lima Metropolitana, casi 1 de cada 4 personas (23 %) ya usa herramientas de IA, según Osiptel (ERESTEL 2025), y es más común en los sectores de mayores ingresos, que son tus pacientes de [tratamiento]. Además, Google ya pone respuestas de IA arriba de todo.» |
+| «¿Y si lo mido yo?» | «Pregúntale a ChatGPT, te lo recomiendo. Pero una pregunta dice poco: la IA cambia su respuesta de una vez a otra. Nosotros hacemos cada mes 10 preguntas de pacientes, 3 veces cada una, en ChatGPT y en Google: 60 respuestas, con el mismo método y contra tu competencia. Y lo importante no es medir, es arreglar: de eso nos encargamos en el Gestionado.» |
 | «Ya tengo agencia.» | «Genial. Esto mide algo que tu agencia hoy no mide. Si quieres, le mandamos el reporte y trabajan con nuestra lista.» |
 | «Está caro.» | «Con lo que me contaste, un solo paciente nuevo de [tratamiento] paga varios meses del servicio. Y no hay permanencia: si en unos meses no te sirve, lo dejas.» (**No** usar precios de agencias: no tenemos fuente.) |
 | «¿Me garantizas salir primero?» | «No, y desconfía de quien lo haga: nadie controla lo que responde la IA. Lo que sí te doy es la medición con su rango cada mes, para que veas si subes.» |

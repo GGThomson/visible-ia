@@ -66,7 +66,7 @@ Escala (base 16 px; interlineado del texto 1.6, de los títulos 1.15):
 
 **Tarjeta de plan**
 - Todas de la misma altura, con el botón alineado abajo.
-- El plan recomendado lleva borde 2 px cobalto, una etiqueta «Más completo» (mono 13 px, sin mayúsculas) y el **único** botón principal. Los demás llevan botón secundario.
+- El servicio principal (Plan Gestionado) va primero y lleva borde 2 px cobalto, una etiqueta «Servicio principal» (mono 13 px, sin mayúsculas) y el **único** botón principal. Los demás llevan botón secundario.
 
 **Formulario**
 - Dentro de una tarjeta de **máximo 640 px**, centrada.

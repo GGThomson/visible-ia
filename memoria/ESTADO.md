@@ -31,6 +31,7 @@
 3. Ventas desde el 05/10 con las 5 clínicas con brecha, usando el guion y los planes Medir / Gestionado; luego **C10**
 
 ## Bloqueos / esperando decisión
+- ⏳ **Al publicar la landing (C9b):** migración que haga obligatoria `prospects.consent_version` (0009 la dejó opcional). Libro de Reclamaciones: esperando RUC y la forma de recibir reclamos
 - ⏳ **Director:** revisar INDECOPI (clases 35 y 42) y eminia.pe antes de comprar o registrar (si no están libres → Prominia); enviar su foto para la landing (C9b-T04)
 - ⏳ **RUC y régimen tributario** (contador) antes del primer cobro. Define si los S/ 349 incluyen IGV (neto ≈ S/ 296) → revisar la meta de la semana 6
 - ⏳ Confirmar a los 8 días que el job diario mantiene activo Supabase dev (C1-T05)

@@ -84,6 +84,17 @@
 - **Animaciones:** solo 3, que se apagan con `prefers-reduced-motion`.
 - **Pendiente:** la foto del Director (`web/marca/gianpol.jpg`).
 
+### C9b · Contenido, legal y consentimiento (Director, 28/09)
+- **Estado:** ✅ en el PR #67, pendiente de publicación.
+- **Landing:**
+  - Índice Eminia (también en el PDF, el reporte y el panel) y la sección «Qué mira la IA» (fase 1);
+  - caso real anónimo y datos propios (34 clínicas, 1 de cada 2, 5 de 9);
+  - «Qué pasa después» (3 días hábiles) y «Para quién no es»;
+  - Pew en las preguntas frecuentes y el bloque de testimonios oculto;
+  - el **Plan Gestionado como servicio principal** («Te ayudamos a que la IA te recomiende») y la objeción «¿Y si lo mido yo?», también en el guion.
+- **Legal (borradores para abogado o contador):** `privacidad.html` (12 meses de conservación, confirmado) y `terminos.html`. El Libro de Reclamaciones queda **fuera de `web/`** (`docs/legal/borradores/`) hasta tener RUC y una forma de recibir los reclamos.
+- **Migración 0009** (`prospects.consent_version`), en dev y prod. Queda **opcional** hasta publicar la landing nueva. **Pendiente:** al publicar, una migración que la haga obligatoria.
+
 ## Demo de la fase
 - El Director ve en la vista previa del PR la landing nueva en su celular y en la computadora, el panel y un PDF de ejemplo con la marca Eminia.
 - Si los aprueba, se publica en Cloudflare Pages al fusionar a `main`.
