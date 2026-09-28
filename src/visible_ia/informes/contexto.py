@@ -16,6 +16,13 @@ from typing import Any
 
 import psycopg
 
+from visible_ia.informes.profundo import (
+    SURFACE_LABELS,
+    Answer,
+    Reasons,
+    missing_pages,
+    question_table,
+)
 from visible_ia.mercados.alias import fold
 from visible_ia.puntaje.brecha import has_gap
 from visible_ia.puntaje.fuentes import TYPE_LABELS, load_citations, top_sources, type_shares
@@ -74,6 +81,10 @@ class ReportData:
     google_without_names: int  # Google answers naming no clinic (C-006 included)
     market_names: dict[int, list[str]] = field(default_factory=dict)  # clinic -> name + aliases
     competitors: list[int] | None = None
+    # Deeper diagnostic (C-008): the month's answers with their clinics, question form and
+    # cited URLs, and the literal reasons picked for the top competitors.
+    deep_answers: list[Answer] = field(default_factory=list)
+    reasons: list[Reasons] = field(default_factory=list)
 
 
 def load_brand(path: Path = BRAND_TOML) -> dict[str, str]:
@@ -180,6 +191,69 @@ def _recommendations(values: dict[str, Any], applies: dict[str, bool]) -> list[d
         {"titulo": r["titulo"].format(**values), "texto": r["texto"].format(**values)}
         for r in chosen[:3]
     ]
+
+
+def reason_filter(data: ReportData):
+    """Sentences shown only if masking would not change them (no professional's name)."""
+    allowed = [n for names in data.market_names.values() for n in names]
+    return lambda sentence: mask_professionals(sentence, allowed) == sentence
+
+
+def reason_targets(data: ReportData) -> list[tuple[int, str, float]]:
+    """The competitors whose reasons the diagnostic shows: the same ones it compares with."""
+    return [
+        (r.clinic_id, r.name, r.combined)
+        for r in pick_competitors(data.ranking, data.clinic.id, data.competitors)
+    ]
+
+
+def _deep_context(data: ReportData, competitors: list, allowed: list[str]) -> dict[str, Any]:
+    """Sections of the deeper diagnostic (C-008); empty when there are no stored answers."""
+    if not data.deep_answers:
+        return {"hay": False}
+    leader = next((r for r in data.ranking if r.clinic_id != data.clinic.id), data.ranking[0])
+    pages, own = missing_pages(
+        data.deep_answers, data.clinic.id, [c.clinic_id for c in competitors], data.clinic.website
+    )
+    return {
+        "hay": True,
+        "fuente": f"{len(data.deep_answers)} respuestas de ChatGPT y Google Modo IA, "
+        f"{month_text(data.month)}",
+        "razones": [
+            {
+                "nombre": r.name,
+                "indice": _pct(r.index),
+                "frases": [
+                    {
+                        "texto": mask_professionals(plain_text(q.sentence), allowed),
+                        "superficie": SURFACE_LABELS.get(q.answer.surface, q.answer.surface),
+                        "pregunta": q.answer.question,
+                        "fecha": q.answer.asked_on.strftime("%d/%m/%Y"),
+                    }
+                    for q in r.quotes
+                ],
+            }
+            for r in data.reasons
+        ],
+        "lider": leader.name,
+        "preguntas": question_table(data.deep_answers, data.clinic.id, leader.clinic_id),
+        "faltantes": [
+            {
+                "url": p.url,
+                "corta": _short_url(p.url),
+                "dominio": p.domain,
+                "tipo": p.kind,
+                "veces": p.answers,
+            }
+            for p in pages
+        ],  # fmt: skip
+        "webs": own,
+    }
+
+
+def _short_url(url: str, limit: int = 60) -> str:
+    text = re.sub(r"^https?://(www\.)?", "", url).rstrip("/")
+    return text if len(text) <= limit else text[: limit - 1] + "…"
 
 
 def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict[str, Any]:
@@ -306,6 +380,7 @@ def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict
             "lider": {"nombre": leader.name, "indice": _pct(leader.combined)},
         },
         "recomendaciones": _recommendations(values, applies),
+        "profundo": _deep_context(data, competitors, allowed),
         "metodo": {
             "preguntas": 10,
             "repeticiones": 3,
@@ -382,7 +457,31 @@ def load_report_data(
             (market_id, month, clinic_id),
         )
         detectable = cur.fetchone()
+        cur.execute(
+            "select r.id, r.question_id, t.form, s.url, s.domain, s.source_type "
+            "from public.responses r join public.questions q on q.id = r.question_id "
+            "join public.templates t on t.id = q.template_id "
+            "join public.runs ru on ru.id = r.run_id "
+            "left join public.sources s on s.response_id = r.id "
+            "where ru.market_id = %s and ru.month = %s and ru.kind = 'api' "
+            "and ru.status = 'reviewed'",
+            (market_id, month),
+        )
+        meta: dict[int, tuple[int, str, list[tuple[str, str, str]]]] = {}
+        for rid, question_id, form, url, domain, kind in cur.fetchall():
+            item = meta.setdefault(rid, (question_id, form, []))
+            if url:
+                item[2].append((url, domain, kind))
     citations, total = load_citations(conn, market_id, month)
+    deep_answers = [
+        Answer(
+            rid, surface, meta[rid][0], question, meta[rid][1], asked_on, text,
+            frozenset(c for _, _, c in by_response.get(rid, []) if c is not None),
+            tuple(meta[rid][2]),
+        )
+        for rid, surface, question, asked_on, text in answers
+        if rid in meta
+    ]  # fmt: skip
     examples = [
         ExampleAnswer(surface, question, asked_on, text, by_response.get(rid, []))
         for rid, surface, question, asked_on, text in answers
@@ -405,4 +504,5 @@ def load_report_data(
         google_without_names=google_without_names,
         market_names=market_names,
         competitors=competitors,
+        deep_answers=deep_answers,
     )

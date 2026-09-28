@@ -95,6 +95,16 @@
 - **Legal (borradores para abogado o contador):** `privacidad.html` (12 meses de conservación, confirmado) y `terminos.html`. El Libro de Reclamaciones queda **fuera de `web/`** (`docs/legal/borradores/`) hasta tener RUC y una forma de recibir los reclamos.
 - **Migración 0009** (`prospects.consent_version`), en dev y prod. Queda **opcional** hasta publicar la landing nueva. **Pendiente:** al publicar, una migración que la haga obligatoria.
 
+### C9b-C008 · Diagnóstico más profundo (cambio C-008, 28/09)
+- **Estado:** ✅ en el PR #67 (falta el OK para la migración 0010 en prod).
+- **Tres secciones nuevas** en el diagnóstico gratis, solo con respuestas guardadas y sin corridas nuevas:
+  - «Por qué la IA eligió a tu competencia»: frases **literales**; gpt-5-nano solo elige números, se valida que la frase esté tal cual en la respuesta y hay respaldo sin IA;
+  - «En qué preguntas apareces»: tabla por forma;
+  - «Dónde te falta estar»: máx. 8 páginas; sin las webs de los competidores.
+- **Costo real:** 3 llamadas, US$0.0001 por diagnóstico. Se registra en el presupuesto mensual (migración **0010**, `llm_costs`). Opción `--sin-ia`.
+- **Plantilla** `docs/06-lanzamiento/auditoria-puesta-a-punto.md`.
+- **Ejemplo:** `scripts/ejemplo_diagnostico.py` (demo ficticio en dev). El diagnóstico queda en **5 páginas**; la landing y la estrategia ya lo dicen.
+
 ## Demo de la fase
 - El Director ve en la vista previa del PR la landing nueva en su celular y en la computadora, el panel y un PDF de ejemplo con la marca Eminia.
 - Si los aprueba, se publica en Cloudflare Pages al fusionar a `main`.

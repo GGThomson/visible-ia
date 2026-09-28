@@ -69,3 +69,4 @@ footer { margin-top: 1.2em; font-size: 11pt; color: #51607A; border-top: 1px sol
   .brecha { grid-template-columns: 1fr; }
 }
 ul.hechas { list-style: none; padding-left: 0.4em; }
+tr.grupo td { background: var(--suave); }

@@ -27,8 +27,9 @@
   </div>
 </header>
 
+{% set n = namespace(i=0) %}
 <section data-seccion="1-indice">
-  <h2>1. Cuánto te nombra la IA frente a tu competencia</h2>
+  <h2>{% set n.i = n.i + 1 %}{{ n.i }}. Cuánto te nombra la IA frente a tu competencia</h2>
   <p class="frase">{{ frase }}</p>
   <p>Hicimos las mismas {{ metodo.preguntas }} preguntas que hace un paciente ({{ metodo.repeticiones }} veces cada una) a ChatGPT y a Google en su Modo IA. El número es tu <b>Índice Eminia</b>: el % de respuestas en que te nombran; entre paréntesis, el rango en que está con seguridad.</p>
   <div class="barras">
@@ -46,7 +47,7 @@
 </section>
 
 <section data-seccion="2-ejemplos">
-  <h2>2. Lo que respondió la IA</h2>
+  <h2>{% set n.i = n.i + 1 %}{{ n.i }}. Lo que respondió la IA</h2>
   {% for e in ejemplos %}
   <div class="ejemplo">
     <p class="pregunta">{{ e.superficie }} · «{{ e.pregunta }}» <small>({{ e.fecha }})</small></p>
@@ -63,8 +64,43 @@
   {% endfor %}
 </section>
 
+{% if profundo.hay and profundo.razones %}
+<section data-seccion="razones">
+  <h2>{% set n.i = n.i + 1 %}{{ n.i }}. Por qué la IA eligió a tu competencia</h2>
+  <p>Frases copiadas tal cual de las respuestas de la IA, sin cambiar una palabra.</p>
+  {% for r in profundo.razones %}
+  <div class="ejemplo">
+    <p class="pregunta">{{ r.nombre }} · Índice Eminia {{ r.indice }} %</p>
+    {% for f in r.frases %}
+    <blockquote>«{{ f.texto }}»<br><small>{{ f.superficie }} · «{{ f.pregunta }}» ({{ f.fecha }})</small></blockquote>
+    {% else %}
+    <p class="nota">La IA la nombró sin dar una razón que se pueda citar.</p>
+    {% endfor %}
+  </div>
+  {% endfor %}
+  <p class="nota">Fuente: {{ profundo.fuente }}. Los nombres de profesionales están ocultos.</p>
+</section>
+{% endif %}
+
+{% if profundo.hay %}
+<section data-seccion="preguntas">
+  <h2>{% set n.i = n.i + 1 %}{{ n.i }}. En qué preguntas apareces</h2>
+  <p>Cada pregunta se hizo 3 veces a ChatGPT y 3 a Google Modo IA. Cuántas de esas respuestas te nombran a ti y a {{ profundo.lider }}, la clínica más nombrada:</p>
+  <table>
+    <thead><tr><th>Pregunta</th><th class="num">Te nombran</th><th class="num">{{ profundo.lider }}</th></tr></thead>
+    <tbody>
+      {% for g in profundo.preguntas %}
+      <tr class="grupo"><td colspan="3"><b>{{ g.forma }}</b></td></tr>
+      {% for q in g.preguntas %}<tr><td>{{ q.pregunta }}</td><td class="num">{{ q.tu }} de {{ q.total }}</td><td class="num">{{ q.lider }} de {{ q.total }}</td></tr>{% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="nota">Fuente: {{ profundo.fuente }}.</p>
+</section>
+{% endif %}
+
 <section data-seccion="3-fuentes">
-  <h2>3. Dónde se informa la IA en tu mercado</h2>
+  <h2>{% set n.i = n.i + 1 %}{{ n.i }}. Dónde se informa la IA en tu mercado</h2>
   <p>Antes de responder, la IA busca en la web. Estas son las fuentes que citó en las {{ metodo.respuestas }} respuestas:</p>
   <table>
     <thead><tr><th>Tipo de fuente</th><th class="num">% de respuestas que la citan</th></tr></thead>
@@ -82,8 +118,27 @@
   <p>{% if fuentes.propia_citada %}Tu web aparece entre las fuentes que la IA consultó.{% else %}<b>Tu web no apareció entre las fuentes que la IA consultó.</b>{% endif %}</p>
 </section>
 
+{% if profundo.hay %}
+<section data-seccion="faltantes">
+  <h2>{% set n.i = n.i + 1 %}{{ n.i }}. Dónde te falta estar</h2>
+  {% if profundo.faltantes %}
+  <p>Páginas que la IA citó al recomendar a tu competencia y nunca en respuestas que te nombran a ti. Las más citadas primero:</p>
+  <table>
+    <thead><tr><th>Página</th><th>Tipo</th><th class="num">Respuestas</th></tr></thead>
+    <tbody>
+      {% for p in profundo.faltantes %}<tr><td style="word-break: break-all;">{{ p.corta }}</td><td>{{ p.tipo }}</td><td class="num">{{ p.veces }}</td></tr>{% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No encontramos páginas citadas junto a tu competencia que falten junto a ti.</p>
+  {% endif %}
+  <p>La IA citó webs propias de clínicas en {{ profundo.webs.competidores }} respuestas que nombran a tu competencia; la tuya, en {{ profundo.webs.tuya }}.</p>
+  <p class="nota">Fuente: {{ profundo.fuente }}. No incluimos las webs de tus competidores: ahí no puedes estar.</p>
+</section>
+{% endif %}
+
 <section data-seccion="4-brecha">
-  <h2>4. Tu reputación en Google Maps frente a la IA</h2>
+  <h2>{% set n.i = n.i + 1 %}{{ n.i }}. Tu reputación en Google Maps frente a la IA</h2>
   <div class="brecha">
     <div class="dato"><b>{% if brecha.rating %}{{ brecha.rating }} ★{% else %}—{% endif %}</b>en Google Maps</div>
     <div class="dato"><b>{% if brecha.resenas is not none %}{{ brecha.resenas }}{% else %}—{% endif %}</b>reseñas</div>
@@ -98,14 +153,14 @@
 </section>
 
 <section data-seccion="5-recomendaciones">
-  <h2>5. Tres cosas que puedes hacer</h2>
+  <h2>{% set n.i = n.i + 1 %}{{ n.i }}. Tres cosas que puedes hacer</h2>
   <ol class="recomendaciones">
     {% for r in recomendaciones %}<li><b>{{ r.titulo }}.</b> {{ r.texto }}</li>{% endfor %}
   </ol>
 </section>
 
 <section data-seccion="6-metodo">
-  <h2>6. Cómo lo medimos</h2>
+  <h2>{% set n.i = n.i + 1 %}{{ n.i }}. Cómo lo medimos</h2>
   <p>En {{ metodo.mes }} hicimos {{ metodo.preguntas }} preguntas de pacientes sobre {{ mercado.tratamiento }} en {{ mercado.distrito }}, {{ metodo.repeticiones }} veces cada una, a ChatGPT (por su API, con búsqueda web y ubicación en Lima) y a Google Modo IA: {{ metodo.respuestas }} respuestas en total. Contamos en cuántas te nombran.</p>
   <p>Las respuestas de la IA cambian de una vez a otra; por eso damos un rango y no un número exacto. Con estos datos, un cambio de menos de {{ metodo.detectable }} puntos entre un mes y otro no se puede distinguir del azar.</p>
   {% if metodo.google_sin_nombres %}<p>{{ metodo.google_sin_nombres }} respuestas de Google no nombraron clínicas o mostraron fichas cuyo nombre no pudimos leer; esas no suman a ninguna clínica.</p>{% endif %}

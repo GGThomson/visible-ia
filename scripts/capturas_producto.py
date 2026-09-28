@@ -27,6 +27,7 @@ from visible_ia.atribucion import kit_context, save_count
 from visible_ia.checklist import generate
 from visible_ia.clientes import PANEL_PATH, AuthAdmin, add_site, create_client, link_user
 from visible_ia.config import get_settings
+from visible_ia.extractor.fuentes import classify
 from visible_ia.informes.contexto import load_brand
 from visible_ia.informes.mensual import build_monthly_context, load_monthly_data
 from visible_ia.informes.render import render_kit, render_monthly
@@ -53,6 +54,35 @@ CLINICS = [
     (ME, 4.9, 1135, "https://tuclinicadental.pe/", (3, 6, 15)),
 ]
 MAX_KB = 200
+# Fictional reasons and pages, so the deeper diagnostic (C-008) has something to quote.
+REASONS = {
+    "Clínica Sonrisa Larco": [
+        "destaca por sus más de 600 reseñas y por usar implantes guiados por computadora",
+        "tiene especialistas en implantología y da garantía escrita de sus tratamientos",
+    ],
+    "Centro Dental Pardo": [
+        "es muy valorada por su trato cercano y por explicar los precios desde la primera cita",
+        "ofrece la evaluación con tomografía incluida",
+    ],
+    "Implantes Benavides": [
+        "cuenta con más de 15 años de experiencia en implantes y carga inmediata",
+        "recibe buenas opiniones en Doctoralia por su puntualidad",
+    ],
+    "Odonto Angamos": ["atiende también los sábados, con horarios amplios"],
+    "Dental Camino Real": ["es una opción económica en San Isidro"],
+    ME: ["tiene excelentes reseñas en Google Maps"],
+}
+PAGES = {
+    "Clínica Sonrisa Larco": ["https://www.doctoralia.pe/clinicas/clinica-sonrisa-larco",
+                              "https://cuantomecuesta.com/implantes-dentales-san-isidro"],
+    "Centro Dental Pardo": ["https://www.doctoralia.pe/clinicas/centro-dental-pardo",
+                            "https://cuantomecuesta.com/implantes-dentales-san-isidro"],
+    "Implantes Benavides": ["https://www.instagram.com/implantesbenavides/",
+                            "https://elcomercio.pe/salud/implantes-dentales-guia-lima"],
+    "Odonto Angamos": ["https://www.google.com/maps/place/Odonto+Angamos"],
+    "Dental Camino Real": [],
+    ME: ["https://www.google.com/maps/place/Tu+Clinica+Dental"],
+}  # fmt: skip
 
 
 def _cleanup(conn) -> None:
@@ -116,9 +146,22 @@ def _build(conn) -> dict:
                         name for k, (name, *_, counts) in enumerate(CLINICS)
                         if (i * 7 + k * 11 + m_index * 5) % 60 < counts[m_index]
                     ]  # fmt: skip
-                    cites = ["https://www.doctoralia.pe/clinicas/lima"] if i % 3 == 0 else []
-                    cites += [w for name, _, _, w, _ in CLINICS if name in named and w][:2]
-                    text = "Te recomiendo " + ", ".join(named) + "." if named else "Sin nombres."
+                    cites = []
+                    for name, _, _, w, _ in CLINICS:
+                        if name in named:
+                            cites += ([w] if w and i % 2 == 0 else []) + PAGES[name][: 1 + i % 2]
+                    lines = [
+                        f"{k}. {name}: {REASONS[name][(i + k) % len(REASONS[name])]}."
+                        for k, name in enumerate(named, start=1)
+                    ]
+                    if "Centro Dental Pardo" in named and i % 4 == 0:
+                        lines.append("En Centro Dental Pardo atiende la Dra. Lucía Rojas Vega.")
+                    text = (
+                        "Te recomiendo estas clínicas de implantes en San Isidro:\n"
+                        + "\n".join(lines)
+                        if named
+                        else "Sin nombres."
+                    )
                     save_response(
                         conn, run, Call(q.id, q.template_id, q.text, surface, rep),
                         EngineResponse(surface=surface, provider="demo", text=text,
@@ -139,6 +182,17 @@ def _build(conn) -> dict:
                         (response_id, pos, name, ids[name]),
                     )
             cur.execute("update public.runs set status = 'reviewed' where id = %s", (run,))
+            cur.execute(
+                "select s.id, s.url from public.sources s join public.responses r "
+                "on r.id = s.response_id where r.run_id = %s",
+                (run,),
+            )
+            websites = {w for _, _, _, w, _ in CLINICS if w}
+            for source_id, url in cur.fetchall():
+                cur.execute(
+                    "update public.sources set source_type = %s where id = %s",
+                    (classify(url, websites), source_id),
+                )
         calculate(conn, run)
     client = create_client(conn, "clinic", "Demo capturas (dev)")
     site, _ = add_site(conn, client, ids[ME], market)

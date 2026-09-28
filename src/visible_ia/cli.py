@@ -1089,6 +1089,51 @@ informe_app = typer.Typer(help="Informes en PDF.", no_args_is_help=True)
 app.add_typer(informe_app, name="informe")
 
 
+# gpt-5-nano only picks sentence numbers: 3 calls of ~2,500 tokens (US$0.001); this cap is a
+# conservative guard against the monthly budget before calling it.
+REASONS_ESTIMATE_USD = 0.01
+
+
+def _add_reasons(conn, data, settings, *, market_id: int, use_model: bool) -> None:
+    """Literal reasons for the top competitors (C-008); the model cost goes to the budget."""
+    from visible_ia.informes.contexto import reason_filter, reason_targets
+    from visible_ia.informes.profundo import MODEL, ModelChooser, competitor_reasons
+    from visible_ia.motor.presupuesto import month_usage, record_llm_cost
+
+    chooser = None
+    if use_model and data.deep_answers and settings.openai_api_key:
+        spent = month_usage(conn).spent_usd
+        if spent + REASONS_ESTIMATE_USD > settings.monthly_budget_usd:
+            typer.echo("Frases de la competencia sin IA: el presupuesto del mes está al límite.")
+        else:
+            import openai
+
+            from visible_ia.motor.chatgpt_api import TIMEOUT_SECONDS
+            from visible_ia.motor.tarifas import openai_rates
+
+            client = openai.OpenAI(
+                api_key=settings.openai_api_key.get_secret_value(),
+                max_retries=1,
+                timeout=TIMEOUT_SECONDS,
+            )
+            chooser = ModelChooser(client, openai_rates())
+    elif use_model and data.deep_answers:
+        typer.echo("Frases de la competencia sin IA: falta OPENAI_API_KEY.")
+    data.reasons = competitor_reasons(
+        reason_targets(data), data.deep_answers, data.market_names, chooser, reason_filter(data)
+    )
+    if chooser and chooser.calls:
+        record_llm_cost(
+            conn, "diagnostic_reasons", model=MODEL, calls=chooser.calls,
+            cost_usd=chooser.cost_usd, market_id=market_id,
+            clinic_id=data.clinic.id, month=data.month,
+        )  # fmt: skip
+        typer.echo(
+            f"Frases elegidas con {MODEL}: {chooser.calls} llamadas, "
+            f"US${chooser.cost_usd:.4f} (registrado en el presupuesto del mes)."
+        )
+
+
 @informe_app.command("diagnostico")
 def informe_diagnostico(
     clinica: int = typer.Option(..., help="Id de la clínica prospecto."),
@@ -1100,9 +1145,12 @@ def informe_diagnostico(
     subir: bool = typer.Option(
         True, "--subir/--sin-subir", help="Subir el PDF a Supabase Storage y registrarlo."
     ),
+    ia: bool = typer.Option(
+        True, "--ia/--sin-ia", help="Elegir las frases de la competencia con gpt-5-nano (C-008)."
+    ),
     env: str = typer.Option(None, help="dev o prod."),
 ) -> None:
-    """Genera el informe gratis de diagnóstico en PDF (HU-14)."""
+    """Genera el informe gratis de diagnóstico en PDF (HU-14, C-008)."""
     import time
 
     from visible_ia.informes.contexto import build_context, load_brand, load_report_data
@@ -1124,6 +1172,7 @@ def informe_diagnostico(
     with _connect_or_exit(target, autocommit=True) as conn:
         try:
             data = load_report_data(conn, clinica, mercado, _parse_month(mes), chosen)
+            _add_reasons(conn, data, settings, market_id=mercado, use_model=ia)
             html = render_diagnostic(build_context(data, load_brand()))
         except ScoreError as exc:
             typer.echo(str(exc))

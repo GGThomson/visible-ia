@@ -143,7 +143,35 @@ def month_usage(
             (start, end),
         )
         spent += cur.fetchone()[0]
+        # Calls outside runs, such as the reasons of the free diagnostic (C-008).
+        cur.execute(
+            "select coalesce(sum(cost_usd), 0) from public.llm_costs "
+            "where (created_at at time zone 'America/Lima') >= %s "
+            "  and (created_at at time zone 'America/Lima') < %s",
+            (start, end),
+        )
+        spent += cur.fetchone()[0]
     return MonthUsage(float(spent), max(int(serpapi_used), serpapi_account_used or 0))
+
+
+def record_llm_cost(
+    conn: psycopg.Connection,
+    kind: str,
+    *,
+    model: str,
+    calls: int,
+    cost_usd: float,
+    market_id: int | None = None,
+    clinic_id: int | None = None,
+    month: date | None = None,
+) -> None:
+    """Record OpenAI money spent outside a run, so month_usage counts it."""
+    with conn.transaction(), conn.cursor() as cur:
+        cur.execute(
+            "insert into public.llm_costs (kind, market_id, clinic_id, month, model, calls, "
+            "cost_usd) values (%s, %s, %s, %s, %s, %s, %s)",
+            (kind, market_id, clinic_id, month, model, calls, cost_usd),
+        )
 
 
 def authorize(
