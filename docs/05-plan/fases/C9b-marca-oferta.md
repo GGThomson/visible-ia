@@ -3,13 +3,13 @@
 **Objetivo:** llegar a las primeras llamadas con la marca **Eminia** (ADR-005) aplicada en la landing, el panel y el informe, y con una oferta clara (planes, ganchos y guion). Sin funciones nuevas: solo aspecto, textos y documentos.
 **Origen:** acta `memoria/actas/2026-09-28-marca-y-oferta.md` · cambio C-007
 **Historias que cubre:** apoya HU-26 (landing) y la venta de la v1.1
-**Estado:** ⚪ pendiente (aprobada por el Director el 28/09, antes de C10)
+**Estado:** 🟡 tareas ✅; falta que el Director apruebe la vista previa (y su foto) antes de publicar
 **Nota:** no agrega dependencias. El repo, el paquete y la URL siguen como `visible-ia`; solo cambian los textos visibles.
 
 ## Tareas
 
 ### C9b-T01 · Documento de marca
-- **Estado:** ⚪
+- **Estado:** ✅ (`docs/marca/marca.md`)
 - **Qué:**
   - Crear `docs/marca/marca.md` con: nombre, lema, colores, tipografías, reglas de uso del logo y el tono.
   - Tono: colega que sabe de marketing de clínicas; tuteo; siempre con número y rango; nunca «garantizamos el puesto #1»; sin «prompts», «LLM», «GEO»; ejemplos de Lima.
@@ -18,7 +18,7 @@
 - **Rama:** `feat/C9b-marca-y-oferta` (una rama para toda la fase; un commit por tarea)
 
 ### C9b-T02 · Logo, favicon y `marca.toml`
-- **Estado:** ⚪
+- **Estado:** ✅ (el SVG lleva ancho y alto para que el PDF lo muestre; una prueba verifica que el logo incrustado coincide con `web/marca/logo.svg`)
 - **Qué:**
   - Guardar `web/marca/logo.svg` y `web/marca/simbolo.svg` (el SVG del anexo A del acta; el símbolo es sin `<text>` y con `viewBox="0 0 48 48"`).
   - Usar el símbolo como favicon de la landing y el panel.
@@ -26,7 +26,7 @@
 - **Criterios de aceptación:** [ ] el PDF sale con el logo sin conexión.
 
 ### C9b-T03 · Colores y letras (tokens)
-- **Estado:** ⚪
+- **Estado:** ✅ (hoja común `web/marca/eminia.css`; en el informe, la competencia va en pizarra y el cobalto solo marca a la clínica; el diagnóstico de ejemplo bajó de 4 a 3 páginas)
 - **Qué:**
   - Landing y panel: mantener Pico CSS, pero sobrescribir sus variables (`--pico-primary`, `--pico-primary-background`, `--pico-font-family`, fondos) con los colores del ADR-005.
   - Cargar Source Serif 4, IBM Plex Sans e IBM Plex Mono desde Google Fonts.
@@ -37,7 +37,7 @@
 - **Pruebas:** `tests/unit/test_informe_diagnostico.py` y `test_informe_mensual.py`; regenerar el PDF de ejemplo para que lo mire el Director.
 
 ### C9b-T04 · Landing nueva
-- **Estado:** ⚪
+- **Estado:** ✅ con una pendiente: la foto del Director (por ahora, un monograma «GR»). Dato de Osiptel verificado: **23 % en Lima Metropolitana** («casi 1 de cada 4»); «cerca de la mitad en el nivel A» no se pudo verificar y no se publica
 - **Qué:** `web/index.html` con el mismo formulario y el mismo `app.js`, en este orden:
   1. Título «¿Qué clínica recomienda ChatGPT cuando un paciente pregunta por implantes en Miraflores?», un subtítulo y el botón «Mira cómo te ve la IA (gratis)».
   2. Tarjeta que imita un chat: la pregunta del paciente y una respuesta de ejemplo que nombra 3 clínicas y no a «tu clínica». Marcada como ejemplo.
@@ -57,12 +57,12 @@
 - **Notas para Claude Code:** HTML plano, sin compilar ni cambiar de stack; referencia de estructura `PaulleDemon/awesome-landing-pages`. Los datos de Osiptel y BrightLocal se enlazan a la fuente exacta; si no se puede verificar alguno, no se publica.
 
 ### C9b-T05 · Panel e informe con la marca
-- **Estado:** ⚪
+- **Estado:** ✅ (entró con T03; «visible-ia» queda solo en nombres internos: clave de almacenamiento, comando de la CLI y la URL)
 - **Qué:** solo colores, fuentes y logo en el panel, el informe de diagnóstico, el reporte mensual y el kit de atribución. Reemplazar «visible-ia» por «Eminia» en los textos visibles. Sin cambios de funciones.
 - **Criterios de aceptación:** [ ] las pruebas del panel, del informe y del reporte pasan.
 
 ### C9b-T06 · Guion de llamada
-- **Estado:** ⚪
+- **Estado:** ✅ (`docs/06-lanzamiento/guion-llamada.md`, con las fuentes de cada cifra)
 - **Qué:** `docs/06-lanzamiento/guion-llamada.md` con el guion del anexo B del acta, más estos cambios:
   - la oferta incluye sin permanencia, precio fundador y garantía de entrega (aprobados);
   - la objeción «Está caro» **no usa el precio de las agencias** (no tiene fuente). Dice: «Con lo que me contaste, un solo paciente nuevo de [tratamiento] paga varios meses del servicio»;
