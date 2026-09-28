@@ -1,0 +1,52 @@
+name: Corrida mensual
+
+# C8-T01 (decided by the Director on 27/09): day 1 only ESTIMATES and opens the issue
+# "Corridas de <mes> · esperando tu OK" -- nothing is spent. Launching this workflow by hand
+# in "correr" mode IS the approval: it runs (or resumes) the active markets within the
+# monthly budget, extracts the answers and opens "Revisar corridas de <mes>".
+on:
+  schedule:
+    - cron: "0 11 1 * *" # day 1, 06:00 in Lima (UTC-5)
+  workflow_dispatch:
+    inputs:
+      modo:
+        description: "estimar (no gasta) o correr (tu aprobación: gasta, dentro del tope)"
+        type: choice
+        options: [estimar, correr]
+        default: estimar
+      entorno:
+        description: "prod o dev"
+        type: choice
+        options: [prod, dev]
+        default: prod
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: corrida-mensual
+  cancel-in-progress: false
+
+jobs:
+  mensual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          enable-cache: true
+
+      - run: uv sync --locked --no-dev
+
+      - name: ${{ inputs.modo || 'estimar' }} (${{ inputs.entorno || 'prod' }})
+        run: uv run visible-ia mensual ${{ inputs.modo || 'estimar' }} --env ${{ inputs.entorno || 'prod' }} --issue
+        env:
+          SUPABASE_DB_URL_PROD: ${{ secrets.SUPABASE_DB_URL_PROD }}
+          SUPABASE_DB_URL_DEV: ${{ secrets.SUPABASE_DB_URL_DEV }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
+          MONTHLY_BUDGET_USD: ${{ secrets.MONTHLY_BUDGET_USD }}
+          GITHUB_TOKEN: ${{ github.token }}
