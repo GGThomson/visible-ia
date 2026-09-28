@@ -30,7 +30,7 @@
 <section data-seccion="1-indice">
   <h2>1. Cuánto te nombra la IA frente a tu competencia</h2>
   <p class="frase">{{ frase }}</p>
-  <p>Hicimos las mismas {{ metodo.preguntas }} preguntas que hace un paciente ({{ metodo.repeticiones }} veces cada una) a ChatGPT y a Google en su Modo IA. El número es el <b>% de respuestas en que te nombran</b>; entre paréntesis, el rango en que está con seguridad.</p>
+  <p>Hicimos las mismas {{ metodo.preguntas }} preguntas que hace un paciente ({{ metodo.repeticiones }} veces cada una) a ChatGPT y a Google en su Modo IA. El número es tu <b>Índice Eminia</b>: el % de respuestas en que te nombran; entre paréntesis, el rango en que está con seguridad.</p>
   <div class="barras">
     {% for r in ranking %}
     <div class="barra{% if r.es_cliente %} cliente{% endif %}">
@@ -87,7 +87,7 @@
   <div class="brecha">
     <div class="dato"><b>{% if brecha.rating %}{{ brecha.rating }} ★{% else %}—{% endif %}</b>en Google Maps</div>
     <div class="dato"><b>{% if brecha.resenas is not none %}{{ brecha.resenas }}{% else %}—{% endif %}</b>reseñas</div>
-    <div class="dato"><b>{{ brecha.indice }} %</b>de las respuestas de la IA</div>
+    <div class="dato"><b>{{ brecha.indice }} %</b>Índice Eminia</div>
   </div>
   {% if brecha.tiene_brecha %}
   <p class="frase">Tus pacientes te valoran mucho en Google Maps, pero la IA casi no te nombra. Esa diferencia es una oportunidad: tu reputación todavía no se traduce en recomendaciones.</p>

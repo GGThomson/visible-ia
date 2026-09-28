@@ -28,10 +28,11 @@
       <div class="envoltura">
         <div>
           <h1>¿La IA recomienda tu clínica o la de tu competencia?</h1>
-          <p class="intro">Le preguntamos a ChatGPT y a Google lo mismo que tus pacientes, 30 veces, y te mostramos cuánto te nombran frente a las clínicas de tu distrito.</p>
+          <p class="intro">Antes, el paciente buscaba en Google y veía 10 clínicas. Hoy le pregunta a la IA y recibe 3 o 4 nombres. Si no eres uno de ellos, ese paciente no te llama.</p>
+          <p>Le preguntamos a ChatGPT y a Google lo mismo que tus pacientes, 30 veces cada uno, y te damos tu <strong>Índice Eminia</strong>: el % de respuestas que nombran a tu clínica, con su rango, frente a las clínicas de tu distrito.</p>
           <div class="acciones">
             <a class="boton principal" href="#pedir">Pide tu diagnóstico gratis</a>
-            <p class="nota">En PDF, por WhatsApp. Sin compromiso.</p>
+            <p class="nota">En PDF, por WhatsApp, en 3 días hábiles. Sin compromiso.</p>
           </div>
         </div>
 
@@ -83,8 +84,8 @@
             <p>10 preguntas reales de tu especialidad y tu distrito, 3 veces cada una, a ChatGPT y a Google en su Modo IA.</p>
           </li>
           <li>
-            <h3>Contamos a quién nombra</h3>
-            <p>En cuántas respuestas apareces tú y tu competencia, con un rango honesto de variación.</p>
+            <h3>Calculamos tu Índice Eminia</h3>
+            <p>El % de respuestas en que la IA te nombra a ti y a tu competencia, con un rango honesto de variación.</p>
           </li>
           <li>
             <h3>Te decimos qué arreglar primero</h3>
@@ -94,18 +95,39 @@
       </div>
     </section>
 
-    <section class="seccion niebla informe" aria-labelledby="h-informe">
+    <section id="fuentes" class="seccion niebla" aria-labelledby="h-fuentes">
+      <div class="envoltura aparece">
+        <h2 id="h-fuentes">Qué mira la IA para elegir una clínica</h2>
+        <p>Antes de responder, la IA busca en internet. En nuestra prueba con ChatGPT, Gemini y Google Modo IA, esto fue lo que más consultó:</p>
+        <ul class="fuentes-ia">
+          <li><h3>Tu ficha de Google Maps</h3><p>La fuente principal: Gemini se apoyó en fichas de Maps en 10 de 10 respuestas y Google Modo IA, en 7 de 10.</p></li>
+          <li><h3>Doctoralia</h3><p>Citada en 5 de 11 respuestas de ChatGPT y en 4 de 10 de Google Modo IA.</p></li>
+          <li><h3>Facebook e Instagram</h3><p>Aparecieron en 6 de 10 respuestas de Google Modo IA.</p></li>
+          <li><h3>Tu web y los rankings</h3><p>Webs propias de las clínicas y sitios de rankings y directorios de Lima.</p></li>
+        </ul>
+        <p class="nota">Fuente: medición propia, setiembre 2026 (prueba de fuentes: 31 respuestas de ChatGPT, Gemini y Google Modo IA a preguntas de pacientes en Lima). Todas estas fuentes se pueden trabajar.</p>
+      </div>
+    </section>
+
+    <section class="seccion informe" aria-labelledby="h-informe">
       <div class="envoltura aparece">
         <div>
           <h2 id="h-informe">Así se ve tu diagnóstico</h2>
-          <p>3 a 4 páginas: tu % frente a tu competencia, lo que respondió la IA, las fuentes que consulta y 3 arreglos concretos.</p>
-          <div class="barras" aria-label="Ejemplo: porcentaje de respuestas en que la IA nombra a cada clínica">
+          <p>3 a 4 páginas: tu Índice Eminia frente a tu competencia, lo que respondió la IA, las fuentes que consulta y 3 arreglos concretos.</p>
+          <div class="barras" aria-label="Ejemplo: Índice Eminia de cada clínica">
             <div class="barra"><span class="nombre">Clínica A</span><div><div class="riel"><div class="relleno" style="--valor:50%"></div></div><div class="rango">50 % (entre 38 % y 62 %)</div></div></div>
             <div class="barra"><span class="nombre">Clínica B</span><div><div class="riel"><div class="relleno" style="--valor:37%"></div></div><div class="rango">37 % (entre 26 % y 49 %)</div></div></div>
             <div class="barra"><span class="nombre">Clínica C</span><div><div class="riel"><div class="relleno" style="--valor:30%"></div></div><div class="rango">30 % (entre 20 % y 43 %)</div></div></div>
             <div class="barra tu"><span class="nombre">Tu clínica</span><div><div class="riel"><div class="relleno" style="--valor:10%"></div></div><div class="rango">10 % (entre 5 % y 20 %)</div></div></div>
           </div>
-          <p class="nota">Ejemplo basado en una medición real de un mercado de Lima, con nombres y datos cambiados. En este caso, la clínica tiene excelentes reseñas en Google Maps, pero la IA casi no la nombra.</p>
+          <p class="nota">Barras de ejemplo, con nombres cambiados.</p>
+          <p class="caso"><strong>Un caso real, sin nombre:</strong> una clínica de implantes de Lima con 4.9 estrellas y más de 1,100 reseñas en Google Maps aparecía en solo 1 de cada 10 respuestas de la IA (setiembre 2026).</p>
+          <ul class="hallazgos">
+            <li>En 60 respuestas, la IA nombró <strong>34 clínicas distintas</strong>.</li>
+            <li>La más nombrada aparece en <strong>1 de cada 2 respuestas</strong>.</li>
+            <li><strong>5 de 9</strong> clínicas con 4.5 estrellas o más y más de 100 reseñas aparecen en 1 de cada 10 respuestas o menos.</li>
+          </ul>
+          <p class="nota">Implantes dentales en Miraflores, setiembre 2026: 60 respuestas de ChatGPT y Google Modo IA (medición propia).</p>
         </div>
         <figure class="hoja">
           <img src="marca/informe-ejemplo.jpg" width="794" height="1123" loading="lazy"
@@ -115,7 +137,7 @@
       </div>
     </section>
 
-    <section id="planes" class="seccion" aria-labelledby="h-planes">
+    <section id="planes" class="seccion niebla" aria-labelledby="h-planes">
       <div class="envoltura aparece">
         <h2 id="h-planes">Elige cuánto quieres hacer tú</h2>
         <div class="planes">
@@ -126,7 +148,7 @@
             <p class="setup">Una vez, sin compromiso</p>
             <ul>
               <li>Informe de 3 a 4 páginas en PDF</li>
-              <li>Tu % en ChatGPT y Google frente a tu competencia</li>
+              <li>Tu Índice Eminia en ChatGPT y Google frente a tu competencia</li>
               <li>3 arreglos concretos para tu clínica</li>
             </ul>
             <a class="boton secundario" href="#pedir">Pide tu diagnóstico</a>
@@ -137,9 +159,10 @@
             <p class="precio">S/ 349 <small>al mes</small></p>
             <p class="setup">por sede · puesta a punto S/ 490</p>
             <ul>
-              <li>Sabes cada mes cuánto te nombran ChatGPT y Google</li>
+              <li>Tu Índice Eminia cada mes, en ChatGPT y Google</li>
               <li>Tu panel, con tu evolución mes a mes</li>
               <li>Comparación con 3 competidores en tu reporte y el ranking de tu distrito en el panel</li>
+              <li>Las fuentes que consulta la IA en tu mercado</li>
               <li>La lista de arreglos en orden, para tu equipo</li>
               <li>Código listo para tu web (JSON-LD)</li>
               <li>Kit «¿Cómo nos conociste?» para contar los pacientes que llegan por la IA</li>
@@ -154,6 +177,9 @@
             <ul>
               <li>Todo lo del Plan Medir</li>
               <li>Nosotros hacemos 3 mejoras al mes: ficha de Google, Doctoralia, tu web y el pedido de reseñas</li>
+              <li>Cómo te describe la IA: lo leemos cada mes y te decimos qué corregir</li>
+              <li>Reescribimos las preguntas frecuentes y los textos de tu web para que la IA los entienda</li>
+              <li>Te ayudamos a pedir y responder reseñas</li>
               <li>Una llamada de 15 minutos al mes para contarte cómo vas</li>
             </ul>
             <a class="boton principal" href="#pedir">Empieza con el diagnóstico</a>
@@ -168,13 +194,46 @@
       </div>
     </section>
 
+    <section class="seccion" aria-labelledby="h-despues">
+      <div class="envoltura aparece dos-bloques">
+        <div>
+          <h2 id="h-despues">Qué pasa después de pedirlo</h2>
+          <ol class="lista-pasos">
+            <li>Llenas el formulario: 1 minuto.</li>
+            <li>Medimos tu especialidad en tu distrito: 60 respuestas de ChatGPT y Google.</li>
+            <li>Te enviamos el PDF por WhatsApp en 3 días hábiles.</li>
+            <li>Si quieres, lo revisamos juntos en 15 minutos.</li>
+          </ol>
+        </div>
+        <div>
+          <h2>Para quién no es</h2>
+          <ul class="lista-no">
+            <li>Clínicas fuera de Lima o de otras especialidades: por ahora medimos implantología, estética dental, medicina estética y dermatología en Miraflores, San Isidro y Surco.</li>
+            <li>Quien busque que le garanticen el «puesto #1». Nadie controla lo que responde la IA.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials: show ONLY with the clinic's written permission (VOZ.md). Remove "hidden" and fill in.
+    <section class="seccion" aria-labelledby="h-testimonios" hidden>
+      <div class="envoltura">
+        <h2 id="h-testimonios">Lo que dicen las clínicas</h2>
+        <figure class="testimonio">
+          <blockquote>[Texto exacto aprobado por la clínica]</blockquote>
+          <figcaption>[Nombre y cargo] · [Clínica, distrito] · [fecha del permiso]</figcaption>
+        </figure>
+      </div>
+    </section>
+    -->
+
     <section id="preguntas" class="seccion niebla" aria-labelledby="h-preguntas">
       <div class="envoltura aparece">
         <h2 id="h-preguntas">Preguntas frecuentes</h2>
         <div class="preguntas">
           <details>
             <summary>Mis pacientes no usan ChatGPT.</summary>
-            <p>En Lima Metropolitana, el 23 % de las personas ya usa herramientas de IA (Osiptel, ERESTEL 2025), y Google ya muestra respuestas de IA arriba de sus resultados. El diagnóstico gratis te muestra qué responde la IA hoy sobre tu especialidad en tu distrito.</p>
+            <p>En Lima Metropolitana, el 23 % de las personas ya usa herramientas de IA (Osiptel, ERESTEL 2025). Y aunque no abran ChatGPT, Google ya muestra un resumen de IA arriba de sus resultados: cuando aparece, la gente hace clic en un enlace en el 8 % de las visitas; sin el resumen, en el 15 % (<a href="https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/" rel="noopener" target="_blank">Pew Research Center, julio 2025</a>, datos de EE. UU.). El diagnóstico gratis te muestra qué responde la IA hoy sobre tu especialidad en tu distrito.</p>
           </details>
           <details>
             <summary>Ya tengo una agencia.</summary>
@@ -213,7 +272,7 @@
     <section id="pedir" class="seccion niebla pedir" aria-labelledby="h-pedir">
       <div class="envoltura">
         <h2 id="h-pedir">Pide tu diagnóstico gratis</h2>
-        <p class="intro">Te lo enviamos por WhatsApp en los próximos días. Por ahora medimos implantología, estética dental, medicina estética y dermatología en Miraflores, San Isidro y Surco.</p>
+        <p class="intro">Te lo enviamos por WhatsApp en 3 días hábiles. Por ahora medimos implantología, estética dental, medicina estética y dermatología en Miraflores, San Isidro y Surco.</p>
         <form id="formulario" class="tarjeta-formulario" novalidate>
           <div class="campos">
             <label>Tu nombre
@@ -255,7 +314,7 @@
           <p id="error" role="alert" hidden></p>
         </form>
         <div id="resultado" role="status" hidden>
-          <strong>Listo.</strong> Recibimos tu pedido. Te escribiremos por WhatsApp en los próximos días con tu diagnóstico.
+          <strong>Listo.</strong> Recibimos tu pedido. Te escribiremos por WhatsApp en 3 días hábiles con tu diagnóstico.
         </div>
       </div>
     </section>
