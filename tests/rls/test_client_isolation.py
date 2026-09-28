@@ -27,7 +27,7 @@ pytestmark = pytest.mark.integration
 
 MARKETS = {"A": ("IMP", "San Isidro"), "B": ("IMP", "Surco")}  # used by no other test
 TABLES = ("monthly_scores", "mentions", "sources", "reports", "tasks", "sites", "clients",
-          "clinics", "markets", "runs", "app_users")  # fmt: skip
+          "clinics", "markets", "runs", "app_users", "attributions")  # fmt: skip
 VIEWS = ("v_panel_ranking", "v_panel_evolution", "v_panel_sources")
 PRIVATE = ("prospects", "payments", "heartbeats", "questions", "aliases", "clinic_markets")
 
@@ -114,6 +114,11 @@ def world():
                 cur.execute(
                     "insert into public.tasks (site_id, code) values (%s, 'ficha_google')", (site,)
                 )
+                cur.execute(
+                    "insert into public.attributions (site_id, month, ai_patients) "
+                    "values (%s, '2026-08-01', 2)",
+                    (site,),
+                )
             calculate(conn, run)
             record_report(conn, clinic, date(2026, 9, 1), f"informes/rls/{side}.pdf")
             email = f"rls-{side.lower()}-{uuid.uuid4().hex[:6]}@example.com"
@@ -174,6 +179,7 @@ def test_each_table_shows_only_my_data(world, me, other):
         "tasks": ("site_id", mine["site"], theirs["site"]),
         "reports": ("clinic_id", mine["clinic"], theirs["clinic"]),
         "app_users": ("id", mine["user"], theirs["user"]),
+        "attributions": ("site_id", mine["site"], theirs["site"]),
     }
     for table in TABLES:
         rows = _rows(world, me, table)
@@ -243,3 +249,25 @@ def test_a_clinic_marks_only_its_own_tasks(world):
     assert other_column.status_code in (400, 401, 403)
     rows = _rows(world, "B", "tasks")
     assert [r["status"] for r in rows] == ["pending"]
+
+
+def test_a_clinic_saves_only_its_own_ai_patients(world):
+    a, b = world["ids"]["A"], world["ids"]["B"]
+    headers = {"apikey": world["anon"], "Authorization": f"Bearer {a['token']}",
+               "Prefer": "return=representation,resolution=merge-duplicates"}  # fmt: skip
+
+    def save(site, patients):  # the same upsert the panel does
+        return httpx.post(
+            f"{world['url']}/rest/v1/attributions",
+            params={"on_conflict": "site_id,month"},
+            json={"site_id": site, "month": "2026-09-01", "ai_patients": patients},
+            headers=headers,
+        )
+
+    for patients in (3, 4):  # insert, then update the same month
+        own = save(a["site"], patients)
+        assert own.status_code in (200, 201), own.text[:200]
+        assert own.json()[0]["ai_patients"] == patients
+    assert save(b["site"], 9).status_code in (401, 403)
+    assert save(a["site"], -1).status_code == 400
+    assert [r["month"] for r in _rows(world, "B", "attributions")] == ["2026-08-01"]

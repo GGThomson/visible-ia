@@ -1,5 +1,6 @@
 """Monthly report of a site (C8-T02, HU-15): evolution, ADR-003 change, 3-month window,
-competitors, sources, checklist and calibration with the apps (PRD §5.4).
+competitors, sources, checklist, patients who came through the AI (C9-T02) and calibration
+with the apps (PRD §5.4).
 
 `build_monthly_context` is pure (tested with 1, 2 and 3 months of data); `load_monthly_data`
 reads a site's scores from the database.
@@ -11,6 +12,7 @@ from typing import Any
 
 import psycopg
 
+from visible_ia.atribucion import load_counts
 from visible_ia.informes.contexto import TREATMENT, load_brand, month_text
 from visible_ia.puntaje.calibracion import Calibration, calibration_with_alert
 from visible_ia.puntaje.fuentes import TYPE_LABELS, load_citations, top_sources, type_shares
@@ -54,6 +56,7 @@ class MonthlyData:
     tasks: list[dict[str, Any]]  # title, status
     calibration: list[Calibration] = field(default_factory=list)
     calibration_alert: bool = False
+    ai_patients: dict[date, int] = field(default_factory=dict)  # month -> count, oldest first
 
 
 def _pct(value: float | None) -> str:
@@ -89,6 +92,7 @@ def build_monthly_context(data: MonthlyData, brand: dict[str, str] | None = None
         (r for rows in top.values() for r in rows if r.source_type != "google_profile"),
         key=lambda r: -r.answers,
     )[:6]
+    counts = {m: n for m, n in data.ai_patients.items() if m <= data.month}
     done = [t for t in data.tasks if t["status"] == "done"]
     pending = [t for t in data.tasks if t["status"] != "done"]
 
@@ -158,6 +162,12 @@ def build_monthly_context(data: MonthlyData, brand: dict[str, str] | None = None
         "tareas": {
             "hechas": [t["title"] for t in done],
             "pendientes": [t["title"] for t in pending],
+        },
+        "atribucion": {
+            "este_mes": counts.get(data.month),
+            "historial": [
+                {"mes": month_text(m), "pacientes": n} for m, n in sorted(counts.items())
+            ][-6:],
         },
         "calibracion": [
             {
@@ -248,5 +258,5 @@ def load_monthly_data(conn: psycopg.Connection, site_id: int, month: date) -> Mo
     calibration, alert = calibration_with_alert(conn, market_id, month)
     return MonthlyData(
         site_id, clinic_id, clinic_name, category, district, month, history, ranking,
-        citations, total, tasks, calibration, alert,
+        citations, total, tasks, calibration, alert, load_counts(conn, site_id, month),
     )  # fmt: skip

@@ -1692,3 +1692,70 @@ def pagos_aviso(env: str = typer.Option("prod", help="dev o prod.")) -> None:
         _post_issue(f"{ISSUE_PREFIX} ", None, "Ya no hay pagos atrasados.", close=True)
     else:
         _post_issue(f"{ISSUE_PREFIX} ", *notice)
+
+
+# --- attribution kit (C9-T02) --------------------------------------------------------------
+
+atribucion_app = typer.Typer(help="Pacientes que llegan por la IA (kit de atribución).",
+                             no_args_is_help=True)  # fmt: skip
+app.add_typer(atribucion_app, name="atribucion")
+
+
+@atribucion_app.command("registrar")
+def atribucion_registrar(
+    sede: int = typer.Argument(..., help="Id de la sede."),
+    mes: str = typer.Option(..., help="AAAA-MM."),
+    pacientes: int = typer.Option(..., min=0, help="Pacientes que llegaron por la IA ese mes."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Guarda el conteo del mes cuando la clínica lo envía por WhatsApp (en vez del panel)."""
+    from visible_ia.atribucion import save_count
+
+    target = _resolve_env(env)
+    month = _parse_month(mes)
+    _confirm_prod(target)
+    with _connect_or_exit(target, autocommit=True) as conn:
+        try:
+            save_count(conn, sede, month, pacientes)
+        except ValueError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+    typer.echo(f"Sede {sede}: {pacientes} pacientes por IA en {mes}.")
+
+
+@informe_app.command("kit")
+def informe_kit(
+    sede: int = typer.Option(..., help="Id de la sede."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Genera el kit de atribución de una sede en PDF, para enviarlo por WhatsApp (HU-25)."""
+    from visible_ia.atribucion import kit_context
+    from visible_ia.clientes import PANEL_PATH
+    from visible_ia.informes.contexto import load_brand
+    from visible_ia.informes.pdf import OUTPUT_DIR, PdfError, html_to_pdf, slug
+    from visible_ia.informes.render import render_kit
+
+    target = _resolve_env(env)
+    settings = get_settings()
+    with _connect_or_exit(target) as conn, conn.cursor() as cur:
+        cur.execute(
+            "select c.name, c.website from public.sites s "
+            "join public.clinics c on c.id = s.clinic_id where s.id = %s",
+            (sede,),
+        )
+        row = cur.fetchone()
+    if row is None:
+        typer.echo(f"No existe la sede {sede}")
+        raise typer.Exit(code=1)
+    name, website = row
+    panel = settings.site_url.rstrip("/") + PANEL_PATH
+    html = render_kit(kit_context(name, website, load_brand(), panel))
+    path = OUTPUT_DIR / f"kit-atribucion-{slug(name)}.pdf"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.with_suffix(".html").write_text(html, encoding="utf-8")
+    try:
+        html_to_pdf(html, path)
+    except PdfError as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from None
+    typer.echo(f"PDF: {path} ({path.stat().st_size / 1024:.0f} KB)")

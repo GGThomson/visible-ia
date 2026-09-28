@@ -32,6 +32,13 @@ uv run visible-ia pagos estado --env prod     # al día / vence pronto / atrasad
 ```
 Cada pago cubre un mes (`--periodo`), por adelantado. Un mes vence el día 1 (o el día en que se creó el cliente) más `PAGO_DIAS_GRACIA` (5); "vence pronto" avisa `PAGO_AVISO_DIAS` (7) antes del mes siguiente. Las clínicas de una agencia no aparecen: se cobra a la agencia. Con `PAGOS_INCLUYEN_IGV=true`, el neto descuenta el 18 %.
 
+### Kit de atribución (pacientes que llegan por la IA)
+```powershell
+uv run visible-ia informe kit --sede <id> --env prod                          # PDF en salida/ para enviar por WhatsApp
+uv run visible-ia atribucion registrar <sede> --mes 2026-10 --pacientes 3 --env prod   # si la clínica lo manda por WhatsApp
+```
+La clínica también lo registra en su panel (sección «Pacientes que llegan por la IA»); el reporte mensual muestra el conteo del mes.
+
 ### Pruebas y estilo
 ```powershell
 uv run ruff check .                  # estilo

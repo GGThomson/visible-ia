@@ -120,5 +120,19 @@ def test_magic_link_session_opens_only_my_panel(world, site, page):  # noqa: F81
         )
         assert cur.fetchone()[0] == "pending"
 
+    assert page.inner_text("#cupon") == "IA-VISIBLE"  # "Clínica A" has no distinctive word
+    assert "ChatGPT u otra IA" in page.inner_text("#intake-opciones")
+    assert "agosto de 2026: 2" in page.inner_text("#conteo-historial")
+    page.fill("#conteo-pacientes", "3")
+    page.click("#form-conteo button[type=submit]")
+    page.wait_for_selector("#conteo-estado:has-text('Guardado')", timeout=10000)
+    with db.connect(get_settings(), "dev") as conn, conn.cursor() as cur:
+        cur.execute(
+            "select ai_patients from public.attributions where site_id = %s "
+            "and month = date_trunc('month', now() at time zone 'America/Lima')::date",
+            (a["site"],),
+        )
+        assert cur.fetchone()[0] == 3
+
     page.click("#salir")
     page.wait_for_url("**/login.html", timeout=15000)
