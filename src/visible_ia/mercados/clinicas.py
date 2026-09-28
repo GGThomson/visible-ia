@@ -55,6 +55,12 @@ def _optional(value: str | None) -> str | None:
     return value or None
 
 
+def _instagram(value: str | None) -> str | None:
+    """Profile URL or handle without the query string Maps adds (?hl=en, ?igsh=…)."""
+    value = _optional(value)
+    return re.split(r"[?#]", value, maxsplit=1)[0] if value else None
+
+
 def _parse_rating(value: str | None) -> float | None:
     value = _optional(value)
     if value is None:
@@ -108,7 +114,7 @@ def parse_clinics_csv(text: str) -> tuple[list[ClinicRow], list[RowError]]:
                     rating=_parse_rating(get.get("rating")),
                     review_count=_parse_count(get.get("resenas")),
                     website=_optional(get.get("web")),
-                    instagram=_optional(get.get("instagram")),
+                    instagram=_instagram(get.get("instagram")),
                     aliases=tuple(
                         a.strip() for a in (get.get("alias") or "").split(";") if a.strip()
                     ),

@@ -54,3 +54,19 @@ def test_alias_column_accepts_several_names_separated_by_semicolons():
     assert errors == []
     assert rows[0].aliases == ("Dr. Aldo Implants", "Aldo Implants")
     assert rows[1].aliases == ()
+
+
+def test_instagram_query_string_is_dropped():
+    text = (
+        "nombre,distrito,maps_url,instagram\n"
+        "A,Surco,https://m/1,https://www.instagram.com/a.pe/?hl=en\n"
+        "B,Surco,https://m/2,https://www.instagram.com/b?igsh=ZnRm\n"
+        "C,Surco,https://m/3,@c\n"
+    )
+    rows, errors = parse_clinics_csv(text)
+    assert errors == []
+    assert [r.instagram for r in rows] == [
+        "https://www.instagram.com/a.pe/",
+        "https://www.instagram.com/b",
+        "@c",
+    ]
