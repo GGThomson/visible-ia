@@ -117,8 +117,9 @@ select
     s.detectable_diff,
     s.avg_position,
     s.mention_share,
-    g.presence_index as chatgpt,
-    o.presence_index as google
+    -- A surface with no answers that month is shown as empty, not as 0 %.
+    (case when g.n_responses > 0 then g.presence_index end)::numeric(5, 2) as chatgpt,
+    (case when o.n_responses > 0 then o.presence_index end)::numeric(5, 2) as google
 from public.monthly_scores s
 join public.clinics c on c.id = s.clinic_id
 left join public.monthly_scores g on g.market_id = s.market_id and g.month = s.month

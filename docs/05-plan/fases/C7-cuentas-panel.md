@@ -37,7 +37,7 @@
 - **Rama:** `feat/C7-T02-rls-client`
 
 ### C7-T03 · Login con enlace mágico (HU-19)
-- **Estado:** ⚪
+- **Estado:** ✅ (código y pruebas; publicación en prod con el OK del Director)
 - **Qué:** `web/panel/login.html` + `web/panel/app.js` con `supabase-js` (CDN): pide el correo, envía el enlace, maneja la sesión y cierra sesión.
 - **Criterios de aceptación:**
   - [ ] Los criterios de HU-19 del PRD: entra solo con su correo y ve solo lo suyo.
@@ -47,7 +47,7 @@
 - **Rama:** `feat/C7-T03-magic-link`
 
 ### C7-T04 · Panel: índice, ranking, fuentes y evolución (HU-20)
-- **Estado:** ⚪
+- **Estado:** ✅ (código y pruebas; publicación en prod con el OK del Director)
 - **Qué:** `web/panel/index.html`, con:
   - índice combinado y por superficie, con su margen y la frase de cambio del ADR-003;
   - ranking del mercado;

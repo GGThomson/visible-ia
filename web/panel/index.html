@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>visible-ia · Tu panel</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <style>
+    :root { --acento: #E36414; }
+    main { max-width: 52rem; padding-top: 1.5rem; }
+    header.barra-sup { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .indice { font-size: 3rem; font-weight: 700; line-height: 1; color: var(--pico-primary); }
+    .tarjetas { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+    .tarjetas article { margin: 0; }
+    .fila-barra { display: grid; grid-template-columns: minmax(8rem, 36%) 1fr; gap: .6rem; align-items: center; margin: .35rem 0; }
+    .riel { background: var(--pico-muted-border-color); border-radius: .3rem; height: 1.2rem; }
+    .relleno { background: var(--pico-primary-background); height: 100%; border-radius: .3rem; min-width: 2px; }
+    .mia .relleno { background: var(--acento); }
+    .mia .nombre { color: var(--acento); font-weight: 700; }
+    .valor { font-size: .9rem; }
+    [hidden] { display: none !important; }
+    @media (max-width: 480px) { .fila-barra { grid-template-columns: 1fr; } .indice { font-size: 2.4rem; } }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="barra-sup">
+      <strong>visible-ia</strong>
+      <button class="secondary outline" id="salir">Salir</button>
+    </header>
+
+    <p id="cargando" aria-busy="true">Cargando tu panel…</p>
+    <p id="error" role="alert" hidden></p>
+
+    <div id="contenido" hidden>
+      <label id="elegir-sede" hidden>Sede <select id="sede"></select></label>
+      <h1 id="titulo"></h1>
+      <p id="subtitulo"></p>
+
+      <section aria-labelledby="h-indice">
+        <h2 id="h-indice">Tu índice de presencia</h2>
+        <div class="tarjetas">
+          <article>
+            <div class="indice" id="combinado"></div>
+            <p id="rango"></p>
+            <p id="cambio"></p>
+          </article>
+          <article>
+            <p><b>ChatGPT:</b> <span id="chatgpt"></span></p>
+            <p><b>Google (Modo IA):</b> <span id="google"></span></p>
+            <p><small>El índice es el % de respuestas de la IA en que te nombran, cuando un paciente pregunta por tu especialidad en tu distrito.</small></p>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="h-ranking">
+        <h2 id="h-ranking">Frente a tu competencia</h2>
+        <div id="ranking"></div>
+        <p><small>Si los rangos de dos clínicas se cruzan, la diferencia entre ellas no es clara.</small></p>
+      </section>
+
+      <section aria-labelledby="h-fuentes">
+        <h2 id="h-fuentes">Dónde se informa la IA en tu mercado</h2>
+        <div class="overflow-auto"><table><thead><tr><th>Sitio</th><th>Tipo</th><th>% de respuestas</th></tr></thead><tbody id="fuentes"></tbody></table></div>
+      </section>
+
+      <section aria-labelledby="h-evolucion">
+        <h2 id="h-evolucion">Evolución mes a mes</h2>
+        <div class="overflow-auto"><table><thead><tr><th>Mes</th><th>Índice</th><th>Rango</th><th>Últimos 3 meses</th><th>Cambio</th></tr></thead><tbody id="evolucion"></tbody></table></div>
+      </section>
+
+      <section aria-labelledby="h-tareas">
+        <h2 id="h-tareas">Tu checklist</h2>
+        <div id="tareas"></div>
+      </section>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+  <script src="../config.js"></script>
+  <script src="comun.js"></script>
+  <script src="panel.js"></script>
+</body>
+</html>
