@@ -64,3 +64,4 @@ footer { margin-top: 1.2em; font-size: 11pt; color: #4a5a5e; border-top: 1px sol
   .barra { grid-template-columns: 1fr; }
   .brecha { grid-template-columns: 1fr; }
 }
+ul.hechas { list-style: none; padding-left: 0.4em; }

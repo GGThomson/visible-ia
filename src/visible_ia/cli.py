@@ -1517,3 +1517,56 @@ def sede_schema(
         typer.echo("El schema tiene problemas:\n- " + "\n- ".join(errors))
         raise typer.Exit(code=1)
     typer.echo(script_tag(data))
+
+
+@informe_app.command("mensual")
+def informe_mensual(
+    sede: int = typer.Option(..., help="Id de la sede."),
+    mes: str = typer.Option(..., help="AAAA-MM."),
+    subir: bool = typer.Option(
+        True, "--subir/--sin-subir", help="Subir el PDF a Supabase Storage y registrarlo."
+    ),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Genera el reporte mensual de una sede en PDF (HU-15)."""
+    from visible_ia.informes.contexto import load_brand
+    from visible_ia.informes.mensual import build_monthly_context, load_monthly_data
+    from visible_ia.informes.pdf import OUTPUT_DIR, PdfError, html_to_pdf, slug, upload
+    from visible_ia.informes.render import render_monthly
+
+    target = _resolve_env(env)
+    month = _parse_month(mes)
+    settings = get_settings()
+    with _connect_or_exit(target, autocommit=True) as conn:
+        try:
+            data = load_monthly_data(conn, sede, month)
+            html = render_monthly(build_monthly_context(data, load_brand()))
+        except ValueError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+        path = OUTPUT_DIR / f"mensual-{slug(data.clinic_name)}-{month:%Y-%m}.pdf"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.with_suffix(".html").write_text(html, encoding="utf-8")
+        try:
+            html_to_pdf(html, path)
+        except PdfError as exc:
+            typer.echo(str(exc))
+            raise typer.Exit(code=1) from None
+        typer.echo(f"PDF: {path} ({path.stat().st_size / 1024:.0f} KB)")
+        if subir:
+            _confirm_prod(target)
+            stored = upload(
+                path,
+                f"mensual/{path.name}",
+                supabase_url=settings.value(f"SUPABASE_URL_{target.upper()}"),
+                service_role_key=settings.value(
+                    f"SUPABASE_SERVICE_ROLE_KEY_{target.upper()}"
+                ).get_secret_value(),
+            )
+            with conn.transaction(), conn.cursor() as cur:
+                cur.execute(
+                    "insert into public.reports (kind, site_id, month, pdf_path) "
+                    "values ('monthly', %s, %s, %s) returning id",
+                    (sede, month, stored),
+                )
+                typer.echo(f"Subido ({stored}) y registrado como informe {cur.fetchone()[0]}.")

@@ -23,3 +23,8 @@ def environment() -> Environment:
 def render_diagnostic(context: dict[str, Any]) -> str:
     template = environment().get_template("diagnostico.html.j2")
     return template.render(**context, estilos=STYLES.read_text(encoding="utf-8"))
+
+
+def render_monthly(context: dict[str, Any]) -> str:
+    template = environment().get_template("mensual.html.j2")
+    return template.render(**context, estilos=STYLES.read_text(encoding="utf-8"))
