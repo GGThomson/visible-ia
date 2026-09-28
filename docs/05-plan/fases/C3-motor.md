@@ -6,7 +6,7 @@
 - Además, se pueden cargar muestras manuales de las apps (Gemini y ChatGPT).
 
 **Historias que cubre:** HU-04, HU-05, HU-06
-**Estado:** 🟡 tareas ✅; falta la demo del Director (la corrida real ya se hizo: corrida 1 en prod, 60/60, US$0.97)
+**Estado:** ✅ completa (27/09)
 **Depende de (Director):** cuenta de SerpApi (plan gratis) y **facturación de OpenAI aprobada y activada**, con las claves en `.env` y en Secrets.
 
 ## Tareas

@@ -4,7 +4,7 @@
 - Con esto se empieza a vender el 05/10.
 
 **Historias que cubre:** HU-14, HU-26
-**Estado:** 🟡 en curso
+**Estado:** ✅ completa (27/09) · tag `v1.0`
 
 ## Tareas
 
