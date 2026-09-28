@@ -26,15 +26,22 @@
 | Setup | **S/ 490** (auditoría + schema + perfiles) | S/ 0 (la agencia ejecuta los checklists) |
 | Entregables | Reporte por WhatsApp, alertas y soporte | Reportes PDF con el logo de la agencia |
 
-> 💡 **Hipótesis C-004 (26/09): plan Gestionado.** Además de medir, nosotros ejecutamos los arreglos del checklist. Se valida con las primeras 40 clínicas (H9); por ahora no se ofrece como plan ni se construye nada. 
+> ✅ **Planes que se ofrecen en las llamadas desde el 05/10** (acta 2026-09-28, marca Eminia, ADR-005). Los precios siguen siendo **tentativos** (Director, 26/09) y se muestran **sin IGV** mientras el contador no defina el régimen.
 >
-> | Plan Gestionado (tentativo) | Precio | Incluye |
+> | Plan | Precio | Incluye |
 > |---|---|---|
-> | Puesta a punto | **S/ 990**, pago único | Ficha de Google, Doctoralia, web y plan de reseñas |
-> | Mensual | **S/ 790/mes** | Medición, reporte, 3 mejoras al mes y una llamada corta |
+> | **Diagnóstico gratis** | S/ 0 | El informe de 3–4 páginas de hoy |
+> | **Plan Medir** | **S/ 349/mes** por sede + **S/ 490** de puesta a punto | Medición mensual en ChatGPT y Google Modo IA; panel; comparación con **3 competidores** en el reporte y el ranking completo en el panel; checklist; JSON-LD listo para la web; kit «¿Cómo nos conociste?» |
+> | **Plan Gestionado** («más completo») | **S/ 790/mes** + **S/ 990** de puesta a punto | Todo lo de Medir y, además, **nosotros** hacemos 3 mejoras al mes (ficha de Google, Doctoralia, web, pedido de reseñas) y una llamada de 15 min al mes. Es servicio manual: no se construye nada (C-004, H9) |
 >
-> Referencia: el plan base es S/ 490 de setup + S/ 349/mes. **Son precios para preguntar en las llamadas, no definitivos** (Director, 26/09). La duda del IGV (régimen pendiente) aplica igual.
-> Si se valida: `/decision` para fijar el precio y revisar el PRD §7, que hoy excluye editar los perfiles del cliente dentro del producto (el servicio sería manual).
+> Las agencias (S/ 690) **no van en la landing de clínicas**: tendrán su propia página en C10.
+>
+> **Ganchos aprobados por el Director (28/09):**
+> - **Sin permanencia:** cancelas cuando quieras.
+> - **Precio fundador** para las 5 primeras clínicas: la puesta a punto va a mitad de precio (S/ 245 en Medir, S/ 495 en Gestionado) y la mensualidad queda congelada 12 meses.
+> - **Garantía de entrega:** se devuelve la puesta a punto si el checklist y los arreglos no se entregan en 10 días hábiles. **No** se garantiza subir en la IA.
+>
+> Si H9 se valida con el Gestionado, `/decision` para fijar el precio y revisar el PRD §7, que hoy excluye editar los perfiles del cliente dentro del producto (el servicio seguiría siendo manual).
 
 **Costo variable por cliente al mes** (estimado; precios del 26/09/2026). La pasarela aplica solo a pagos con tarjeta; con Yape o transferencia el costo baja a ≈ S/ 4 por clínica:
 
