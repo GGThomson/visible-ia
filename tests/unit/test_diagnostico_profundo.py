@@ -117,7 +117,7 @@ def test_question_table_by_form():
 
 
 def test_report_shows_the_new_sections_numbered_and_masked():
-    from tests.unit.test_informe_diagnostico import _data
+    from test_informe_diagnostico import _data
 
     data = _data()
     data.deep_answers = [
