@@ -1162,7 +1162,7 @@ def informe_diagnostico(
         report_filename,
         upload,
     )
-    from visible_ia.informes.render import render_diagnostic
+    from visible_ia.informes.render import diagnostic_frame, render_diagnostic
     from visible_ia.puntaje.indice import ScoreError
 
     started = time.monotonic()
@@ -1173,7 +1173,8 @@ def informe_diagnostico(
         try:
             data = load_report_data(conn, clinica, mercado, _parse_month(mes), chosen)
             _add_reasons(conn, data, settings, market_id=mercado, use_model=ia)
-            html = render_diagnostic(build_context(data, load_brand()))
+            context = build_context(data, load_brand())
+            html = render_diagnostic(context)
         except ScoreError as exc:
             typer.echo(str(exc))
             raise typer.Exit(code=1) from None
@@ -1181,7 +1182,7 @@ def informe_diagnostico(
         path.with_suffix(".html").parent.mkdir(parents=True, exist_ok=True)
         path.with_suffix(".html").write_text(html, encoding="utf-8")
         try:
-            html_to_pdf(html, path)
+            html_to_pdf(html, path, *diagnostic_frame(context))
         except PdfError as exc:
             typer.echo(str(exc))
             raise typer.Exit(code=1) from None

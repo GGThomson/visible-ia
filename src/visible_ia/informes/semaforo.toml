@@ -1,0 +1,35 @@
+# Traffic light of the free diagnostic's summary (redesign, 28/09/2026). Fixed rules, approved by
+# the Director; the report's annex says they are "criterio Eminia". Each area is "Bien" when the
+# value reaches `bien`, "Regular" when it reaches `regular`, and "Bajo" otherwise. A missing value
+# shows "Sin datos" (grey), never an invented colour. Tested in tests/unit/test_semaforo.py.
+
+[[area]]
+id = "presencia"
+nombre = "Presencia en IA"
+mide = "Índice Eminia: % de respuestas que te nombran"
+bien = 25
+regular = 10
+
+[[area]]
+id = "web"
+nombre = "Tu web como fuente"
+mide = "% de respuestas que citan tu web (0 % si no tienes web registrada)"
+bien = 15
+regular = 1
+
+[[area]]
+id = "directorios"
+nombre = "Doctoralia y directorios"
+mide = "% de las respuestas que te nombran que citan Doctoralia o directorios"
+bien = 40
+regular = 15
+
+[[area]]
+id = "maps"
+nombre = "Reputación en Maps"
+mide = "Estrellas y número de reseñas en Google Maps"
+# Both conditions must hold for each level.
+bien_estrellas = 4.7
+bien_resenas = 200
+regular_estrellas = 4.3
+regular_resenas = 50

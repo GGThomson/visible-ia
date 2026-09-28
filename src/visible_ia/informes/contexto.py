@@ -20,9 +20,12 @@ from visible_ia.informes.profundo import (
     SURFACE_LABELS,
     Answer,
     Reasons,
+    consistency,
     missing_pages,
+    question_grid,
     question_table,
 )
+from visible_ia.informes.semaforo import findings, impact, lights
 from visible_ia.mercados.alias import fold
 from visible_ia.puntaje.brecha import has_gap
 from visible_ia.puntaje.fuentes import TYPE_LABELS, load_citations, top_sources, type_shares
@@ -188,7 +191,12 @@ def _recommendations(values: dict[str, Any], applies: dict[str, bool]) -> list[d
         if r not in chosen and r["id"] in ("web", "doctoralia", "mantener"):
             chosen.append(r)
     return [
-        {"titulo": r["titulo"].format(**values), "texto": r["texto"].format(**values)}
+        {
+            "id": r["id"],
+            "titulo": r["titulo"].format(**values),
+            "texto": r["texto"].format(**values),
+            "esfuerzo": r.get("esfuerzo", "medio"),
+        }
         for r in chosen[:3]
     ]
 
@@ -254,6 +262,106 @@ def _deep_context(data: ReportData, competitors: list, allowed: list[str]) -> di
 def _short_url(url: str, limit: int = 60) -> str:
     text = re.sub(r"^https?://(www\.)?", "", url).rstrip("/")
     return text if len(text) <= limit else text[: limit - 1] + "…"
+
+
+def _position(value: float | None) -> str:
+    """Average position when named, Peruvian style (2,3)."""
+    return "—" if value is None else f"{value:.1f}".replace(".", ",")
+
+
+def _share(answers: list[Answer], test) -> float | None:
+    return 100 * sum(1 for a in answers if test(a)) / len(answers) if answers else None
+
+
+def _redesign(data, me, competitors, leader, position, appearances, website_domain, recs):
+    """Summary, comparison, question grid and action plan of the redesigned diagnostic."""
+    answers = data.deep_answers
+    total = data.total_answers
+
+    def cites_web(a):
+        return bool(website_domain) and any(
+            re.sub(r"^www\.", "", (d or "").lower()) == website_domain for _, d, _ in a.urls
+        )
+
+    naming_me = [a for a in answers if data.clinic.id in a.clinics]
+    web_answers = sum(1 for a in answers if cites_web(a))
+    web_share = (100 * web_answers / len(answers)) if answers else None
+    if answers and not website_domain:
+        web_share = 0.0
+    directory_share = _share(
+        naming_me, lambda a: any(k in ("doctoralia", "directory") for _, _, k in a.urls)
+    )
+    if answers and not naming_me:
+        directory_share = 0.0
+    light = lights(me.combined, web_share, directory_share, data.clinic.rating,
+                   data.clinic.reviews)  # fmt: skip
+    by_area = {x.id: x.level for x in light}
+    compared = sorted([me, *competitors], key=lambda r: -(r.combined or 0))
+    leader_appearances = round((leader.combined or 0) * total / 100)
+    clinic_ids = [data.clinic.id, *[c.clinic_id for c in competitors]]
+    names = {r.clinic_id: r.name for r in data.ranking}
+
+    def row(r):
+        return {
+            "nombre": r.name, "es_cliente": r.clinic_id == data.clinic.id,
+            "combinado": _pct(r.combined), "bajo": _pct(r.ci_low), "alto": _pct(r.ci_high),
+            "chatgpt": _pct(r.chatgpt), "google": _pct(r.google),
+            "posicion": _position(r.avg_position),
+            "cuota": _pct(r.mention_share), "ancho": max(r.combined or 0, 0.5),
+        }  # fmt: skip
+
+    return {
+        "cifras": {
+            "indice": _pct(me.combined),
+            "bajo": _pct(me.ci_low),
+            "alto": _pct(me.ci_high),
+            "puesto": position,
+            "total": len(data.ranking),
+            "posicion": _position(me.avg_position),
+        },
+        "semaforo": [
+            {
+                "nombre": x.name,
+                "mide": x.measures,
+                "nivel": x.level,
+                "valor": x.value,
+                "clase": {"Bien": "bien", "Regular": "regular", "Bajo": "bajo"}.get(x.level, "sin"),
+            }
+            for x in light
+        ],  # fmt: skip
+        "barras": [row(r) for r in compared],
+        "hallazgos": findings(
+            clinic=data.clinic.name,
+            appearances=appearances,
+            total=total,
+            leader=leader.name,
+            leader_appearances=leader_appearances,
+            is_leader=me.clinic_id == leader.clinic_id,
+            rating=data.clinic.rating,
+            reviews=data.clinic.reviews,
+            web_answers=web_answers,
+            chatgpt=me.chatgpt,
+            google=me.google,
+        ),  # fmt: skip
+        "competencia": [row(r) for r in compared],
+        "cuadricula": {
+            "clinicas": [
+                {"nombre": names.get(cid, "—"), "es_cliente": cid == data.clinic.id}
+                for cid in clinic_ids
+            ],
+            "grupos": question_grid(answers, clinic_ids),
+        },
+        "consistencia": consistency(answers, data.clinic.id),
+        "plan": [
+            {
+                **r,
+                "impacto": impact(r["id"], by_area),
+                "quien": "Tu equipo en el Plan Medir · nosotros en el Plan Gestionado",
+            }
+            for r in recs
+        ],  # fmt: skip
+        "web_respuestas": web_answers,
+    }
 
 
 def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict[str, Any]:
@@ -337,6 +445,7 @@ def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict
         "mantener": position <= 3,
     }
 
+    recs = _recommendations(values, applies)
     focus = [data.clinic.id, *[c.clinic_id for c in competitors]]
     examples = [
         _example_context(e, data, allowed)
@@ -379,8 +488,11 @@ def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict
             "tiene_brecha": gap,
             "lider": {"nombre": leader.name, "indice": _pct(leader.combined)},
         },
-        "recomendaciones": _recommendations(values, applies),
+        "recomendaciones": recs,
         "profundo": _deep_context(data, competitors, allowed),
+        "nuevo": _redesign(
+            data, me, competitors, leader, position, appearances, website_domain, recs
+        ),
         "metodo": {
             "preguntas": 10,
             "repeticiones": 3,

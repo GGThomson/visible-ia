@@ -70,3 +70,70 @@ footer { margin-top: 1.2em; font-size: 11pt; color: #51607A; border-top: 1px sol
 }
 ul.hechas { list-style: none; padding-left: 0.4em; }
 tr.grupo td { background: var(--suave); }
+
+/* ---- Free diagnostic, redesign 28/09 (body.diag). Header/footer come from Chromium. ---- */
+.diag { font-family: "IBM Plex Sans", "Segoe UI", Arial, sans-serif; color: #0F1B2D; }
+.diag h1, .diag h2, .diag h3, .diag .cifra-caja b, .diag .dato b { font-family: "Source Serif 4", Georgia, serif; font-weight: 600; }
+.diag h2 { font-size: 17pt; border-bottom: 2px solid #D9DEE7; margin-top: 1.1em; }
+.diag h2.sub { font-size: 13pt; border: 0; margin: 1em 0 0.4em; }
+.diag section { break-inside: auto; }
+.diag h2, .diag h3 { break-after: avoid; }
+.diag .tarjeta, .diag table, .diag .cifras, .diag .semaforo, .diag .barras, .diag .proximo,
+.diag .brecha, .diag blockquote, .diag .consistencia, .diag .hallazgos { break-inside: avoid; }
+.diag .resumen { break-after: page; }
+.diag .banda { background: #0F1B2D; color: #FFFFFF; border-radius: 10px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: flex-start; gap: 1em; }
+.diag .banda h1 { color: #FFFFFF; font-size: 22pt; margin: 2px 0 4px; }
+.diag .banda p { margin: 0; color: #C9D1E0; font-size: 11pt; }
+.diag .banda .banda-etiqueta { font-family: "IBM Plex Mono", Consolas, monospace; color: #C9D1E0; }
+.diag .marca-clara { font-family: "Source Serif 4", Georgia, serif; font-size: 16pt; color: #FFFFFF; }
+.diag .cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0 4px; }
+.diag .cifra-caja { border: 1px solid #D9DEE7; border-radius: 10px; padding: 10px 12px; }
+.diag .cifra-caja b { display: block; font-size: 24pt; line-height: 1.1; }
+.diag .cifra-caja:first-child b { color: var(--acento); }
+.diag .cifra-caja span { display: block; font-weight: 600; font-size: 11pt; }
+.diag .cifra-caja small { display: block; color: #51607A; font-size: 11pt; line-height: 1.3; }
+.diag .semaforo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.diag .luz { display: flex; gap: 8px; align-items: flex-start; border: 1px solid #D9DEE7; border-radius: 10px; padding: 8px 10px; }
+.diag .luz .punto { flex: none; width: 12px; height: 12px; border-radius: 50%; margin-top: 4px; background: #8A94A6; }
+.diag .luz.bien .punto { background: #1E7F4F; } .diag .luz.regular .punto { background: #B7791F; } .diag .luz.bajo .punto { background: #B42318; }
+.diag .luz b { display: block; font-size: 11pt; line-height: 1.2; }
+.diag .luz .nivel { display: block; font-weight: 600; font-size: 11pt; }
+.diag .luz.bien .nivel { color: #1E7F4F; } .diag .luz.regular .nivel { color: #8A5A12; } .diag .luz.bajo .nivel { color: #B42318; }
+.diag .luz small { display: block; color: #51607A; font-size: 11pt; }
+.diag .barras.compactas { gap: 0.3em; margin: 0.2em 0; }
+.diag .barras.compactas .riel { height: 1em; }
+.diag .barra .relleno { background: #51607A; }
+.diag .barra.cliente .relleno { background: var(--acento); }
+.diag .hallazgos { margin: 0.2em 0 0.6em; padding-left: 1.2em; }
+.diag .hallazgos li { margin: 0.25em 0; }
+.diag .proximo { border: 2px solid var(--acento); color: #0F1B2D; border-radius: 10px; padding: 10px 14px; margin-top: 10px; }
+.diag .proximo b { color: var(--acento); }
+.diag .tarjeta { border: 1px solid #D9DEE7; border-radius: 10px; padding: 10px 14px; margin: 0 0 10px; }
+.diag .tarjeta h3 { margin-top: 0; }
+.diag .tarjeta .pregunta, .diag .arreglo .pregunta { font-weight: 600; margin-bottom: 0.3em; }
+.diag blockquote { margin: 0.4em 0; padding-left: 0.7em; border-left: 3px solid #D9DEE7; font-size: 11pt; color: #3c4b4f; }
+.diag blockquote small { color: #51607A; font-size: 11pt; }
+.diag .tabla-comp small { color: #51607A; font-size: 11pt; }
+.diag .leyenda-tabla { padding-left: 1.2em; margin: 0.3em 0; }
+.diag .cuadricula { margin: 0.3em 0 0.6em; }
+.diag .cuadricula th { font-size: 11pt; vertical-align: bottom; }
+.diag .cuadricula .col-clinica { text-align: center; width: 13%; }
+.diag .cuadricula .col-clinica.cliente { color: var(--acento); }
+.diag .cuadricula td.pregunta { font-size: 11pt; line-height: 1.3; }
+.diag .cuadricula td.puntos { text-align: center; white-space: nowrap; }
+.diag .p { display: inline-block; width: 7px; height: 7px; border-radius: 50%; border: 1.3px solid #9AA5B8; margin: 0 1px; }
+.diag .p.lleno { background: #51607A; border-color: #51607A; }
+.diag td.cliente .p.lleno { background: var(--acento); border-color: var(--acento); }
+.diag .sep { display: inline-block; width: 1px; height: 9px; background: #D9DEE7; margin: 0 3px; vertical-align: middle; }
+.diag .consistencia { margin-top: 0.4em; }
+.diag td.url { word-break: break-all; }
+.diag .etiquetas { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0.3em 0 0; font-size: 11pt; color: #51607A; }
+.diag .etiquetas span { font-family: "IBM Plex Mono", Consolas, monospace; }
+.diag .pasos-metodo { padding-left: 1.2em; }
+.diag .pasos-metodo li { margin-bottom: 0.5em; }
+.diag .glosario { display: grid; grid-template-columns: 11em 1fr; gap: 0.3em 1em; margin: 0.4em 0 1em; }
+.diag .glosario dt { font-weight: 600; }
+.diag .glosario dd { margin: 0; }
+.diag .anexo { break-before: page; }
+.diag .cabeza { break-inside: avoid; }
+.diag td.num { font-family: "IBM Plex Sans", "Segoe UI", Arial, sans-serif; font-variant-numeric: tabular-nums; }

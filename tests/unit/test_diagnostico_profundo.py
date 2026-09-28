@@ -132,10 +132,8 @@ def test_report_shows_the_new_sections_numbered_and_masked():
                                       data.market_names, None, reason_filter(data))  # fmt: skip
     html = render_diagnostic(build_context(data))
     sections = re.findall(r'data-seccion="([^"]+)"', html)
-    assert sections == ["1-indice", "2-ejemplos", "razones", "preguntas", "3-fuentes",
-                        "faltantes", "4-brecha", "5-recomendaciones", "6-metodo"]  # fmt: skip
-    numbers = [int(n) for n in re.findall(r"<h2>(\d+)\. ", html)]
-    assert numbers == list(range(1, 10))
+    assert sections == ["resumen", "competencia", "preguntas", "razones", "faltantes", "plan",
+                        "metodo"]  # fmt: skip
     assert "destaca por sus reseñas" in html and "Ana Pérez" not in html
     assert "doctoralia.pe/x" in html and "None" not in html
 

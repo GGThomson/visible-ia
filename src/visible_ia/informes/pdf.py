@@ -21,8 +21,11 @@ class PdfError(RuntimeError):
     pass
 
 
-def html_to_pdf(html: str, path: Path) -> Path:
-    """Render with headless Chromium in A4, using the page's own @page size and margins."""
+def html_to_pdf(
+    html: str, path: Path, header: str | None = None, footer: str | None = None
+) -> Path:
+    """Render with headless Chromium in A4, using the page's own @page size and margins.
+    With `header`/`footer` (Chromium templates) they repeat on every page."""
     from playwright.sync_api import Error as PlaywrightError
     from playwright.sync_api import sync_playwright
 
@@ -34,8 +37,19 @@ def html_to_pdf(html: str, path: Path) -> Path:
                 page = browser.new_page()
                 page.set_content(html, wait_until="load")
                 page.evaluate("document.fonts.ready")  # web fonts (or their fallback) in place
+                extra = {}
+                if header or footer:
+                    extra = {
+                        "display_header_footer": True,
+                        "header_template": header or "<span></span>",
+                        "footer_template": footer or "<span></span>",
+                    }
                 page.pdf(
-                    path=str(path), format="A4", print_background=True, prefer_css_page_size=True
+                    path=str(path),
+                    format="A4",
+                    print_background=True,
+                    prefer_css_page_size=True,
+                    **extra,
                 )
             finally:
                 browser.close()

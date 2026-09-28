@@ -114,6 +114,29 @@
   - al enviar: plazo y enlace para adelantarlo por WhatsApp.
 - Los pedidos por WhatsApp no quedan en la base con su consentimiento: se registran a mano.
 
+### C9b-C008 · Rediseño del diagnóstico gratis (Director, 28/09)
+- **Estado:** ✅ en el PR #67.
+- **Estructura:**
+  1. Resumen, solo en la página 1: banda con la clínica; 3 cifras (índice con rango, puesto y posición promedio); semáforo de 4 áreas; barras; 3 hallazgos; próximo paso.
+  2. Tú frente a tu competencia.
+  3. En qué preguntas apareces: cuadrícula y consistencia.
+  4. Por qué la IA eligió a tu competencia, con 2 respuestas de ejemplo.
+  5. Dónde te falta estar.
+  6. Tu plan de acción.
+  - Anexo «Método Eminia» y glosario.
+- **Reglas:**
+  - semáforo en `informes/semaforo.toml` (criterio Eminia), con pruebas en `tests/unit/test_semaforo.py`;
+  - esfuerzo de cada arreglo en `recomendaciones.toml`.
+- **Diseño:**
+  - letras en `informes/fuentes/` (OFL), incrustadas en el HTML;
+  - encabezado y pie de Chromium con «Página X de N»;
+  - las secciones comparten página sin cortar tarjetas ni tablas.
+  - Resultado: **7 páginas** (6 más el anexo).
+- **Scripts:**
+  - `scripts/ejemplo_diagnostico.py` saca todas las páginas como imagen con pdf.js;
+  - `scripts/imagen_informe_landing.py` saca la portada para la landing;
+  - capturas de la landing a doble resolución.
+
 ## Demo de la fase
 - El Director ve en la vista previa del PR la landing nueva en su celular y en la computadora, el panel y un PDF de ejemplo con la marca Eminia.
 - Si los aprueba, se publica en Cloudflare Pages al fusionar a `main`.

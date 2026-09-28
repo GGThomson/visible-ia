@@ -297,3 +297,58 @@ class ModelChooser:
             searches=0,
         )
         return parse_picks(raw)
+
+
+# --- redesign (28/09): question grid and repetition consistency ------------------------------
+
+SURFACE_ORDER = ("chatgpt_api", "google_ai_mode")
+
+
+def _surface_then_id(a: Answer) -> tuple[int, int]:
+    return (SURFACE_ORDER.index(a.surface) if a.surface in SURFACE_ORDER else 9, a.id)
+
+
+def question_grid(answers: list[Answer], clinic_ids: list[int]) -> list[dict]:
+    """Per question, one list of dots per clinic (True = that answer names it), ChatGPT first,
+    then Google, in answer order; grouped by the question's form."""
+    by_question: dict[int, list[Answer]] = {}
+    for a in answers:
+        by_question.setdefault(a.question_id, []).append(a)
+    groups = []
+    for form, label in FORM_LABELS.items():
+        rows = []
+        for qa in by_question.values():
+            if qa[0].form != form:
+                continue
+            ordered = sorted(qa, key=_surface_then_id)
+            rows.append({
+                "pregunta": qa[0].question,
+                "celdas": [[cid in a.clinics for a in ordered] for cid in clinic_ids],
+            })  # fmt: skip
+        if rows:
+            groups.append({"forma": label, "preguntas": sorted(rows, key=lambda r: r["pregunta"])})
+    return groups
+
+
+def consistency(answers: list[Answer], clinic_id: int) -> list[dict]:
+    """Per surface: in how many questions the clinic was named in all repetitions, in some,
+    and in none."""
+    out = []
+    for surface in SURFACE_ORDER:
+        per_question: dict[int, list[bool]] = {}
+        for a in answers:
+            if a.surface == surface:
+                per_question.setdefault(a.question_id, []).append(clinic_id in a.clinics)
+        if not per_question:
+            continue
+        named = [sum(v) for v in per_question.values()]
+        reps = max(len(v) for v in per_question.values())
+        out.append({
+            "superficie": SURFACE_LABELS[surface],
+            "repeticiones": reps,
+            "todas": sum(1 for v in per_question.values() if v and all(v)),
+            "algunas": sum(1 for n, v in zip(named, per_question.values(), strict=True)
+                           if 0 < n < len(v)),
+            "ninguna": sum(1 for n in named if n == 0),
+        })  # fmt: skip
+    return out

@@ -90,14 +90,8 @@ def _data(**overrides):
 def test_report_has_the_six_parts_and_no_blank_values():
     html = render_diagnostic(build_context(_data()))
     sections = re.findall(r'data-seccion="([^"]+)"', html)
-    assert sections == [
-        "1-indice",
-        "2-ejemplos",
-        "3-fuentes",
-        "4-brecha",
-        "5-recomendaciones",
-        "6-metodo",
-    ]
+    # Without stored answers (no C-008 data) the question grid is left out.
+    assert sections == ["resumen", "competencia", "razones", "faltantes", "plan", "metodo"]
     assert "None" not in html and "{{" not in html
     assert "No garantizamos un puesto #1" in html
     assert "entre 0 % y" not in html  # margins come from the data, never defaulted
@@ -179,8 +173,12 @@ def test_brand_comes_from_variables():
         "web": "w",
     }
     html = render_diagnostic(build_context(_data(), brand))
-    assert "--primario: #111111" in html and 'src="https://x.pe/logo.png"' in html
-    assert "visible-ia" not in html.split("<footer>")[1]
+    assert "--primario: #111111" in html and "Agencia X" in html and "visible-ia" not in html
+    from visible_ia.informes.render import diagnostic_frame
+
+    header, footer = diagnostic_frame(build_context(_data(), brand))
+    assert 'src="https://x.pe/logo.png"' in header and "Agencia X" in footer
+    assert 'class="pageNumber"' in footer and 'class="totalPages"' in footer
 
 
 def test_text_is_at_least_11pt():
@@ -208,8 +206,8 @@ def test_footer_hides_an_empty_contact():
 
     brand = load_brand()
     html = render_diagnostic(build_context(_data(), {**brand, "contacto": ""}))
-    footer = html.split("<footer>")[1]
-    assert " ·  · " not in footer and "@" not in footer
+    proximo = html.split('class="proximo"')[1].split("</div>")[0]
+    assert "15 minutos." in proximo and " · ." not in proximo
 
 
 def test_default_brand_is_eminia_with_the_embedded_logo():

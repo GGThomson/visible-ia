@@ -3,8 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Eminia fonts; without internet the PDF falls back to the local ones in estilos.css. -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:wght@600&display=swap">
 <title>{{ clinica }} · Kit de atribución</title>
 <style>
 :root {
@@ -12,6 +10,7 @@
   --acento: {{ marca.color_acento }};
   --suave: {{ marca.color_suave }};
 }
+{{ letras|safe }}
 {{ estilos|safe }}
 </style>
 </head>

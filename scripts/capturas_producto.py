@@ -232,7 +232,7 @@ def _encode(page, png: Path, name: str, width: int) -> None:
     """PNG -> web/marca/<name>.webp and .jpg (under MAX_KB), resized to `width`, in Chromium."""
     data = "data:image/png;base64," + base64.b64encode(png.read_bytes()).decode()
     for fmt, ext in (("image/webp", "webp"), ("image/jpeg", "jpg")):
-        for quality in (0.82, 0.74, 0.66, 0.58, 0.5):
+        for quality in (0.9, 0.86, 0.82, 0.76, 0.7, 0.62):
             uri = page.evaluate(
                 """async ([src, w, fmt, q]) => {
                     const img = new Image(); img.src = src; await img.decode();
@@ -252,7 +252,7 @@ def _encode(page, png: Path, name: str, width: int) -> None:
 
 
 def _a4_top(browser, html: str, png: Path, height: int = 1000) -> None:
-    page = browser.new_page(viewport={"width": 794, "height": height}, device_scale_factor=2)
+    page = browser.new_page(viewport={"width": 794, "height": height}, device_scale_factor=1.5)
     page.set_content(html, wait_until="load")
     page.evaluate("document.fonts.ready")
     page.add_style_tag(content="body { padding: 16mm 15mm; }")
@@ -281,7 +281,7 @@ def main(video: bool) -> None:
         with sync_playwright() as p:
             browser = p.chromium.launch()
             shots = {}
-            page = browser.new_page(viewport={"width": 1200, "height": 750}, device_scale_factor=1.5)
+            page = browser.new_page(viewport={"width": 1200, "height": 750}, device_scale_factor=2)
             page.goto(panel)
             page.wait_for_selector("#contenido:not([hidden])", timeout=30000)
             page.evaluate("document.fonts.ready")
@@ -308,9 +308,10 @@ def main(video: bool) -> None:
 
             encoder = browser.new_page()
             encoder.set_content("<html><body></body></html>")
+            # Double resolution for sharp images on retina screens (the frame shows ~920 px).
             for name, png in shots.items():
-                _encode(encoder, png, name, 1200 if "panel" in name or "checklist" in name else 900)
-            _encode(encoder, OUT / "informe-ejemplo.jpg", "producto-diagnostico", 900)
+                _encode(encoder, png, name, 1840 if "panel" in name or "checklist" in name else 1190)
+            # producto-diagnostico (the report's cover) comes from scripts/imagen_informe_landing.py
 
             if video:
                 ctx = browser.new_context(viewport={"width": 1200, "height": 750},
