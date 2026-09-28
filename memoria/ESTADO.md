@@ -3,7 +3,7 @@
 
 **Proyecto:** visible-ia: visibilidad de clínicas locales en asistentes de IA  
 **Tipo:** A (SaaS) + J (datos / IA)  
-**Última actualización:** 2026-09-26  
+**Última actualización:** 2026-09-27  
 
 ## Dónde estamos
 - **Fase actual:** 5 · Construcción. Fase 4 aprobada el 26/09: arquitectura + plan (tags `fase-4-completa`, `plan-aprobado`)
