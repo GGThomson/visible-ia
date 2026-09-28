@@ -4,32 +4,110 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>visible-ia · ¿La IA recomienda tu clínica?</title>
-  <meta name="description" content="Medimos si ChatGPT y Google recomiendan tu clínica en tu distrito de Lima, frente a tu competencia. Próximamente.">
+  <meta name="description" content="Medimos si ChatGPT y Google recomiendan tu clínica en tu distrito de Lima, frente a tu competencia. Pide tu informe gratis.">
   <meta name="robots" content="noindex">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <style>
-    main { max-width: 40rem; padding-top: 4rem; }
-    .badge { display: inline-block; padding: .2rem .7rem; border-radius: 1rem;
-             background: var(--pico-primary-background); color: var(--pico-primary-inverse);
-             font-size: .85rem; }
+    :root { --acento: #E36414; }
+    main { max-width: 44rem; padding-top: 2.5rem; }
+    h1 { margin-bottom: .6rem; }
+    .lead { font-size: 1.15rem; }
+    .pasos { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
+    .pasos article { margin: 0; }
+    .barra { display: grid; grid-template-columns: 9rem 1fr; gap: .6rem; align-items: center; margin: .35rem 0; }
+    .riel { background: var(--pico-muted-border-color); border-radius: .3rem; height: 1.3rem; }
+    .relleno { background: var(--pico-primary-background); height: 100%; border-radius: .3rem; }
+    .barra.tu .relleno { background: var(--acento); }
+    .barra.tu span { color: var(--acento); font-weight: 700; }
+    .valor { font-size: .9rem; }
+    .trampa { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    #resultado[hidden] { display: none; }
+    small.nota { color: var(--pico-muted-color); }
+    @media (max-width: 480px) { .barra { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
   <main class="container">
-    <span class="badge">Próximamente</span>
     <h1>¿ChatGPT y Google recomiendan tu clínica?</h1>
-    <p>
+    <p class="lead">
       Cada vez más pacientes en Lima le preguntan a la IA dónde atenderse. <strong>visible-ia</strong>
-      mide si tu clínica aparece cuando alguien pregunta por tu especialidad en Miraflores,
-      San Isidro o Surco, frente a tu competencia, y qué hacer para aparecer más.
+      mide si tu clínica aparece cuando alguien busca tu especialidad en tu distrito, frente a tu
+      competencia, y qué hacer para aparecer más.
     </p>
-    <p>
-      Implantología · Estética dental · Medicina estética · Dermatología
-    </p>
-    <p><em>Muy pronto podrás pedir aquí tu informe gratis.</em></p>
+    <p><a href="#pedir" role="button">Pide tu informe gratis</a></p>
+
+    <section>
+      <h2>Cómo funciona</h2>
+      <div class="pasos">
+        <article><strong>1. Preguntamos como un paciente.</strong><br>10 preguntas reales de tu especialidad y distrito, 3 veces cada una, a ChatGPT y a Google en su Modo IA.</article>
+        <article><strong>2. Contamos a quién nombra.</strong><br>En cuántas respuestas apareces tú y tus competidores, con un rango honesto de variación.</article>
+        <article><strong>3. Te decimos qué hacer.</strong><br>Qué fuentes usa la IA en tu mercado y 3 acciones concretas para aparecer más.</article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Así se ve tu informe</h2>
+      <p>Ejemplo basado en una medición real de un mercado de Lima, con nombres y datos cambiados. % de respuestas en que la IA nombró a cada clínica.</p>
+      <div class="barra"><span>Clínica A</span><div><div class="riel"><div class="relleno" style="width:50%"></div></div><div class="valor">50 % (entre 38 % y 62 %)</div></div></div>
+      <div class="barra"><span>Clínica B</span><div><div class="riel"><div class="relleno" style="width:37%"></div></div><div class="valor">37 % (entre 26 % y 49 %)</div></div></div>
+      <div class="barra"><span>Clínica C</span><div><div class="riel"><div class="relleno" style="width:30%"></div></div><div class="valor">30 % (entre 20 % y 43 %)</div></div></div>
+      <div class="barra tu"><span>Tu clínica</span><div><div class="riel"><div class="relleno" style="width:10%"></div></div><div class="valor">10 % (entre 5 % y 20 %) · excelentes reseñas en Google Maps</div></div></div>
+      <p>En este ejemplo, una clínica con excelentes reseñas en Google Maps casi no aparece en la IA. El informe (3–4 páginas, en PDF) incluye además respuestas reales de cada IA, las fuentes que consulta en tu mercado, tu brecha entre Maps y la IA, y 3 recomendaciones.</p>
+    </section>
+
+    <section id="pedir">
+      <h2>Pide tu informe gratis</h2>
+      <p>Por ahora medimos implantología, estética dental, medicina estética y dermatología en Miraflores, San Isidro y Surco.</p>
+      <form id="formulario" novalidate>
+        <label>Tu nombre
+          <input name="name" required minlength="2" maxlength="120" autocomplete="name">
+        </label>
+        <label>Nombre de la clínica
+          <input name="clinic_name" required minlength="2" maxlength="160">
+        </label>
+        <div class="grid">
+          <label>Especialidad
+            <select name="category_code" required>
+              <option value="" selected disabled>Elige una</option>
+              <option value="IMP">Implantología</option>
+              <option value="EDE">Estética dental</option>
+              <option value="MES">Medicina estética</option>
+              <option value="DER">Dermatología</option>
+            </select>
+          </label>
+          <label>Distrito
+            <select name="district" required>
+              <option value="" selected disabled>Elige uno</option>
+              <option>Miraflores</option>
+              <option>San Isidro</option>
+              <option>Surco</option>
+              <option>Otro</option>
+            </select>
+          </label>
+        </div>
+        <label>WhatsApp o correo
+          <input name="contact" required minlength="6" maxlength="160" autocomplete="tel email" placeholder="+51 9xx xxx xxx o tu@correo.com">
+        </label>
+        <div class="trampa" aria-hidden="true">
+          <label>Deja este campo vacío <input name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <label>
+          <input type="checkbox" name="consent" required>
+          Acepto que visible-ia me contacte por este medio para enviarme el informe. Solo usamos tus datos para eso y puedes pedir que los borremos cuando quieras.
+        </label>
+        <button type="submit" id="enviar">Quiero mi informe gratis</button>
+        <p id="error" role="alert" hidden></p>
+      </form>
+      <article id="resultado" hidden>
+        <strong>¡Listo!</strong> Recibimos tu pedido. Te escribiremos en los próximos días con tu informe.
+      </article>
+    </section>
+
     <footer>
-      <small>No prometemos un "puesto #1": medimos con repeticiones y te mostramos el margen de variación.</small>
+      <small class="nota">No prometemos un "puesto #1": medimos con repeticiones y te mostramos el margen de variación. Nadie controla lo que responde la IA.</small>
     </footer>
   </main>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

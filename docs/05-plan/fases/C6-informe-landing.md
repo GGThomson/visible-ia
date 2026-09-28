@@ -47,7 +47,7 @@
 - **Notas para Claude Code:** documentar en el README el paso `uv run playwright install chromium`.
 
 ### C6-T03 · Landing con formulario de informe gratis (HU-26)
-- **Estado:** ⚪
+- **Estado:** ✅ (27/09: migración 0005 en dev y prod; formulario probado de punta a punta en la vista previa)
 - **Qué:** completar `web/index.html`:
   - Explicación del servicio y ejemplo anonimizado del informe.
   - Formulario: nombre, clínica, rubro, distrito, contacto, consentimiento de contacto.

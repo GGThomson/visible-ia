@@ -38,3 +38,6 @@ data/propuestas/
 
 # Generated reports (PDF): kept locally and in Supabase Storage, not in Git
 salida/
+
+# Generated at deploy time by web.yml (Supabase URL + public anon key)
+web/config.js
