@@ -47,8 +47,19 @@
     return result.data;
   }
 
+  async function renderSchema(site, market) {
+    var rows = await query(client.from("clinics").select("name, address, website, instagram, maps_url").eq("id", site.clinic_id));
+    if (!rows.length || !market) return;
+    var c = rows[0];
+    $("schema").value = jsonLdScript(buildJsonLd({
+      name: c.name, category: market.category_code, district: market.district,
+      address: c.address, website: c.website, instagram: c.instagram, mapsUrl: c.maps_url
+    }));
+  }
+
   async function renderSite(site, clinics, markets) {
     var market = markets[site.market_id];
+    await renderSchema(site, market);
     $("titulo").textContent = clinics[site.clinic_id] || "Tu clínica";
     var ranking = await query(client.from("v_panel_ranking").select("*").eq("market_id", site.market_id).order("month", { ascending: false }));
     if (!ranking.length) {
@@ -139,6 +150,11 @@
   async function main() {
     if (!client) return fail("El panel no está disponible en este momento.");
     $("salir").addEventListener("click", async function () { await client.auth.signOut(); window.location.replace("login.html"); });
+    $("copiar-schema").addEventListener("click", async function () {
+      try { await navigator.clipboard.writeText($("schema").value); }
+      catch (e) { $("schema").select(); document.execCommand("copy"); }
+      $("copiado").hidden = false;
+    });
     var session = (await client.auth.getSession()).data.session;
     if (!session) { window.location.replace("login.html"); return; }
     try {

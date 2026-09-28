@@ -105,6 +105,10 @@ def test_magic_link_session_opens_only_my_panel(world, site, page):  # noqa: F81
     assert "Primer mes" in page.inner_text("#cambio")
     assert page.inner_text("#google") == "—"  # no Google answers in this test market
 
+    schema = page.input_value("#schema")
+    assert '"@type": "Dentist"' in schema and '"name": "Clínica A"' in schema
+    assert "Clínica B" not in schema
+
     box = page.locator("#tareas input[type=checkbox]").first
     box.check()
     page.wait_for_timeout(1500)

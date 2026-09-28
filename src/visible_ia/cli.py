@@ -1480,3 +1480,40 @@ def checklist_generar(
             typer.echo(f"Sede {site_id}: " + " → ".join(t.code for t in tasks))
     if not sites:
         typer.echo("No hay sedes activas.")
+
+
+@sede_app.command("schema")
+def sede_schema(
+    sede: int = typer.Argument(..., help="Id de la sede."),
+    telefono: str = typer.Option(None, help="Con código de país, p. ej. +51 1 234 5678."),
+    horario: list[str] = typer.Option(
+        None, help="Repetible, formato schema.org: 'Mo-Fr 09:00-19:00', 'Sa 09:00-13:00'."
+    ),
+    otra_url: list[str] = typer.Option(None, help="Otros perfiles (Doctoralia, Facebook…)."),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Genera el schema JSON-LD de la sede, listo para pegar en su web (HU-18)."""
+    from visible_ia.jsonld import build, script_tag, validate
+
+    with _connect_or_exit(_resolve_env(env)) as conn, conn.cursor() as cur:
+        cur.execute(
+            "select c.name, m.category_code, m.district, c.address, c.website, c.instagram, "
+            "c.maps_url from public.sites s join public.clinics c on c.id = s.clinic_id "
+            "join public.markets m on m.id = s.market_id where s.id = %s",
+            (sede,),
+        )
+        row = cur.fetchone()
+    if row is None:
+        typer.echo(f"No existe la sede {sede}")
+        raise typer.Exit(code=1)
+    name, category, district, address, website, instagram, maps_url = row
+    data = build(
+        name=name, category=category, district=district, address=address, website=website,
+        instagram=instagram, maps_url=maps_url, phone=telefono, opening_hours=horario or None,
+        extra_same_as=otra_url or None,
+    )  # fmt: skip
+    errors = validate(data)
+    if errors:
+        typer.echo("El schema tiene problemas:\n- " + "\n- ".join(errors))
+        raise typer.Exit(code=1)
+    typer.echo(script_tag(data))
