@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ clinica.nombre }} · Reporte mensual · {{ mercado.mes }}</title>
+<style>
+:root {
+  --primario: {{ marca.color_primario }};
+  --acento: {{ marca.color_acento }};
+  --suave: {{ marca.color_suave }};
+}
+{{ estilos|safe }}
+</style>
+</head>
+<body>
+
+<header class="portada">
+  <div>
+    <h1>Tu presencia en la IA · {{ mercado.mes }}</h1>
+    <p><b>{{ clinica.nombre }}</b> · {{ mercado.tratamiento|capitalize }} en {{ mercado.distrito }}</p>
+  </div>
+  <div class="marca">
+    {% if marca.logo_url %}<img src="{{ marca.logo_url }}" alt="{{ marca.nombre }}">{% else %}{{ marca.nombre }}{% endif %}
+  </div>
+</header>
+
+<section data-seccion="resumen">
+  <h2>1. Este mes</h2>
+  <p class="frase">{{ frase }}</p>
+  <div class="brecha">
+    <div class="dato"><b>{{ actual.combinado }} %</b>índice combinado</div>
+    <div class="dato"><b>{{ actual.chatgpt }} %</b>ChatGPT</div>
+    <div class="dato"><b>{{ actual.google }} %</b>Google (Modo IA)</div>
+  </div>
+  <p class="nota">Puesto {{ clinica.posicion }} de {{ clinica.total }} clínicas medidas. El índice es el % de respuestas de la IA en que te nombran.</p>
+</section>
+
+<section data-seccion="evolucion">
+  <h2>2. Evolución</h2>
+  <div class="barras">
+    {% for e in evolucion %}
+    <div class="barra{% if loop.last %} cliente{% endif %}">
+      <div class="nombre">{{ e.mes|capitalize }}</div>
+      <div>
+        <div class="riel"><div class="relleno" style="width: {{ e.ancho }}%"></div></div>
+        <div class="valor">{{ e.combinado }} % (rango {{ e.rango }} %) · últimos 3 meses {{ e.ventana }} % · {{ e.cambio }}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% if ventana.meses >= 2 %}
+  <p>En los últimos {{ ventana.meses }} meses juntos apareces en {{ ventana.indice }} % de las respuestas (entre {{ ventana.bajo }} % y {{ ventana.alto }} %). Esta cifra, con más respuestas, es la que mejor muestra tu tendencia.</p>
+  {% else %}
+  <p>Es el primer mes medido: desde el próximo verás si subes o bajas, y con 3 meses tendrás una tendencia más firme.</p>
+  {% endif %}
+</section>
+
+<section data-seccion="competidores">
+  <h2>3. Frente a tu competencia</h2>
+  <table>
+    <thead><tr><th>Clínica</th><th class="num">{{ mercado.mes|capitalize }}</th><th class="num">{% if anterior %}{{ anterior.mes|capitalize }}{% else %}Mes anterior{% endif %}</th></tr></thead>
+    <tbody>
+      {% for c in competidores %}<tr{% if c.es_cliente %} class="cliente"{% endif %}><td>{{ c.nombre }}</td><td class="num">{{ c.actual }} %</td><td class="num">{% if c.anterior != "—" %}{{ c.anterior }} %{% else %}—{% endif %}</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section data-seccion="fuentes">
+  <h2>4. Dónde se informa la IA en tu mercado</h2>
+  <table>
+    <thead><tr><th>Sitio</th><th>Tipo</th><th class="num">% de respuestas</th></tr></thead>
+    <tbody>{% for s in fuentes.top %}<tr><td>{{ s.dominio }}</td><td>{{ s.tipo }}</td><td class="num">{{ s.pct }} %</td></tr>{% endfor %}</tbody>
+  </table>
+</section>
+
+<section data-seccion="tareas">
+  <h2>5. Tu checklist</h2>
+  {% if tareas.hechas %}<p><b>Hechas:</b></p><ul class="hechas">{% for t in tareas.hechas %}<li>✔ {{ t }}</li>{% endfor %}</ul>{% endif %}
+  {% if tareas.pendientes %}<p><b>Pendientes, en orden de prioridad:</b></p><ol class="recomendaciones">{% for t in tareas.pendientes %}<li>{{ t }}</li>{% endfor %}</ol>{% endif %}
+  {% if not tareas.hechas and not tareas.pendientes %}<p>Tu checklist se prepara con tu primer mes medido.</p>{% endif %}
+</section>
+
+<section data-seccion="calibracion">
+  <h2>6. Cómo medimos y comparación con las apps</h2>
+  <p>En {{ metodo.mes }} hicimos las mismas 10 preguntas 3 veces a ChatGPT (por su API, con búsqueda web y ubicación en Lima) y a Google Modo IA: {{ metodo.respuestas }} respuestas. Un cambio de menos de {{ actual.detectable }} puntos entre dos meses no se distingue del azar. <b>No garantizamos un puesto #1.</b></p>
+  {% if calibracion %}
+  <p>Para comprobar que la API se parece a lo que ve un paciente en su teléfono, también preguntamos a mano en las apps:</p>
+  <table>
+    <thead><tr><th>App</th><th class="num">Clínicas que también nombró la API</th><th>Líder en la app / en la API</th></tr></thead>
+    <tbody>{% for c in calibracion %}<tr><td>{{ c.app }} ({{ c.respuestas }} respuestas)</td><td class="num">{{ c.coincidencia }} %</td><td>{{ c.lider_app }} / {{ c.lider_api }}{% if c.mismo_lider %} ✔{% endif %}</td></tr>{% endfor %}</tbody>
+  </table>
+  {% if alerta_calibracion %}<p class="frase"><b>Aviso:</b> por segundo mes seguido, menos de la mitad de las clínicas que nombra la app de ChatGPT aparecen en la API. Estamos revisando el método de medición.</p>{% endif %}
+  {% else %}
+  <p class="nota">Este mes no hubo muestra manual de las apps.</p>
+  {% endif %}
+</section>
+
+<footer>{{ marca.nombre }} · {{ marca.lema }}{% if marca.contacto %} · {{ marca.contacto }}{% endif %} · {{ marca.web }}</footer>
+</body>
+</html>

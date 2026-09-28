@@ -6,7 +6,7 @@
 - la clínica tiene un checklist priorizado y su schema JSON-LD.
 
 **Historias que cubre:** HU-15, HU-17, HU-18
-**Estado:** 🟡 en curso
+**Estado:** 🟡 tareas ✅; falta la demo del Director (y la migración 0007 en prod)
 **Nota:** las tareas se refinan al empezar la fase, sin cambiar su alcance.
 
 ## Tareas
@@ -22,7 +22,7 @@
 - **Rama:** `feat/C8-T01-monthly-workflow`
 
 ### C8-T02 · Reporte mensual PDF (HU-15)
-- **Estado:** ⚪
+- **Estado:** ✅
 - **Qué:** plantilla `mensual.html.j2` y el comando `visible-ia informe mensual --sede <id> --mes <aaaa-mm>`, con:
   - evolución del índice;
   - cambio frente al mes anterior (ADR-003);
