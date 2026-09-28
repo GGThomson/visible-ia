@@ -6,7 +6,7 @@
 - la clínica tiene un checklist priorizado y su schema JSON-LD.
 
 **Historias que cubre:** HU-15, HU-17, HU-18
-**Estado:** 🟡 tareas ✅; falta la demo del Director (y la migración 0007 en prod)
+**Estado:** ✅ completa (27/09) · demo del Director aprobada · migración 0007 en dev y prod
 **Nota:** las tareas se refinan al empezar la fase, sin cambiar su alcance.
 
 ## Tareas
@@ -40,7 +40,7 @@
 - **Rama:** `feat/C8-T02-monthly-report`
 
 ### C8-T03 · Checklist priorizado (HU-17)
-- **Estado:** ✅ (catálogo en `data/checklist.toml` en vez de YAML, para no sumar dependencias; migración 0007 en dev, en prod con OK)
+- **Estado:** ✅ (catálogo en `data/checklist.toml` en vez de YAML, para no sumar dependencias; migración 0007 en dev y prod)
 - **Qué:**
   - Catálogo de tareas en `data/checklist.yaml`, en este orden: ficha de Google → Doctoralia → web con schema → redes → Bing Places. Cada tarea tiene su condición.
   - Prioriza según lo que le falta a la sede y según las fuentes que más cita su mercado.
@@ -53,7 +53,7 @@
 - **Rama:** `feat/C8-T03-checklist`
 
 ### C8-T04 · Generador de schema JSON-LD (HU-18)
-- **Estado:** ✅
+- **Estado:** ✅ (en la demo se vio `?hl=en` en el Instagram: la importación y el JSON-LD ahora quitan el query string; datos de prod limpiados, PR #61)
 - **Qué:** comando y botón en el panel que generan el JSON-LD `Dentist`/`MedicalClinic` de la sede (nombre, dirección, teléfono, horario, `sameAs` hacia la ficha de Google, Doctoralia e Instagram), listo para copiar.
 - **Criterios de aceptación:**
   - [ ] El JSON es válido según schema.org. Hay una prueba con un validador local de estructura.
@@ -63,3 +63,4 @@
 
 ## Demo de la fase
 - El Director ejecuta la corrida mensual a mano en dev, revisa, genera el reporte mensual de una sede de prueba, marca una tarea como hecha en el panel y copia su JSON-LD.
+- **Hecha (27/09) en prod** con una sede de prueba sobre Clínica Odontologists (opción A; la corrida mensual se probó en C8-T01): checklist visible y marcable en el panel, JSON-LD correcto, reporte de setiembre generado. Después se borraron el cliente 3, su sede, tareas, usuario e informe 2 (con su PDF).
