@@ -210,3 +210,19 @@ def test_footer_hides_an_empty_contact():
     html = render_diagnostic(build_context(_data(), {**brand, "contacto": ""}))
     footer = html.split("<footer>")[1]
     assert " ·  · " not in footer and "@" not in footer
+
+
+def test_default_brand_is_eminia_with_the_embedded_logo():
+    import base64
+    from pathlib import Path
+
+    from visible_ia.informes.contexto import load_brand
+
+    brand = load_brand()
+    logo = Path(__file__).resolve().parents[2] / "web" / "marca" / "logo.svg"
+    assert brand["nombre"] == "Eminia"
+    prefix = "data:image/svg+xml;base64,"
+    assert brand["logo_url"].startswith(prefix)
+    embedded = base64.b64decode(brand["logo_url"][len(prefix) :])
+    # Git may turn the file into CRLF on Windows: compare the content, not the line endings.
+    assert embedded.replace(b"\r\n", b"\n") == logo.read_bytes().replace(b"\r\n", b"\n")
