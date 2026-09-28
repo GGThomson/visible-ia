@@ -13,29 +13,8 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
-  // Tabs of the product tour: click, arrows, Home/End; image fades in (250 ms).
+  // Tabs of "Qué recibes": click, arrows, Home/End; the illustration fades in (250 ms).
   var tabs = $$(".pestanas [role=tab]");
-  var video = document.querySelector(".video-panel");
-  var replay = document.querySelector(".repetir");
-  var videoPlayed = false;
-
-  function playVideoOnce() {
-    if (!video || videoPlayed || reduce) return;
-    videoPlayed = true;
-    var played = video.play();
-    if (played && played.catch) played.catch(function () { if (replay) replay.hidden = false; });
-  }
-  if (video) {
-    video.addEventListener("ended", function () { if (replay) replay.hidden = false; });
-    if (reduce && replay) { replay.textContent = "Ver el video"; replay.hidden = false; }
-  }
-  if (replay) {
-    replay.addEventListener("click", function () {
-      replay.hidden = true;
-      video.currentTime = 0;
-      video.play();
-    });
-  }
 
   function select(tab, focus) {
     tabs.forEach(function (t) {
@@ -47,7 +26,6 @@
       panel.classList.toggle("entrando", on && !reduce);
     });
     if (focus) tab.focus();
-    if (tab.id === "pestana-panel") playVideoOnce();
   }
   tabs.forEach(function (tab, i) {
     tab.addEventListener("click", function () { select(tab, false); });
@@ -97,10 +75,8 @@
       var el = entry.target;
       observer.unobserve(el);
       if (el.hasAttribute("data-contar")) count(el);
-      else if (el.classList.contains("video-panel")) { if (!el.closest("[hidden]")) playVideoOnce(); }
       else el.classList.add("visible");
     });
   }, { threshold: 0.2, rootMargin: "0px 0px -40px 0px" });
   reveal.concat(counters).forEach(function (el) { observer.observe(el); });
-  if (video) observer.observe(video);
 })();

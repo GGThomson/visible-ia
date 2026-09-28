@@ -41,6 +41,9 @@ from visible_ia.puntaje.indice import calculate
 ROOT = Path(__file__).resolve().parents[1]
 WEB = ROOT / "web"
 OUT = WEB / "marca"
+# Real product screenshots are no longer on the landing (illustrations since 29/09): kept in
+# salida/ for sales decks and WhatsApp.
+SHOTS = ROOT / "salida" / "capturas-producto"
 CATEGORY, DISTRICT = "IMP", "San Isidro"  # dev's IMP Miraflores holds phase-1 real samples
 MONTHS = [date(2026, 7, 1), date(2026, 8, 1), date(2026, 9, 1)]
 ME = "Tu Clínica Dental"
@@ -228,8 +231,8 @@ def _session(conn, client: int) -> dict:
             "refresh": tokens["refresh_token"]}  # fmt: skip
 
 
-def _encode(page, png: Path, name: str, width: int) -> None:
-    """PNG -> web/marca/<name>.webp and .jpg (under MAX_KB), resized to `width`, in Chromium."""
+def _encode(page, png: Path, name: str, width: int, out: Path = OUT) -> None:
+    """PNG -> <out>/<name>.webp and .jpg (under MAX_KB), resized to `width`, in Chromium."""
     data = "data:image/png;base64," + base64.b64encode(png.read_bytes()).decode()
     for fmt, ext in (("image/webp", "webp"), ("image/jpeg", "jpg")):
         for quality in (0.9, 0.86, 0.82, 0.76, 0.7, 0.62):
@@ -247,7 +250,7 @@ def _encode(page, png: Path, name: str, width: int) -> None:
             raw = base64.b64decode(uri.split(",", 1)[1])
             if len(raw) <= MAX_KB * 1024:
                 break
-        (OUT / f"{name}.{ext}").write_bytes(raw)
+        (out / f"{name}.{ext}").write_bytes(raw)
         print(f"  {name}.{ext}: {len(raw) / 1024:.0f} KB")
 
 
@@ -264,6 +267,7 @@ def main(video: bool) -> None:
     settings = get_settings()
     conn = db.connect(settings, "dev", autocommit=True)
     tmp = Path(tempfile.mkdtemp())
+    SHOTS.mkdir(parents=True, exist_ok=True)
     try:
         _cleanup(conn)
         demo = _build(conn)
@@ -310,7 +314,8 @@ def main(video: bool) -> None:
             encoder.set_content("<html><body></body></html>")
             # Double resolution for sharp images on retina screens (the frame shows ~920 px).
             for name, png in shots.items():
-                _encode(encoder, png, name, 1840 if "panel" in name or "checklist" in name else 1190)
+                _encode(encoder, png, name, 1840 if "panel" in name or "checklist" in name else 1190,
+                        SHOTS)  # fmt: skip
             # producto-diagnostico (the report's cover) comes from scripts/imagen_informe_landing.py
 
             if video:
@@ -330,7 +335,7 @@ def main(video: bool) -> None:
                 size = recorded.stat().st_size
                 print(f"  video: {size / 1024:.0f} KB")
                 if size < 1.5 * 1024 * 1024:
-                    shutil.copy(recorded, OUT / "producto-panel.webm")
+                    shutil.copy(recorded, SHOTS / "producto-panel.webm")
                 else:
                     print("  video > 1.5 MB: not used")
             browser.close()

@@ -113,8 +113,8 @@ p { margin: 0 0 16px; max-width: 65ch; }
 
 /* Data (the one dark section) */
 .datos-titulo { max-width: 20em; }
-.datos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; margin-top: 48px; }
-.dato .cifra { font-variant-numeric: tabular-nums; display: block; font-family: var(--serif); font-weight: 600; font-size: 56px; line-height: 1; margin-bottom: 16px; color: var(--blanco); }
+.datos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px 40px; margin-top: 48px; }
+.dato .cifra { font-variant-numeric: tabular-nums; display: block; font-family: var(--serif); font-weight: 600; font-size: 48px; line-height: 1; margin-bottom: 16px; color: var(--blanco); }
 .dato p { color: var(--claro-2); font-size: 17px; }
 .dato .fuente { font-family: var(--mono); font-weight: 500; font-size: 13px; color: var(--claro-2); }
 
@@ -140,15 +140,23 @@ p { margin: 0 0 16px; max-width: 65ch; }
 }
 .pestanas [role=tab]:hover { border-color: var(--pizarra); }
 .pestanas [role=tab][aria-selected=true] { background: var(--tinta); border-color: var(--tinta); color: var(--blanco); }
-.vista { max-width: 920px; margin: 0 auto; }
+.vista { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: center; }
+.vista[hidden] { display: none; }
+.vinetas { list-style: none; margin: 0; padding: 0; }
+.vinetas li { position: relative; padding-left: 30px; margin: 0 0 16px; font-size: 18px; }
+.vinetas li::before { content: ""; position: absolute; left: 0; top: 6px; width: 18px; height: 18px; border-radius: 50%; background: var(--cobalto)
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5 9.2l2.6 2.6L13 6.4' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/18px no-repeat; }
+.garantias-franja { background: var(--niebla); border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); }
+.garantias-franja .envoltura { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 32px; padding-top: 20px; padding-bottom: 20px; }
+.garantias-franja p { margin: 0; font-size: 16px; text-align: center; }
+.testimonio blockquote { font-family: var(--serif); font-size: 24px; margin: 24px 0 12px; }
 .vista:focus-visible { outline-offset: 8px; }
 .marco { background: var(--blanco); border: 1px solid var(--linea); border-radius: var(--radio-tarjeta); box-shadow: var(--sombra-1); overflow: hidden; }
 .marco-barra { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; background: var(--niebla); border-bottom: 1px solid var(--linea); }
 .marco-barra span { width: 10px; height: 10px; border-radius: 50%; background: var(--linea); }
 .marco-barra em { margin-left: 12px; font-style: normal; font-family: var(--mono); font-size: 12px; color: var(--pizarra); }
 .marco-pantalla { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--blanco); }
-.marco-pantalla img, .marco-pantalla video { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
-.repetir { position: absolute; right: 16px; bottom: 16px; min-height: 40px; padding: 8px 16px; background: var(--blanco); }
+.marco-pantalla img { width: 100%; height: 100%; object-fit: contain; display: block; background: var(--niebla); }
 .leyenda { text-align: center; margin: 16px auto 0; }
 .cierre-recibe { text-align: center; margin: 48px auto 0; font-weight: 600; }
 
@@ -299,6 +307,7 @@ p { margin: 0 0 16px; max-width: 65ch; }
   .portada .envoltura, .informe .envoltura { grid-template-columns: 1fr; gap: 48px; }
   .datos, .pasos, .planes, .ganchos, .dos-bloques { grid-template-columns: 1fr; gap: 32px; }
   .recibe-grilla { grid-template-columns: 1fr 1fr; }
+  .vista { grid-template-columns: 1fr; gap: 24px; }
   .fuentes-ia { grid-template-columns: 1fr 1fr; }
   .planes { max-width: 520px; }
   .hoja { max-width: 380px; }
@@ -323,6 +332,8 @@ p { margin: 0 0 16px; max-width: 65ch; }
   .campos { grid-template-columns: 1fr; }
   .fuentes-ia { grid-template-columns: 1fr; gap: 24px; }
   .recibe-grilla { grid-template-columns: 1fr; gap: 16px; }
+  .garantias-franja .envoltura { grid-template-columns: 1fr; }
+  .garantias-franja p { text-align: left; }
   .recibe { padding: 24px; }
   .pestanas { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
   .pestanas [role=tab] { flex: none; }

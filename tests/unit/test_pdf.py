@@ -25,8 +25,7 @@ def test_pdf_is_short_and_small(tmp_path):
 
     path, seconds = _pdf(tmp_path, _data())
     reader = PdfReader(path)
-    # Redesign (Director, 28/09): about 6 pages plus the annex. PRD HU-14 still says <= 4:
-    # pending the Director's OK to update it.
+    # PRD HU-14 (Director, 28/09): <= 8 pages, summary on page 1 plus sections and annex.
     assert 1 <= len(reader.pages) <= 8
     assert path.stat().st_size < 2 * 1024 * 1024
     assert seconds < 60

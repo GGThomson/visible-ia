@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" role="img" aria-label="Ilustración: un informe con barras, tu clínica en azul, y un semáforo de cuatro áreas">
+  <rect width="480" height="300" fill="#F4F6F9"/>
+  <rect x="120" y="24" width="240" height="276" rx="10" fill="#FFFFFF" stroke="#D9DEE7" stroke-width="2"/>
+  <rect x="140" y="44" width="200" height="34" rx="6" fill="#0F1B2D"/>
+  <rect x="152" y="55" width="96" height="6" rx="3" fill="#FFFFFF"/>
+  <rect x="152" y="66" width="60" height="4" rx="2" fill="#C9D1E0"/>
+  <g>
+    <rect x="140" y="96" width="60" height="30" rx="5" fill="#FFFFFF" stroke="#D9DEE7"/>
+    <rect x="150" y="104" width="30" height="8" rx="2" fill="#2447C8"/>
+    <rect x="210" y="96" width="60" height="30" rx="5" fill="#FFFFFF" stroke="#D9DEE7"/>
+    <rect x="220" y="104" width="26" height="8" rx="2" fill="#0F1B2D"/>
+    <rect x="280" y="96" width="60" height="30" rx="5" fill="#FFFFFF" stroke="#D9DEE7"/>
+    <rect x="290" y="104" width="22" height="8" rx="2" fill="#0F1B2D"/>
+  </g>
+  <g>
+    <circle cx="152" cy="146" r="6" fill="#1E7F4F"/><rect x="164" y="143" width="30" height="6" rx="3" fill="#D9DEE7"/>
+    <circle cx="206" cy="146" r="6" fill="#B7791F"/><rect x="218" y="143" width="30" height="6" rx="3" fill="#D9DEE7"/>
+    <circle cx="260" cy="146" r="6" fill="#1E7F4F"/><rect x="272" y="143" width="30" height="6" rx="3" fill="#D9DEE7"/>
+    <circle cx="314" cy="146" r="6" fill="#B42318"/><rect x="326" y="143" width="14" height="6" rx="3" fill="#D9DEE7"/>
+  </g>
+  <g>
+    <rect x="140" y="168" width="200" height="12" rx="4" fill="#F4F6F9"/><rect x="140" y="168" width="150" height="12" rx="4" fill="#51607A"/>
+    <rect x="140" y="188" width="200" height="12" rx="4" fill="#F4F6F9"/><rect x="140" y="188" width="118" height="12" rx="4" fill="#51607A"/>
+    <rect x="140" y="208" width="200" height="12" rx="4" fill="#F4F6F9"/><rect x="140" y="208" width="96" height="12" rx="4" fill="#51607A"/>
+    <rect x="140" y="228" width="200" height="12" rx="4" fill="#F4F6F9"/><rect x="140" y="228" width="44" height="12" rx="4" fill="#2447C8"/>
+  </g>
+  <rect x="140" y="256" width="200" height="26" rx="6" fill="#FFFFFF" stroke="#2447C8" stroke-width="2"/>
+  <rect x="152" y="266" width="120" height="6" rx="3" fill="#2447C8"/>
+</svg>

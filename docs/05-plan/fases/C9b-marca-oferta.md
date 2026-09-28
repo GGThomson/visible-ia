@@ -137,6 +137,21 @@
   - `scripts/imagen_informe_landing.py` saca la portada para la landing;
   - capturas de la landing a doble resolución.
 
+### C9b · Landing con ilustraciones, cifras y confianza (Director, 28–29/09)
+- **Pestañas de «Qué recibes»:** 5 ilustraciones SVG propias (sin capturas ni datos), cada una con 3 viñetas; se mantienen el marco, el fundido y el teclado.
+- **«La IA ya decide qué clínica eligen»:** 6 cifras con contador, fuente y año enlazados:
+  - Osiptel 2025;
+  - BrightLocal 2026;
+  - Pew 2025;
+  - KFF 2026;
+  - OpenAI 2026;
+  - medición propia: 34 clínicas.
+- **Confianza:**
+  - franja de garantías (sin permanencia · entrega en 10 días hábiles · precio fundador);
+  - «Quién está detrás» lista para la foto;
+  - testimonios en una sección oculta hasta tener el primero real con permiso escrito.
+- Las capturas reales del producto ya no están en la landing: se guardan en `salida/capturas-producto/`.
+
 ## Demo de la fase
 - El Director ve en la vista previa del PR la landing nueva en su celular y en la computadora, el panel y un PDF de ejemplo con la marca Eminia.
 - Si los aprueba, se publica en Cloudflare Pages al fusionar a `main`.

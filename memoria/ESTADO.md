@@ -38,11 +38,11 @@
 - 🔽 Prueba API Gemini (informativa, baja prioridad): config. B, 1 de 10 hecha (rama `chore/prueba-api-gemini`)
 
 ## Decisiones recientes (últimas 5)
+- 2026-09-28 · **ADR-006**: los planes pagados medirán **120 respuestas/mes** por mercado (20 preguntas × 3 × ChatGPT y Google), el diagnóstico gratis sigue en 60; presupuesto +US$2.50 por mercado de cliente que pagó; Gemini manual; investigar Vertex AI. Sin construir (C-009). PRD HU-14: diagnóstico ≤ 8 páginas
 - 2026-09-28 · **Marca Eminia** (ADR-005) y oferta para las llamadas: planes Diagnóstico gratis / Medir (S/ 349 + 490) / Gestionado (S/ 790 + 990), sin permanencia, precio fundador (5 primeras) y garantía de entrega en 10 días; fase C9b antes de C10 (acta 2026-09-28)
 - 2026-09-27 · **C9 cerrada, v1.1 lista** (tag `v1.1`): pagos manuales con las reglas de «al día» aprobadas (5 días de gracia, aviso 7 días antes, IGV configurable), kit de atribución y conteo «por IA» en el reporte; migración 0008 en prod
 - 2026-09-27 · **C8 cerrada**: demo del Director aprobada en prod (sede de prueba borrada después); migración 0007 en prod; las URLs de Instagram se guardan sin `?hl=en` ni otros parámetros
 - 2026-09-27 · C8: la corrida mensual **pide OK**: el día 1 solo estima y abre un issue; se aprueba lanzando el workflow en modo `correr`. Checklist en TOML (sin dependencia nueva); JSON-LD sin reseñas propias
-- 2026-09-27 · C7 cerrada: acceso al panel **por enlaces de WhatsApp** (`usuario invitar --enlace`), sin SMTP propio por ahora; registro abierto apagado en Supabase; migración 0006 en prod
 
 ## Bandeja de pendientes
 - Ver `memoria/cambios-pendientes.md` (0 sin clasificar)

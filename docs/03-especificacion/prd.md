@@ -96,7 +96,7 @@
 - **Dado** el mercado, **cuando** veo las fuentes, **entonces** aparece el top de dominios citados, agrupados por tipo: ficha de Google, Doctoralia, web propia, redes, directorios o rankings y prensa.
 
 ### HU-14 · Informe gratis
-- **Dado** un prospecto (una clínica del mercado) y una corrida revisada, **cuando** genero el informe, **entonces** obtengo un PDF en español de ≤ 4 páginas con:
+- **Dado** un prospecto (una clínica del mercado) y una corrida revisada, **cuando** genero el informe, **entonces** obtengo un PDF en español de **≤ 8 páginas: resumen en 1 página más secciones y anexo** (cambiado por el Director el 28/09, rediseño C-008; antes ≤ 4) con:
   1. su índice frente a sus 3 competidores principales;
   2. ejemplos reales de lo que respondió cada IA (citados, con fecha);
   3. las fuentes que usa la IA en su mercado;
