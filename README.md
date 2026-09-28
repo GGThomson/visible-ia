@@ -25,6 +25,13 @@ uv run visible-ia informe diagnostico --clinica <id> --mercado <id> --env prod
 ```
 Por defecto compara con los 3 mejores del ranking (`--competidores a,b,c` para elegir otros). El PDF queda en `salida/` (fuera de Git), se sube al bucket privado y se registra en `reports`. Con `--sin-subir` solo se genera el archivo local. La marca (nombre, colores, logo, contacto) está en `src/visible_ia/informes/marca.toml`.
 
+### Pagos manuales
+```powershell
+uv run visible-ia pago registrar <cliente> --monto 349 --medio yape --periodo 2026-10 --ref <n.º op.> --env prod
+uv run visible-ia pagos estado --env prod     # al día / vence pronto / atrasado
+```
+Cada pago cubre un mes (`--periodo`), por adelantado. Un mes vence el día 1 (o el día en que se creó el cliente) más `PAGO_DIAS_GRACIA` (5); "vence pronto" avisa `PAGO_AVISO_DIAS` (7) antes del mes siguiente. Las clínicas de una agencia no aparecen: se cobra a la agencia. Con `PAGOS_INCLUYEN_IGV=true`, el neto descuenta el 18 %.
+
 ### Pruebas y estilo
 ```powershell
 uv run ruff check .                  # estilo
@@ -46,7 +53,7 @@ Todas las tablas tienen RLS activado; las políticas se agregan en migraciones p
 | Workflow | Cuándo | Qué hace |
 |---|---|---|
 | `ci.yml` | push a `main`, PRs | ruff + pytest |
-| `diario.yml` | cada día 07:17 (Lima) y a mano | latido en Supabase dev y prod para que no se pausen; si falla, abre un issue |
+| `diario.yml` | cada día 07:17 (Lima) y a mano | latido en Supabase dev y prod para que no se pausen (si falla, abre un issue); issues de prospectos nuevos y de **pagos atrasados** |
 | `web.yml` | cambios en `web/` | publica `web/` en Cloudflare Pages: `main` → producción, PR → URL de vista previa |
 
 **GitHub Secrets** que usan: `SUPABASE_URL_DEV/PROD`, `SUPABASE_SERVICE_ROLE_KEY_DEV/PROD`, `SUPABASE_DB_URL_DEV/PROD`, `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`. Para cargar uno desde tu `.env` sin copiarlo a mano:

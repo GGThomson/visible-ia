@@ -49,6 +49,12 @@ class Settings(BaseSettings):
     # Public site (landing + panel); sign-in links send clinics to <site_url>/panel/.
     site_url: str = "https://visible-ia.pages.dev"
 
+    # Manual payments (C9-T01). Whether the amounts include IGV depends on the tax regime,
+    # still pending with the accountant (estrategia); until then they are taken as net.
+    pagos_incluyen_igv: bool = False
+    pago_dias_gracia: int = 5
+    pago_aviso_dias: int = 7
+
     @field_validator("supabase_url_dev", "supabase_url_prod", mode="before")
     @classmethod
     def _normalize_url(cls, value: object) -> object:

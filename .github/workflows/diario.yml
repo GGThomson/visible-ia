@@ -1,4 +1,4 @@
-name: Diario (Supabase activo + aviso de prospectos)
+name: Diario (Supabase activo + avisos de prospectos y pagos)
 
 # Supabase pauses free projects after a week without database activity.
 # This runs once a day against dev and prod (docs/04-arquitectura/arquitectura.md).
@@ -72,4 +72,24 @@ jobs:
         env:
           SUPABASE_URL_PROD: ${{ secrets.SUPABASE_URL_PROD }}
           SUPABASE_SERVICE_ROLE_KEY_PROD: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY_PROD }}
+          GITHUB_TOKEN: ${{ github.token }}
+
+  # C9-T01: one issue "Pagos atrasados (n)" while some client is overdue; it closes itself
+  # once their payments are registered (`visible-ia pago registrar`).
+  pagos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          enable-cache: true
+
+      - run: uv sync --locked --no-dev
+
+      - name: Aviso de pagos atrasados (prod)
+        run: uv run visible-ia pagos aviso --env prod
+        env:
+          SUPABASE_DB_URL_PROD: ${{ secrets.SUPABASE_DB_URL_PROD }}
           GITHUB_TOKEN: ${{ github.token }}

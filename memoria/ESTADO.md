@@ -7,7 +7,7 @@
 
 ## Dónde estamos
 - **Fase actual:** 5 · Construcción. Fase 4 aprobada el 26/09: arquitectura + plan (tags `fase-4-completa`, `plan-aprobado`)
-- **Tarea actual:** **C9** (cobros manuales y atribución → v1.1): empieza por C9-T01 (pagos y estado "al día"). C8 cerrada. Panel: https://visible-ia.pages.dev/panel/
+- **Tarea actual:** **C9** (cobros manuales y atribución → v1.1): T01 pagos ✅ (`pago registrar`, `pagos estado`, aviso diario); sigue **C9-T02** (kit de atribución). C8 cerrada. Panel: https://visible-ia.pages.dev/panel/
 - **Rama de trabajo:** cada tarea en `feat/C<n>-T<nn>-...` desde `main` (las fases 1–4 ya están en `main`)
 - **Avance general:** █████████░ 89 % (construcción: C1–C8 de C1–C12 completas)
 - **Calendario:** construcción del 28/09 al 08/11 · **v1.0 "Vender" el 04/10** · ventas desde el 05/10 · control del Plan B el **jue 02/10** (C6-T05)
@@ -28,7 +28,7 @@
 ## Próximos 3 pasos
 1. **Director:** el **1/10** llega el issue "Corridas de octubre · esperando tu OK" → aprobar lanzando *Corrida mensual* en modo `correr`
 2. Ventas desde el 05/10 con las 5 clínicas con brecha; demo v1.0 (formulario → issue)
-3. **C9**: T01 pagos → T02 kit de atribución
+3. **C9-T02** kit de atribución → demo v1.1 (confirmar las reglas de "al día": 5 días de gracia, aviso 7 días antes)
 
 ## Bloqueos / esperando decisión
 - ⏳ **RUC y régimen tributario** (contador) antes del primer cobro. Define si los S/ 349 incluyen IGV (neto ≈ S/ 296) → revisar la meta de la semana 6
