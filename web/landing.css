@@ -260,3 +260,26 @@ p { margin: 0 0 16px; max-width: 65ch; }
   .plan { padding: 24px; }
   .hoja { max-width: 300px; }
 }
+
+/* Legal pages (privacidad, términos, reclamaciones): drafts pending a lawyer's review. */
+.legal { padding: 64px 0 96px; }
+.legal .envoltura { max-width: 800px; }
+.legal h1 { font-size: 40px; }
+.legal h2 { font-size: 24px; margin-top: 40px; }
+.legal p, .legal li { max-width: 70ch; }
+.legal ul, .legal ol { padding-left: 22px; }
+.legal li { margin: 6px 0; }
+.borrador { background: #FFF6E0; border: 1px solid #E8C66A; border-radius: var(--radio); padding: 16px 20px; margin: 24px 0 32px; font-size: 15px; }
+.pendiente { background: #FFF6E0; padding: 0 4px; border-radius: 3px; font-family: var(--mono); font-size: 14px; }
+.legal table { border-collapse: collapse; width: 100%; font-size: 15px; margin: 16px 0; }
+.legal th, .legal td { border-bottom: 1px solid var(--linea); padding: 10px 8px; text-align: left; vertical-align: top; }
+.hoja-reclamo fieldset { border: 1px solid var(--linea); border-radius: var(--radio-tarjeta); padding: 24px; margin: 0 0 24px; }
+.hoja-reclamo legend { font-family: var(--serif); font-weight: 600; font-size: 20px; padding: 0 8px; }
+.hoja-reclamo label { display: block; font-weight: 600; font-size: 15px; margin: 16px 0 0; }
+.hoja-reclamo input:not([type=radio]):not([type=checkbox]), .hoja-reclamo textarea, .hoja-reclamo select {
+  display: block; width: 100%; margin-top: 8px; padding: 12px 14px; font: 400 16px var(--sans);
+  border: 1px solid var(--linea); border-radius: var(--radio); background: var(--blanco); color: var(--tinta);
+}
+.hoja-reclamo .opciones label { display: inline-flex; gap: 8px; align-items: center; font-weight: 400; margin-right: 24px; }
+.hoja-reclamo button[disabled] { opacity: .55; cursor: not-allowed; }
+.pie nav { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 8px 0 16px; }

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Libro de Reclamaciones · Eminia</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="marca/simbolo.svg">
+  <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+  <!-- DRAFT (C9b-D4): do not publish to production until there is a RUC and a way to receive
+       the complaints (see the PR). The form is disabled on purpose: nothing is sent. -->
+  <header class="encabezado">
+    <div class="envoltura">
+      <a class="logo" href="./" aria-label="Eminia, ir al inicio"><img src="marca/logo.svg" alt="Eminia" width="160" height="32"></a>
+      <nav aria-label="Principal"><a class="boton principal" href="./#pedir">Diagnóstico gratis</a></nav>
+    </div>
+  </header>
+
+  <main class="legal">
+    <div class="envoltura">
+      <h1>Libro de Reclamaciones</h1>
+      <p class="nota">Conforme al Código de Protección y Defensa del Consumidor (Ley N.º 29571) y al Reglamento del Libro de Reclamaciones (D.S. N.º 011-2011-PCM y modificatorias).</p>
+      <p class="borrador"><strong>Borrador, todavía no disponible.</strong> Mientras tanto, puedes presentar tu reclamo o queja por WhatsApp al <a href="https://wa.me/51920857428">+51 920 857 428</a>; te respondemos en un plazo máximo de 15 días hábiles.</p>
+
+      <form class="hoja-reclamo" onsubmit="return false" aria-describedby="nota-reclamo">
+        <p><strong>Hoja de reclamación virtual N.º</strong> <span class="pendiente">[se asigna al enviar]</span> · Fecha: <span class="pendiente">[se asigna al enviar]</span></p>
+        <p><strong>Proveedor:</strong> <span class="pendiente">[PENDIENTE: nombre o razón social]</span> · RUC <span class="pendiente">[PENDIENTE]</span> · Domicilio: <span class="pendiente">[PENDIENTE: dirección]</span></p>
+
+        <fieldset>
+          <legend>1. Identificación del consumidor reclamante</legend>
+          <label>Nombre completo <input name="nombre" autocomplete="name" disabled></label>
+          <label>Domicilio <input name="domicilio" autocomplete="street-address" disabled></label>
+          <label>Tipo y n.º de documento (DNI / CE) <input name="documento" disabled></label>
+          <label>Teléfono <input name="telefono" autocomplete="tel" disabled></label>
+          <label>Correo electrónico (te enviaremos aquí la copia de esta hoja) <input name="correo" type="email" autocomplete="email" disabled></label>
+          <label>Si eres menor de edad: nombre del padre, madre o apoderado <input name="apoderado" disabled></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>2. Identificación del bien contratado</legend>
+          <div class="opciones">
+            <label><input type="radio" name="tipo_bien" value="producto" disabled> Producto</label>
+            <label><input type="radio" name="tipo_bien" value="servicio" disabled> Servicio</label>
+          </div>
+          <label>Monto reclamado (S/) <input name="monto" inputmode="decimal" disabled></label>
+          <label>Descripción <input name="descripcion_bien" placeholder="Por ejemplo: Plan Medir, mes de octubre" disabled></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>3. Detalle de la reclamación y pedido del consumidor</legend>
+          <div class="opciones">
+            <label><input type="radio" name="tipo" value="reclamo" disabled> Reclamo</label>
+            <label><input type="radio" name="tipo" value="queja" disabled> Queja</label>
+          </div>
+          <label>Detalle <textarea name="detalle" rows="5" disabled></textarea></label>
+          <label>Pedido <textarea name="pedido" rows="3" disabled></textarea></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>4. Observaciones y acciones adoptadas por el proveedor</legend>
+          <p>Las completa Eminia al responder. Fecha de comunicación de la respuesta: <span class="pendiente">[—]</span></p>
+        </fieldset>
+
+        <button type="submit" class="boton principal" disabled>Enviar hoja de reclamación</button>
+
+        <div id="nota-reclamo" class="nota">
+          <p><strong>Reclamo:</strong> disconformidad relacionada a los productos o servicios. <strong>Queja:</strong> disconformidad no relacionada a los productos o servicios, o malestar o descontento respecto a la atención al público.</p>
+          <p>La formulación del reclamo no impide acudir a otras vías de solución de controversias ni es requisito previo para interponer una denuncia ante el INDECOPI.</p>
+          <p>El proveedor deberá dar respuesta al reclamo o queja en un plazo no mayor a quince (15) días hábiles improrrogables.</p>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="pie">
+    <div class="envoltura">
+      <div>
+        <img src="marca/logo-claro.svg" alt="Eminia" width="160" height="32">
+        <p>Que la IA te nombre a ti.</p>
+        <p><a href="https://wa.me/51920857428" rel="noopener" target="_blank">WhatsApp: +51 920 857 428</a></p>
+      </div>
+      <div>
+        <nav aria-label="Legal"><a href="privacidad.html">Privacidad</a><a href="terminos.html">Términos</a><a href="reclamaciones.html">Libro de Reclamaciones</a></nav>
+        <p>© 2026 [PENDIENTE: nombre o razón social] · RUC [PENDIENTE]</p>
+        <p>No prometemos un puesto #1: medimos con repeticiones y te mostramos el margen de variación.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
