@@ -4,7 +4,7 @@
 - Las políticas RLS están probadas de forma automática.
 
 **Historias que cubre:** HU-19, HU-20 (+ HU-11 y HU-12 en el panel)
-**Estado:** 🟡 en curso
+**Estado:** ✅ completa (27/09) · demo del Director aprobada
 **Nota:** las tareas se refinan al empezar la fase (Notas para Claude Code), sin cambiar su alcance.
 
 ## Tareas
@@ -24,7 +24,7 @@
 - **Rama:** `feat/C7-T01-clients-sites`
 
 ### C7-T02 · Políticas RLS de lectura por cliente + pruebas
-- **Estado:** ✅ (migración 0006 en dev; en prod con el OK del Director)
+- **Estado:** ✅ (0006 en dev y prod)
 - **Qué:** migración `0006_client_read_policies.sql` (0003 ya estaba usado).
   - El usuario de una clínica lee `monthly_scores`, `mentions`, `sources`, `reports` y `tasks` **solo** de los mercados y sedes de su cliente.
   - Vistas de solo lectura para el panel (`v_panel_*`) que no exponen el texto crudo de otras clínicas.
@@ -37,7 +37,7 @@
 - **Rama:** `feat/C7-T02-rls-client`
 
 ### C7-T03 · Login con enlace mágico (HU-19)
-- **Estado:** ✅ (código y pruebas; publicación en prod con el OK del Director)
+- **Estado:** ✅ (publicado en prod)
 - **Qué:** `web/panel/login.html` + `web/panel/app.js` con `supabase-js` (CDN): pide el correo, envía el enlace, maneja la sesión y cierra sesión.
 - **Criterios de aceptación:**
   - [ ] Los criterios de HU-19 del PRD: entra solo con su correo y ve solo lo suyo.
@@ -47,7 +47,7 @@
 - **Rama:** `feat/C7-T03-magic-link`
 
 ### C7-T04 · Panel: índice, ranking, fuentes y evolución (HU-20)
-- **Estado:** ✅ (código y pruebas; publicación en prod con el OK del Director)
+- **Estado:** ✅ (publicado en prod)
 - **Qué:** `web/panel/index.html`, con:
   - índice combinado y por superficie, con su margen y la frase de cambio del ADR-003;
   - ranking del mercado;
