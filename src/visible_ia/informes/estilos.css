@@ -4,23 +4,27 @@
 html { font-size: 11.5pt; }
 body {
   margin: 0;
-  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: "IBM Plex Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   color: #1d2b2f;
   line-height: 1.45;
   background: #ffffff;
 }
-h1, h2, h3 { color: var(--primario); line-height: 1.2; margin: 0 0 0.4em; }
+h1, h2, h3 { color: var(--primario); line-height: 1.2; margin: 0 0 0.4em;
+             font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-weight: 600; }
 h1 { font-size: 20pt; }
 h2 { font-size: 15pt; margin-top: 0.2em; border-bottom: 2px solid var(--suave); padding-bottom: 0.2em; }
 h3 { font-size: 12pt; }
 p { margin: 0 0 0.6em; }
-small, .nota { font-size: 11pt; color: #4a5a5e; }
+small, .nota { font-size: 11pt; color: #51607A; }
+/* Figures: IBM Plex Mono when available (Eminia, ADR-005). */
+td.num, .dato b { font-family: "IBM Plex Mono", Consolas, "Courier New", monospace; }
+.barra .valor { font-variant-numeric: tabular-nums; }
 
 .portada { display: flex; justify-content: space-between; align-items: flex-end; gap: 1em;
-           border-bottom: 4px solid var(--acento); padding-bottom: 0.6em; margin-bottom: 1em; }
-.marca { font-weight: 700; font-size: 14pt; color: var(--primario); }
-.marca img { max-height: 36px; }
-.frase { font-size: 13pt; background: var(--suave); border-left: 5px solid var(--acento);
+           border-bottom: 4px solid var(--primario); padding-bottom: 0.6em; margin-bottom: 1em; }
+.marca { font-weight: 700; font-size: 14pt; color: var(--primario); flex-shrink: 0; }
+.marca img { height: 36px; width: auto; display: block; }
+.frase { font-size: 13pt; background: var(--suave); border-left: 5px solid var(--primario);
          padding: 0.7em 0.9em; border-radius: 4px; }
 
 section { margin: 0 0 1.2em; }
@@ -32,18 +36,18 @@ h2, h3 { break-after: avoid; }
 .barra { display: grid; grid-template-columns: 34% 1fr; gap: 0.6em; align-items: center; }
 .barra .nombre { font-weight: 600; }
 .barra .riel { background: var(--suave); border-radius: 4px; height: 1.6em; position: relative; }
-.barra .relleno { background: var(--primario); height: 100%; border-radius: 4px; min-width: 2px; }
+.barra .relleno { background: #51607A; height: 100%; border-radius: 4px; min-width: 2px; }
 .barra.cliente .nombre { color: var(--acento); }
 .barra.cliente .relleno { background: var(--acento); }
 .barra .valor { font-size: 11pt; margin-top: 0.15em; }
 
 table { width: 100%; border-collapse: collapse; font-size: 11pt; margin: 0.4em 0 0.8em; }
-th, td { text-align: left; padding: 0.35em 0.4em; border-bottom: 1px solid #d8e2e4; vertical-align: top; }
+th, td { text-align: left; padding: 0.35em 0.4em; border-bottom: 1px solid #D9DEE7; vertical-align: top; }
 th { color: var(--primario); }
 td.num, th.num { text-align: right; white-space: nowrap; }
 tr.cliente td { font-weight: 700; color: var(--acento); }
 
-.ejemplo { border: 1px solid #d8e2e4; border-radius: 6px; padding: 0.6em 0.8em; margin-bottom: 0.7em; }
+.ejemplo { border: 1px solid #D9DEE7; border-radius: 6px; padding: 0.6em 0.8em; margin-bottom: 0.7em; }
 .ejemplo .pregunta { font-weight: 600; }
 .ejemplo ol { margin: 0.3em 0 0.4em 1.2em; padding: 0; }
 .ejemplo li.cliente { font-weight: 700; color: var(--acento); }
@@ -58,7 +62,7 @@ ol.recomendaciones { padding-left: 1.2em; }
 ol.recomendaciones li { margin-bottom: 0.6em; }
 ol.recomendaciones b { color: var(--primario); }
 
-footer { margin-top: 1.2em; font-size: 11pt; color: #4a5a5e; border-top: 1px solid #d8e2e4; padding-top: 0.5em; }
+footer { margin-top: 1.2em; font-size: 11pt; color: #51607A; border-top: 1px solid #D9DEE7; padding-top: 0.5em; }
 
 @media (max-width: 600px) {
   .barra { grid-template-columns: 1fr; }

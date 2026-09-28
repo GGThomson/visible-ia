@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="es-PE">
+<html lang="es-PE" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>visible-ia · Tu panel</title>
+  <title>Eminia · Tu panel</title>
   <meta name="robots" content="noindex">
   <link rel="icon" type="image/svg+xml" href="../marca/simbolo.svg">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="../marca/eminia.css">
   <style>
-    :root { --acento: #E36414; }
+    :root { --acento: var(--eminia-cobalto); }  /* only "your clinic" is cobalt (ADR-005) */
     main { max-width: 52rem; padding-top: 1.5rem; }
     header.barra-sup { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
     .indice { font-size: 3rem; font-weight: 700; line-height: 1; color: var(--pico-primary); }
@@ -16,7 +17,7 @@
     .tarjetas article { margin: 0; }
     .fila-barra { display: grid; grid-template-columns: minmax(8rem, 36%) 1fr; gap: .6rem; align-items: center; margin: .35rem 0; }
     .riel { background: var(--pico-muted-border-color); border-radius: .3rem; height: 1.2rem; }
-    .relleno { background: var(--pico-primary-background); height: 100%; border-radius: .3rem; min-width: 2px; }
+    .relleno { background: var(--eminia-pizarra); height: 100%; border-radius: .3rem; min-width: 2px; }
     .mia .relleno { background: var(--acento); }
     .mia .nombre { color: var(--acento); font-weight: 700; }
     .valor { font-size: .9rem; }
@@ -34,7 +35,7 @@
 <body>
   <main class="container">
     <header class="barra-sup">
-      <strong>visible-ia</strong>
+      <span class="logo"><img src="../marca/logo.svg" alt="Eminia"></span>
       <button class="secondary outline" id="salir">Salir</button>
     </header>
 

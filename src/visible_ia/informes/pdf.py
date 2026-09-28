@@ -33,6 +33,7 @@ def html_to_pdf(html: str, path: Path) -> Path:
             try:
                 page = browser.new_page()
                 page.set_content(html, wait_until="load")
+                page.evaluate("document.fonts.ready")  # web fonts (or their fallback) in place
                 page.pdf(
                     path=str(path), format="A4", print_background=True, prefer_css_page_size=True
                 )

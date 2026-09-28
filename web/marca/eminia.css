@@ -1,0 +1,56 @@
+/* Eminia brand on top of Pico CSS (ADR-005, docs/marca/marca.md). Load it after Pico.
+   Only colors and type: no layout. Pages set <html data-theme="light">: the brand is light. */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:wght@600&display=swap");
+
+:root[data-theme="light"] {
+  --eminia-tinta: #0F1B2D;
+  --eminia-pizarra: #51607A;
+  --eminia-cobalto: #2447C8;
+  --eminia-cobalto-hover: #1B369C;
+  --eminia-niebla: #F4F6F9;
+  --eminia-linea: #D9DEE7;
+  --eminia-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --eminia-mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
+
+  --pico-font-family: "IBM Plex Sans", "Segoe UI", system-ui, Arial, sans-serif;
+  --pico-font-family-sans-serif: var(--pico-font-family);
+  --pico-background-color: var(--eminia-niebla);
+  --pico-color: var(--eminia-tinta);
+  --pico-muted-color: var(--eminia-pizarra);
+  --pico-muted-border-color: var(--eminia-linea);
+  --pico-card-background-color: #FFFFFF;
+  --pico-card-sectioning-background-color: #FFFFFF;
+  --pico-h1-color: var(--eminia-tinta);
+  --pico-h2-color: var(--eminia-tinta);
+  --pico-h3-color: var(--eminia-tinta);
+  --pico-h4-color: var(--eminia-tinta);
+  --pico-primary: var(--eminia-cobalto);
+  --pico-primary-background: var(--eminia-cobalto);
+  --pico-primary-border: var(--eminia-cobalto);
+  --pico-primary-underline: rgba(36, 71, 200, 0.5);
+  --pico-primary-hover: var(--eminia-cobalto-hover);
+  --pico-primary-hover-background: var(--eminia-cobalto-hover);
+  --pico-primary-hover-border: var(--eminia-cobalto-hover);
+  --pico-primary-hover-underline: var(--eminia-cobalto-hover);
+  --pico-primary-focus: rgba(36, 71, 200, 0.35);
+  --pico-primary-inverse: #FFFFFF;
+  --pico-secondary: var(--eminia-pizarra);
+  --pico-secondary-background: var(--eminia-pizarra);
+  --pico-secondary-border: var(--eminia-pizarra);
+  --pico-secondary-hover: var(--eminia-tinta);
+  --pico-secondary-hover-background: var(--eminia-tinta);
+  --pico-secondary-hover-border: var(--eminia-tinta);
+  --pico-secondary-inverse: #FFFFFF;
+  --pico-form-element-border-color: var(--eminia-linea);
+  --pico-form-element-focus-color: var(--eminia-cobalto);
+  --pico-table-border-color: var(--eminia-linea);
+}
+
+h1, h2, h3, h4 { font-family: var(--eminia-serif); font-weight: 600; }
+
+/* Figures and labels: percentages, ranges, months. */
+.cifra, .valor, .indice, td.num { font-family: var(--eminia-mono); font-weight: 500; }
+
+/* Header with the logo. */
+.logo { display: inline-flex; align-items: center; }
+.logo img { height: 2.25rem; width: auto; display: block; }
