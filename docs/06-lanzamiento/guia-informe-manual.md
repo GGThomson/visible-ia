@@ -6,7 +6,7 @@ Para el Director. Tres caminos, de más a menos automático. **Hoy (27/09) se us
 
 ## A. Informe automático (≈ 10 minutos)
 
-Antes de empezar, abre PowerShell en la carpeta del proyecto y activa el entorno: `.venv\Scriptsctivate` (verás `(visible-ia)` al inicio de la línea). Todos los comandos de esta guía se escriben así, sin `uv run`.
+Antes de empezar, abre PowerShell en la carpeta del proyecto y activa el entorno: `.venv\Scripts\activate` (verás `(visible-ia)` al inicio de la línea). Todos los comandos de esta guía se escriben así, sin `uv run`.
 
 Una sola vez en tu PC: `playwright install chromium` (navegador para los PDF).
 
