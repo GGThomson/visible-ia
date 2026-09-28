@@ -7,9 +7,9 @@
 
 ## Dónde estamos
 - **Fase actual:** 5 · Construcción. Fase 4 aprobada el 26/09: arquitectura + plan (tags `fase-4-completa`, `plan-aprobado`)
-- **Tarea actual:** **v1.0 "Vender" cerrada** (tag `v1.0`, 27/09): landing con formulario en producción, informe PDF en prod (informe 1: Clínica Odontologists), aviso diario de prospectos. Siguiente: **C7** (cuentas y panel). Landing: https://visible-ia.pages.dev
+- **Tarea actual:** **C7 (cuentas y panel)**: T01 clientes/sedes/usuarios ✅ y T02 RLS por cliente ✅ en `main` (0006 solo en dev); **T03/T04 acceso + panel listos en el PR #52, sin fusionar** hasta aplicar 0006 en prod y configurar Auth. v1.0 cerrada. Landing: https://visible-ia.pages.dev
 - **Rama de trabajo:** cada tarea en `feat/C<n>-T<nn>-...` desde `main` (las fases 1–4 ya están en `main`)
-- **Avance general:** ████████░░ 78 % (construcción: C1–C6 de C1–C12; v1.0 lista)
+- **Avance general:** ████████░░ 82 % (construcción: C1–C6 y C7 casi, de C1–C12)
 - **Calendario:** construcción del 28/09 al 08/11 · **v1.0 "Vender" el 04/10** · ventas desde el 05/10 · control del Plan B el **jue 02/10** (C6-T05)
 
 ## Ruta de fases
@@ -26,9 +26,9 @@
 <!-- ⚪ pendiente · 🟡 en curso · ✅ completa · ⏭️ omitida (explicar por qué en el brief) -->
 
 ## Próximos 3 pasos
-1. **Director:** llenar el formulario de la landing (prueba real) y ver el issue "Prospectos nuevos" al día siguiente; revisar el informe 1 y enviarlo a Clínica Odontologists si le parece bien
-2. **Ventas desde el 05/10:** primeros prospectos = las 5 clínicas con brecha (Odontologists, Digital Smiles, Elisseum, Virtual Dent, Neodentis); preguntar por el plan Gestionado (H9)
-3. `/siguiente` → **C7** (cuentas y panel). En paralelo: lista de 40 clínicas, WhatsApp, pasarela, legales. ~04/10: confirmar que Supabase dev no se pausó
+1. **Director:** aprobar la migración 0006 en prod; en Supabase (dev y prod) → Authentication: Site URL `https://visible-ia.pages.dev`, Redirect URLs `https://visible-ia.pages.dev/panel/` y `https://*.visible-ia.pages.dev/panel/`, y **apagar "Allow new users to sign up"**; decidir correo (SMTP propio, p. ej. Resend gratis) o enlaces por WhatsApp
+2. Fusionar el PR #52 → demo de C7: invitar una clínica de prueba (`visible-ia usuario invitar <cliente> <correo> --enlace --env prod`), abrir el panel en el celular y confirmar que otra no ve sus datos
+3. Demo v1.0 (formulario → issue) y ventas desde el 05/10 con las 5 clínicas con brecha. Luego C8 (reporte mensual y checklist)
 
 ## Bloqueos / esperando decisión
 - ⏳ **RUC y régimen tributario** (contador) antes del primer cobro. Define si los S/ 349 incluyen IGV (neto ≈ S/ 296) → revisar la meta de la semana 6
