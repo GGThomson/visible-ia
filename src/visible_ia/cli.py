@@ -1349,3 +1349,104 @@ def usuario_invitar(
         typer.echo(f"Enlace de acceso (de un solo uso, vence pronto): {result.link}")
     else:
         typer.echo("Supabase le envió el enlace por correo.")
+
+
+# --- monthly run (C8-T01) ------------------------------------------------------------------
+
+mensual_app = typer.Typer(help="Corrida mensual de los mercados activos.", no_args_is_help=True)
+app.add_typer(mensual_app, name="mensual")
+
+
+def _month_plan(conn, settings):
+    from visible_ia.motor.mensual import plan_month
+    from visible_ia.motor.presupuesto import month_usage
+
+    usage = month_usage(conn, serpapi_account_used=_serpapi_account_used(settings))
+    return plan_month(
+        conn,
+        usage,
+        budget_usd=settings.monthly_budget_usd,
+        serpapi_quota=settings.serpapi_monthly_quota,
+    )
+
+
+def _post_issue(prefix, title, body, *, close=False):
+    import os
+
+    from visible_ia.github_issues import upsert_issue
+
+    token, repo = os.environ.get("GITHUB_TOKEN"), os.environ.get("GITHUB_REPOSITORY")
+    if not (token and repo):
+        typer.echo("(sin GITHUB_TOKEN/GITHUB_REPOSITORY: no se publica el issue)")
+        return
+    typer.echo(
+        f"Issue '{prefix}': "
+        f"{upsert_issue(prefix, title, body, repo=repo, token=token, close=close)}"
+    )
+
+
+@mensual_app.command("estimar")
+def mensual_estimar(
+    issue: bool = typer.Option(False, "--issue", help="Publicar la estimación como issue."),
+    env: str = typer.Option("prod", help="dev o prod."),
+) -> None:
+    """Estima la corrida del mes de los mercados activos. No gasta nada."""
+    from visible_ia.motor.mensual import ESTIMATE_PREFIX, estimate_issue
+
+    target = _resolve_env(env)
+    settings = get_settings()
+    with _connect_or_exit(target) as conn:
+        plan = _month_plan(conn, settings)
+    title, body = estimate_issue(plan)
+    typer.echo(f"{title}\n\n{body}")
+    if issue:
+        _post_issue(f"{ESTIMATE_PREFIX} ", title, body)
+
+
+@mensual_app.command("correr")
+def mensual_correr(
+    issue: bool = typer.Option(False, "--issue", help="Publicar el resultado como issue."),
+    env: str = typer.Option("prod", help="dev o prod."),
+) -> None:
+    """Corre (o retoma) el mes de los mercados activos y extrae. Pensado para el workflow:
+    lanzarlo a mano ES la aprobación del Director; nunca supera el presupuesto."""
+    import openai
+
+    from visible_ia.extractor import llm
+    from visible_ia.motor.mensual import (
+        ESTIMATE_PREFIX,
+        REVIEW_PREFIX,
+        SURFACES,
+        estimate_issue,
+        review_issue,
+        run_month,
+    )
+
+    target = _resolve_env(env)
+    settings = get_settings()
+    with _connect_or_exit(target, autocommit=True) as conn:
+        plan = _month_plan(conn, settings)
+        if not plan.fits:
+            title, body = estimate_issue(plan)
+            typer.echo(f"No se corre: supera el presupuesto o la cuota.\n\n{body}")
+            if issue:
+                _post_issue(f"{ESTIMATE_PREFIX} ", title, body)
+            raise typer.Exit(code=1)
+        clients = _engine_clients(settings, SURFACES)
+        oa = openai.OpenAI(
+            api_key=_openai_key(settings), max_retries=0, timeout=llm.TIMEOUT_SECONDS
+        )
+        prompt = llm.load_prompt()
+
+        def extractor(text, links):
+            return llm.extract(text, link_texts=links, client=oa, prompt=prompt)
+
+        typer.echo(f"Corriendo {len(plan.markets)} mercados (≈ US${plan.estimated_usd:.2f})…")
+        results = run_month(conn, plan, clients, extractor)
+    title, body = review_issue(plan.month, results)
+    typer.echo(f"{title}\n\n{body}")
+    if issue:
+        _post_issue(f"{REVIEW_PREFIX} ", title, body)
+        _post_issue(f"{ESTIMATE_PREFIX} ", None, "Aprobada y ejecutada: ver " + title, close=True)
+    if any(r.failures for r in results):
+        raise typer.Exit(code=1)

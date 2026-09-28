@@ -6,13 +6,13 @@
 - la clínica tiene un checklist priorizado y su schema JSON-LD.
 
 **Historias que cubre:** HU-15, HU-17, HU-18
-**Estado:** ⚪ pendiente
+**Estado:** 🟡 en curso
 **Nota:** las tareas se refinan al empezar la fase, sin cambiar su alcance.
 
 ## Tareas
 
 ### C8-T01 · Workflow de corrida mensual
-- **Estado:** ⚪
+- **Estado:** ✅ · **Cambio aprobado por el Director (27/09):** el día 1 solo estima y abre el issue; la corrida arranca al lanzar el workflow a mano en modo `correr` (esa es la aprobación)
 - **Qué:** `corrida-mensual.yml` (cron el día 1 a las 06:00 hora de Lima, más ejecución manual). Lanza las corridas de los mercados activos en **prod**, con el tope de presupuesto, y extrae las respuestas. Deja un issue "Revisar corridas de <mes>".
 - **Criterios de aceptación:**
   - [ ] Respeta el presupuesto: si se superaría, no corre y lo dice en el issue.
