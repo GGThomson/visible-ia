@@ -21,6 +21,12 @@
     .valor { font-size: .9rem; }
     [hidden] { display: none !important; }
     .detalle-tarea { margin: -.3rem 0 1rem 2rem; font-size: .9rem; color: var(--pico-muted-color); }
+    .conteo { display: grid; grid-template-columns: 1fr 8rem auto; gap: .6rem; align-items: end; }
+    .conteo button { margin-bottom: var(--pico-spacing); }
+    .enlace-utm { display: grid; grid-template-columns: 1fr auto; gap: .6rem; align-items: center; margin-bottom: .6rem; }
+    .enlace-utm code { overflow-wrap: anywhere; font-size: .8rem; }
+    .enlace-utm button { margin: 0; padding: .3rem .8rem; }
+    @media (max-width: 480px) { .conteo { grid-template-columns: 1fr 1fr; } .conteo button { grid-column: span 2; } }
     @media (max-width: 480px) { .fila-barra { grid-template-columns: 1fr; } .indice { font-size: 2.4rem; } }
   </style>
 </head>
@@ -83,12 +89,41 @@
         <button id="copiar-schema" class="secondary">Copiar</button>
         <small id="copiado" hidden>Copiado.</small>
       </section>
+
+      <section aria-labelledby="h-atribucion">
+        <h2 id="h-atribucion">Pacientes que llegan por la IA</h2>
+        <p>Con estas herramientas sabrás cuántos pacientes te encuentran por ChatGPT y otras IA.</p>
+
+        <h3>1. Pregunta al agendar</h3>
+        <p>Hazle esta pregunta a cada paciente nuevo cuando agende (por WhatsApp o teléfono) o en su ficha de ingreso. Anota cuántos responden «ChatGPT u otra IA».</p>
+        <blockquote><strong id="intake-pregunta"></strong><ul id="intake-opciones"></ul></blockquote>
+        <button id="copiar-intake" class="secondary">Copiar pregunta</button>
+        <small id="intake-copiada" hidden>Copiada.</small>
+
+        <h3>2. ¿Cuántos llegaron por la IA?</h3>
+        <form id="form-conteo" class="conteo">
+          <label>Mes <select id="conteo-mes"></select></label>
+          <label>Pacientes <input id="conteo-pacientes" type="number" min="0" max="10000" step="1" required></label>
+          <button type="submit">Guardar</button>
+        </form>
+        <p id="conteo-estado" role="status"></p>
+        <p id="conteo-historial"></p>
+
+        <h3>3. Enlaces con UTM para tu web</h3>
+        <p>Usa estos enlaces a tu web en cada lugar que lee la IA. Así, en las estadísticas de tu web (p. ej., Google Analytics) verás de dónde viene cada visita. ChatGPT agrega por su cuenta <code>utm_source=chatgpt.com</code> a los enlaces que recomienda: búscalo como fuente.</p>
+        <label>Tu web <input id="utm-web" type="url" placeholder="https://tuclinica.pe/"></label>
+        <div id="utm-enlaces"></div>
+
+        <h3>4. Cupón exclusivo sugerido</h3>
+        <p>Publica un beneficio (p. ej., la evaluación gratis) con el código <strong id="cupon"></strong> solo en tu web y en tu perfil de Doctoralia, que son los lugares donde se informa la IA. Quien lo use llegó por ahí.</p>
+      </section>
     </div>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
   <script src="../config.js"></script>
   <script src="comun.js"></script>
   <script src="jsonld.js"></script>
+  <script src="atribucion.js"></script>
   <script src="panel.js"></script>
 </body>
 </html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ clinica }} · Kit de atribución</title>
+<style>
+:root {
+  --primario: {{ marca.color_primario }};
+  --acento: {{ marca.color_acento }};
+  --suave: {{ marca.color_suave }};
+}
+{{ estilos|safe }}
+</style>
+</head>
+<body>
+
+<header class="portada">
+  <div>
+    <h1>¿Cuántos pacientes te llegan por la IA?</h1>
+    <p><b>{{ clinica }}</b> · Kit de atribución</p>
+  </div>
+  <div class="marca">
+    {% if marca.logo_url %}<img src="{{ marca.logo_url }}" alt="{{ marca.nombre }}">{% else %}{{ marca.nombre }}{% endif %}
+  </div>
+</header>
+
+<p class="frase">Tres herramientas para saber cuántos pacientes te encuentran por ChatGPT y otras IA.</p>
+
+<section data-seccion="pregunta">
+  <h2>1. Pregunta al agendar</h2>
+  <p>Hazle esta pregunta a cada paciente nuevo cuando agende (por WhatsApp o teléfono) o en su ficha de ingreso:</p>
+  <div class="ejemplo">
+    <p class="pregunta">{{ pregunta }}</p>
+    <ul style="columns: 2; margin-bottom: 0;">{% for o in opciones %}<li>{% if o == opcion_ia %}<b>{{ o }}</b>{% else %}{{ o }}{% endif %}</li>{% endfor %}</ul>
+  </div>
+  <p>Al final de cada mes, cuenta cuántos respondieron «{{ opcion_ia }}» y anota el total en tu panel ({{ panel }}), en «Pacientes que llegan por la IA».</p>
+</section>
+
+<section data-seccion="utm">
+  <h2>2. Enlaces con UTM para tu web</h2>
+  {% if enlaces %}
+  <p>Pon estos enlaces a tu web en cada lugar que lee la IA. Así, en las estadísticas de tu web (p. ej., Google Analytics) verás de dónde viene cada visita:</p>
+  <table>
+    <thead><tr><th>Dónde va</th><th>Enlace</th></tr></thead>
+    <tbody>{% for e in enlaces %}<tr><td>{{ e.placement }}</td><td style="word-break: break-all; font-size: 9pt;">{{ e.url }}</td></tr>{% endfor %}</tbody>
+  </table>
+  {% else %}
+  <p>No tenemos registrada la dirección de tu web. Cuando la tengas, tu panel arma los enlaces por ti.</p>
+  {% endif %}
+  <p class="nota">ChatGPT agrega por su cuenta <b>utm_source=chatgpt.com</b> a los enlaces que recomienda: búscalo como fuente en tus estadísticas.</p>
+</section>
+
+<section data-seccion="cupon">
+  <h2>3. Cupón exclusivo</h2>
+  <p>Publica un beneficio (p. ej., la evaluación gratis) con el código <b>{{ cupon }}</b> solo en tu web y en tu perfil de Doctoralia, que son los lugares donde se informa la IA. Quien lo use llegó por ahí.</p>
+</section>
+
+<footer>{{ marca.nombre }} · {{ marca.lema }}{% if marca.contacto %} · {{ marca.contacto }}{% endif %} · {{ marca.web }}</footer>
+</body>
+</html>

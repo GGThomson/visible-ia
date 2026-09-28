@@ -15,7 +15,7 @@ SCORES = {
 }
 
 
-def _data(month, calibration=(), alert=False, tasks=None):
+def _data(month, calibration=(), alert=False, tasks=None, ai_patients=None):
     history = [s for m, s in SCORES.items() if m <= month]
     ranking = [
         {"clinic_id": 1, "name": "Smiles Peru", "combined": 50.0, "previous": 48.0},
@@ -35,6 +35,7 @@ def _data(month, calibration=(), alert=False, tasks=None):
             {"title": "Completa tu perfil de Doctoralia", "status": "pending"},
         ],
         calibration=list(calibration), calibration_alert=alert,
+        ai_patients=ai_patients or {},
     )  # fmt: skip
 
 
@@ -42,7 +43,9 @@ def _data(month, calibration=(), alert=False, tasks=None):
 def test_report_renders_with_one_two_and_three_months(month, months):
     html = render_monthly(build_monthly_context(_data(month)))
     sections = re.findall(r'data-seccion="([^"]+)"', html)
-    assert sections == ["resumen", "evolucion", "competidores", "fuentes", "tareas", "calibracion"]
+    assert sections == [
+        "resumen", "evolucion", "competidores", "fuentes", "tareas", "atribucion", "calibracion"
+    ]  # fmt: skip
     assert len(re.findall(r'class="barra( cliente)?"', html)) == months
     assert "None" not in html and "{{" not in html
     assert "No garantizamos un puesto #1" in html
@@ -106,3 +109,16 @@ def test_alert_needs_two_months_below_50():
     assert chatgpt_alert(low, ok) is False
     assert chatgpt_alert(low, []) is False
     assert chatgpt_alert(gemini_low, gemini_low) is False
+
+
+def test_ai_patients_of_the_month_appear_in_the_report():
+    ctx = build_monthly_context(_data(OCT, ai_patients={SEP: 1, OCT: 3, NOV: 7}))
+    assert ctx["atribucion"]["este_mes"] == 3
+    assert [h["pacientes"] for h in ctx["atribucion"]["historial"]] == [1, 3]  # not November
+    html = render_monthly(ctx)
+    assert "registraste <b>3 pacientes</b>" in html and "setiembre" in html
+
+
+def test_report_without_ai_patients_invites_to_count_them():
+    html = render_monthly(build_monthly_context(_data(OCT)))
+    assert "no registraste pacientes por IA" in html and "¿Cómo nos conociste?" in html

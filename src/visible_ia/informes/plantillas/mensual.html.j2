@@ -81,8 +81,24 @@
   {% if not tareas.hechas and not tareas.pendientes %}<p>Tu checklist se prepara con tu primer mes medido.</p>{% endif %}
 </section>
 
+<section data-seccion="atribucion">
+  <h2>6. Pacientes que llegaron por la IA</h2>
+  {% if atribucion.este_mes is not none %}
+  <p class="frase">En {{ mercado.mes }} registraste <b>{{ atribucion.este_mes }} {{ "paciente" if atribucion.este_mes == 1 else "pacientes" }}</b> que dijeron haberte conocido por ChatGPT u otra IA.</p>
+  {% else %}
+  <p>En {{ mercado.mes }} no registraste pacientes por IA. Haz la pregunta «¿Cómo nos conociste?» al agendar y anota el total en tu panel.</p>
+  {% endif %}
+  {% if atribucion.historial|length > 1 %}
+  <table>
+    <thead><tr><th>Mes</th><th class="num">Pacientes por IA</th></tr></thead>
+    <tbody>{% for h in atribucion.historial %}<tr><td>{{ h.mes }}</td><td class="num">{{ h.pacientes }}</td></tr>{% endfor %}</tbody>
+  </table>
+  {% endif %}
+  <p class="nota">Lo cuenta tu equipo con la pregunta de ingreso; no lo medimos nosotros.</p>
+</section>
+
 <section data-seccion="calibracion">
-  <h2>6. Cómo medimos y comparación con las apps</h2>
+  <h2>7. Cómo medimos y comparación con las apps</h2>
   <p>En {{ metodo.mes }} hicimos las mismas 10 preguntas 3 veces a ChatGPT (por su API, con búsqueda web y ubicación en Lima) y a Google Modo IA: {{ metodo.respuestas }} respuestas. Un cambio de menos de {{ actual.detectable }} puntos entre dos meses no se distingue del azar. <b>No garantizamos un puesto #1.</b></p>
   {% if calibracion %}
   <p>Para comprobar que la API se parece a lo que ve un paciente en su teléfono, también preguntamos a mano en las apps:</p>

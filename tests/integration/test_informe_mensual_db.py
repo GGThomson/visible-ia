@@ -2,6 +2,7 @@ from datetime import date
 
 import pytest
 
+from visible_ia.atribucion import save_count
 from visible_ia.checklist import generate
 from visible_ia.clientes import add_site, create_client
 from visible_ia.informes.mensual import build_monthly_context, load_monthly_data
@@ -53,8 +54,11 @@ def test_monthly_report_from_the_database(tx):
         cur.execute("update public.runs set status = 'reviewed' where id = %s", (run,))
     _, month, _ = calculate(tx, run)
     generate(tx, site)
+    save_count(tx, site, month, 2)
+    save_count(tx, site, month, 3)  # the clinic corrects it: the last value wins
 
     data = load_monthly_data(tx, site, month)
+    assert data.ai_patients == {month: 3}
     assert data.clinic_name == "Clínica Mía" and len(data.history) == 1
     assert data.history[0].combined == 100.0 and data.tasks
     [cal] = data.calibration
@@ -65,3 +69,11 @@ def test_monthly_report_from_the_database(tx):
     assert (
         "Clínica Mía" in html and "Completa tu ficha de Google" in html and "ChatGPT (app)" in html
     )
+    assert "registraste <b>3 pacientes</b>" in html
+
+
+def test_ai_patients_need_a_real_site_and_a_sane_number(tx):
+    with pytest.raises(ValueError, match="No existe"):
+        save_count(tx, 10**9, date(2026, 9, 1), 1)
+    with pytest.raises(ValueError, match="entre 0"):
+        save_count(tx, 1, date(2026, 9, 1), -1)

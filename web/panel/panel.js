@@ -47,19 +47,89 @@
     return result.data;
   }
 
+  async function copyText(text, done) {
+    try { await navigator.clipboard.writeText(text); }
+    catch (e) { window.prompt("Copia el texto:", text); }
+    if (done) done.hidden = false;
+  }
+
   async function renderSchema(site, market) {
     var rows = await query(client.from("clinics").select("name, address, website, instagram, maps_url").eq("id", site.clinic_id));
-    if (!rows.length || !market) return;
+    if (!rows.length) return null;
     var c = rows[0];
-    $("schema").value = jsonLdScript(buildJsonLd({
-      name: c.name, category: market.category_code, district: market.district,
-      address: c.address, website: c.website, instagram: c.instagram, mapsUrl: c.maps_url
-    }));
+    if (market) {
+      $("schema").value = jsonLdScript(buildJsonLd({
+        name: c.name, category: market.category_code, district: market.district,
+        address: c.address, website: c.website, instagram: c.instagram, mapsUrl: c.maps_url
+      }));
+    }
+    return c;
+  }
+
+  // C9-T02 (HU-25): attribution kit and the monthly count of patients who came through the AI.
+  function isoMonth(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-01"; }
+
+  function renderUtm(website) {
+    var box = $("utm-enlaces");
+    box.replaceChildren();
+    var links = utmLinks(website);
+    if (!links.length) { box.appendChild(el("p", "Escribe la dirección de tu web para ver tus enlaces.")); return; }
+    links.forEach(function (l) {
+      box.appendChild(el("small", l.placement));
+      var row = el("div", null, "enlace-utm");
+      row.appendChild(el("code", l.url));
+      var button = el("button", "Copiar", "secondary outline");
+      button.type = "button";
+      button.addEventListener("click", function () { copyText(l.url); button.textContent = "Copiado"; });
+      row.appendChild(button);
+      box.appendChild(row);
+    });
+  }
+
+  async function renderAttribution(site, clinic) {
+    $("cupon").textContent = suggestedCoupon((clinic && clinic.name) || "");
+    $("utm-web").value = (clinic && clinic.website) || "";
+    renderUtm($("utm-web").value);
+    $("utm-web").oninput = function () { renderUtm($("utm-web").value); };
+
+    var now = new Date();
+    var months = [isoMonth(now), isoMonth(new Date(now.getFullYear(), now.getMonth() - 1, 1))];
+    var select = $("conteo-mes");
+    select.replaceChildren();
+    months.forEach(function (m) { var o = el("option", monthText(m)); o.value = m; select.appendChild(o); });
+    var counts = {};
+    function showCount() { var v = counts[select.value]; $("conteo-pacientes").value = v === undefined ? "" : v; }
+    async function refresh() {
+      var rows = await query(client.from("attributions").select("month, ai_patients").eq("site_id", site.id).order("month", { ascending: false }).limit(12));
+      counts = {};
+      rows.forEach(function (r) { counts[r.month] = r.ai_patients; });
+      $("conteo-historial").textContent = rows.length
+        ? "Registrado: " + rows.map(function (r) { return monthText(r.month) + ": " + r.ai_patients; }).join(" · ")
+        : "Todavía no registras pacientes por IA.";
+      showCount();
+    }
+    select.onchange = showCount;
+    $("conteo-estado").textContent = "";
+    $("form-conteo").onsubmit = async function (event) {
+      event.preventDefault();
+      var patients = Number($("conteo-pacientes").value);
+      if (!Number.isInteger(patients) || patients < 0) return;
+      $("conteo-estado").textContent = "Guardando…";
+      var result = await client.from("attributions")
+        .upsert({ site_id: site.id, month: select.value, ai_patients: patients, updated_at: new Date().toISOString() }, { onConflict: "site_id,month" })
+        .select();
+      if (result.error || !result.data.length) { $("conteo-estado").textContent = "No se pudo guardar. Inténtalo de nuevo."; return; }
+      $("conteo-estado").textContent = "Guardado: " + patients + " en " + monthText(select.value) + ". Aparecerá en tu reporte mensual.";
+      await refresh();
+    };
+    try { await refresh(); }
+    catch (e) { $("conteo-historial").textContent = "El registro mensual estará disponible pronto."; }
   }
 
   async function renderSite(site, clinics, markets) {
     var market = markets[site.market_id];
-    await renderSchema(site, market);
+    var clinic = await renderSchema(site, market);
+    await renderAttribution(site, clinic);
     $("titulo").textContent = clinics[site.clinic_id] || "Tu clínica";
     var ranking = await query(client.from("v_panel_ranking").select("*").eq("market_id", site.market_id).order("month", { ascending: false }));
     if (!ranking.length) {
@@ -150,6 +220,11 @@
   async function main() {
     if (!client) return fail("El panel no está disponible en este momento.");
     $("salir").addEventListener("click", async function () { await client.auth.signOut(); window.location.replace("login.html"); });
+    $("intake-pregunta").textContent = INTAKE_QUESTION;
+    INTAKE_OPTIONS.forEach(function (o) { $("intake-opciones").appendChild(el("li", o)); });
+    $("copiar-intake").addEventListener("click", function () {
+      copyText(INTAKE_QUESTION + "\n" + INTAKE_OPTIONS.map(function (o) { return "- " + o; }).join("\n"), $("intake-copiada"));
+    });
     $("copiar-schema").addEventListener("click", async function () {
       try { await navigator.clipboard.writeText($("schema").value); }
       catch (e) { $("schema").select(); document.execCommand("copy"); }
