@@ -84,6 +84,9 @@ def test_form_sends_the_request_with_utm(browser_page, page_url, tag):
     [(clinic, category, district, utm, consent)] = _rows(tag)
     assert (clinic, category, district, consent) == ("Clínica de prueba", "IMP", "Miraflores", True)
     assert utm["utm_source"] == "prueba" and utm["utm_campaign"] == "c6"
+    with db.connect(get_settings(), "dev") as conn, conn.cursor() as cur:
+        cur.execute("select consent_version from public.prospects where name = %s", (tag,))
+        assert cur.fetchone()[0] == "2026-09-28"  # proof of which policy was accepted
 
 
 def test_without_consent_nothing_is_sent(browser_page, page_url, tag):

@@ -47,6 +47,7 @@ def _prospect(tag, **extra):
         "contact": "+51 999 999 999",
         "utm": {"utm_source": "test"},
         "consent": True,
+        "consent_version": "2026-09-28",  # required since 0011
         **extra,
     }
 
@@ -56,10 +57,24 @@ def _insert(api, row):
 
 
 def test_anon_can_insert_a_request_with_consent(api, marker):
-    assert _insert(api, _prospect(marker)).status_code == 201
+    assert _insert(api, _prospect(marker, consent_version="2026-09-28")).status_code == 201
     with db.connect(get_settings(), "dev") as conn, conn.cursor() as cur:
-        cur.execute("select status, seen, utm from public.prospects where name = %s", (marker,))
-        assert cur.fetchone() == ("new", False, {"utm_source": "test"})
+        cur.execute(
+            "select status, seen, utm, consent_version, consent_at is not null "
+            "from public.prospects where name = %s",
+            (marker,),
+        )
+        assert cur.fetchone() == ("new", False, {"utm_source": "test"}, "2026-09-28", True)
+
+
+def test_the_form_sends_the_same_policy_version_the_page_shows():
+    import re
+    from pathlib import Path
+
+    web = Path(__file__).resolve().parents[2] / "web"
+    sent = re.search(r'POLICY_VERSION = "([\d-]+)"', (web / "app.js").read_text(encoding="utf-8"))
+    shown = (web / "privacidad.html").read_text(encoding="utf-8")
+    assert sent and f"Versión {sent.group(1)}" in shown
 
 
 @pytest.mark.parametrize(
@@ -71,6 +86,8 @@ def test_anon_can_insert_a_request_with_consent(api, marker):
         {"do_not_contact": True},
         {"contact": "x"},
         {"consent_at": "2020-01-01T00:00:00Z"},
+        {"consent_version": "la última"},
+        {"consent_version": None},  # 0011: the policy version is required
     ],
 )
 def test_anon_cannot_skip_consent_or_set_internal_fields(api, marker, extra):

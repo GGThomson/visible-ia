@@ -1,11 +1,13 @@
-# Brand of the reports. C10 (white label for agencies) replaces these values per agency.
-nombre = "visible-ia"
-lema = "Cómo te ve la IA cuando un paciente busca clínica"
-color_primario = "#0F4C5C"
-color_acento = "#E36414"
-color_suave = "#E8F1F2"
+# Brand of the reports (Eminia, ADR-005). C10 (white label for agencies) replaces these values
+# per agency.
+nombre = "Eminia"
+lema = "Que la IA te nombre a ti"
+color_primario = "#0F1B2D"  # Tinta noche: titles and text
+color_acento = "#2447C8"  # Cobalto: only "your clinic" (and buttons on the web)
+color_suave = "#F4F6F9"  # Niebla: soft backgrounds
 # Optional: absolute URL or data: URI of a logo. Empty = the name is shown as text.
-logo_url = ""
+# Eminia: web/marca/logo.svg embedded, so the PDF needs no internet (a test keeps them in sync).
+logo_url = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCAyNDAgNDgiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iRW1pbmlhIj4KICA8cmVjdCB4PSIxMCIgeT0iOSIgd2lkdGg9IjUiIGhlaWdodD0iMzAiIGZpbGw9IiMwRjFCMkQiLz4KICA8cmVjdCB4PSIxMCIgeT0iOSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjUiIGZpbGw9IiMwRjFCMkQiLz4KICA8cmVjdCB4PSIxMCIgeT0iMjEuNSIgd2lkdGg9IjI4IiBoZWlnaHQ9IjUiIGZpbGw9IiMyNDQ3QzgiLz4KICA8cmVjdCB4PSIxMCIgeT0iMzQiIHdpZHRoPSIxNSIgaGVpZ2h0PSI1IiBmaWxsPSIjMEYxQjJEIi8+CiAgPHRleHQgeD0iNTAiIHk9IjMzIiBmb250LWZhbWlseT0iJ1NvdXJjZSBTZXJpZiA0JywgR2VvcmdpYSwgc2VyaWYiIGZvbnQtc2l6ZT0iMjciIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiMwRjFCMkQiPkVtaW5pYTwvdGV4dD4KPC9zdmc+Cg=="
 # Real contact of the Director (email or WhatsApp). Empty = not shown.
 contacto = "WhatsApp +51 920 857 428"
 web = "https://visible-ia.pages.dev"

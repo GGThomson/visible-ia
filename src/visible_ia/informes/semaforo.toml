@@ -1,0 +1,30 @@
+# Traffic light of the free diagnostic's summary (redesign 28/09/2026; rule of 29/09/2026,
+# approved by the Director). Each area compares the clinic's figure with the leader's (the
+# runner-up when the clinic leads): "Bien" when it reaches `bien` of the leader's figure,
+# "Regular" when it reaches `regular`, "Bajo" below. A missing figure, or a leader at 0, shows
+# "Sin datos" (grey), never an invented colour. The report's annex calls this "criterio Eminia".
+# Tested in tests/unit/test_semaforo.py.
+
+[corte]
+bien = 0.8     # 80 % of the leader's figure or more
+regular = 0.4  # from 40 % to 80 %
+
+[[area]]
+id = "presencia"
+nombre = "Presencia en IA"
+mide = "% de respuestas que te nombran (Índice Eminia)"
+
+[[area]]
+id = "web"
+nombre = "Tu web como fuente"
+mide = "% de respuestas que citan tu web (0 % si no tienes web registrada)"
+
+[[area]]
+id = "directorios"
+nombre = "Doctoralia y directorios"
+mide = "% de las respuestas que te nombran que citan Doctoralia o directorios"
+
+[[area]]
+id = "maps"
+nombre = "Reputación en Maps"
+mide = "Número de reseñas en Google Maps (las estrellas casi no varían entre clínicas)"

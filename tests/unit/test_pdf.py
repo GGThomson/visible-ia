@@ -20,12 +20,13 @@ def _pdf(tmp_path, data):
         pytest.skip(str(exc))
 
 
-def test_pdf_has_at_most_4_pages_and_is_small(tmp_path):
+def test_pdf_is_short_and_small(tmp_path):
     from pypdf import PdfReader
 
     path, seconds = _pdf(tmp_path, _data())
     reader = PdfReader(path)
-    assert 1 <= len(reader.pages) <= 4
+    # PRD HU-14 (Director, 28/09): <= 8 pages, summary on page 1 plus sections and annex.
+    assert 1 <= len(reader.pages) <= 8
     assert path.stat().st_size < 2 * 1024 * 1024
     assert seconds < 60
     text = " ".join(page.extract_text() for page in reader.pages)

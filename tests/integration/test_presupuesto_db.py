@@ -45,3 +45,18 @@ def test_month_usage_sums_only_the_lima_month(tx):
     assert usage.spent_usd == pytest.approx(0.05 + 2 * 0.0002)
     assert usage.serpapi_used == 1
     assert month_usage(tx, now, serpapi_account_used=9).serpapi_used == 9
+
+
+def test_diagnostic_llm_costs_count_in_the_month(tx):
+    from visible_ia.motor.presupuesto import record_llm_cost
+
+    before = month_usage(tx).spent_usd
+    record_llm_cost(tx, "diagnostic_reasons", model="gpt-5-nano", calls=70, cost_usd=0.015)
+    assert month_usage(tx).spent_usd == pytest.approx(before + 0.015)
+    with tx.cursor() as cur:  # a cost of another Lima month does not count
+        cur.execute(
+            "insert into public.llm_costs (kind, model, calls, cost_usd, created_at) "
+            "values ('diagnostic_reasons', 'gpt-5-nano', 1, 0.5, '2026-10-01 04:00+00')"
+        )
+    oct_usage = month_usage(tx, datetime(2026, 10, 25, tzinfo=UTC)).spent_usd
+    assert oct_usage < 0.5

@@ -1,38 +1,45 @@
-# Base checklist of the free diagnostic report (HU-14, part 5). The report picks 3, in this
-# priority order, among those whose condition applies to the clinic (see informes/contexto.py).
+# Base checklist of the free diagnostic report (HU-14, action plan). The report picks up to 3 among
+# those whose area is not already "Bien", ordered by their computed impact (informes/contexto.py).
 # Wording is for the clinic owner: plain Spanish from Peru, no jargon. Placeholders in {braces}.
 
 [[recomendacion]]
 id = "web"
+esfuerzo = "medio"  # bajo / medio / alto (redesign 28/09)
 titulo = "Una página clara de {tratamiento} en tu web"
-texto = "Las webs propias son la fuente más citada por la IA en tu mercado ({pct_web} % de las respuestas), pero la tuya no apareció como fuente. Crea una página dedicada a {tratamiento} en {distrito}: quién atiende, tecnología, precios de referencia, preguntas frecuentes y datos de contacto, con marcado schema de clínica."
+texto = "Las webs propias son la fuente más citada por la IA en tu mercado ({pct_web} % de las respuestas); la tuya se citó {web_tuya}. Crea una página dedicada a {tratamiento} en {distrito}: quién atiende, tecnología, precios de referencia, preguntas frecuentes y datos de contacto, con marcado schema de clínica."
 
 [[recomendacion]]
 id = "google"
+esfuerzo = "bajo"  # bajo / medio / alto (redesign 28/09)
 titulo = "Tu ficha de Google, completa y con reseñas que hablen de {tratamiento}"
 texto = "En Google Modo IA apareces en {google} % de las respuestas, frente a {chatgpt} % en ChatGPT. Completa categorías, servicios y fotos de tu ficha, y pide a tus pacientes reseñas que mencionen el tratamiento y el distrito."
 
 [[recomendacion]]
 id = "resenas"
+esfuerzo = "medio"  # bajo / medio / alto (redesign 28/09)
 titulo = "Más reseñas en Google Maps"
 texto = "Tienes {resenas} reseñas; las clínicas que más recomienda la IA en tu mercado tienen varias veces más. Pide la reseña al terminar cada tratamiento, con un enlace directo por WhatsApp."
 
 [[recomendacion]]
 id = "doctoralia"
+esfuerzo = "bajo"  # bajo / medio / alto (redesign 28/09)
 titulo = "Un perfil completo en Doctoralia"
-texto = "Doctoralia aparece como fuente en {pct_doctoralia} % de las respuestas de tu mercado. Completa el perfil de la clínica y de cada especialista, con {tratamiento} como servicio y opiniones verificadas."
+texto = "Doctoralia aparece como fuente en {pct_doctoralia} % de las respuestas de tu mercado, y Doctoralia o algún directorio, en {dir_tuyo} respuestas que te nombran. Completa el perfil de la clínica y de cada especialista, con {tratamiento} como servicio y opiniones verificadas."
 
 [[recomendacion]]
 id = "chatgpt"
+esfuerzo = "medio"  # bajo / medio / alto (redesign 28/09)
 titulo = "Presencia en los sitios que consulta ChatGPT"
 texto = "ChatGPT te nombra en {chatgpt} % de sus respuestas, frente a {google} % en Google. ChatGPT se apoya mucho en webs, directorios y rankings ({pct_directorios} % de las respuestas los citan): asegúrate de figurar, con datos correctos, en los directorios de tu rubro."
 
 [[recomendacion]]
 id = "brecha"
+esfuerzo = "medio"  # bajo / medio / alto (redesign 28/09)
 titulo = "Convierte tu reputación en Maps en presencia en la IA"
 texto = "Tienes {rating} ★ con {resenas} reseñas, mejor que muchas clínicas que la IA sí nombra, pero apareces en solo {indice} % de las respuestas. Tu reputación no se está traduciendo en recomendaciones: la IA necesita encontrarte también en tu web y en fuentes externas."
 
 [[recomendacion]]
 id = "mantener"
+esfuerzo = "bajo"  # bajo / medio / alto (redesign 28/09)
 titulo = "Mantén y amplía tu ventaja"
 texto = "Ya estás entre las clínicas más nombradas ({indice} % de las respuestas). Mantén tu web, tu ficha y tus perfiles al día y mide cada mes: la IA cambia sus respuestas y tus competidores también se mueven."

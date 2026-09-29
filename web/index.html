@@ -3,111 +3,474 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>visible-ia · ¿La IA recomienda tu clínica?</title>
-  <meta name="description" content="Medimos si ChatGPT y Google recomiendan tu clínica en tu distrito de Lima, frente a tu competencia. Pide tu informe gratis.">
+  <title>Eminia · ¿La IA recomienda tu clínica?</title>
+  <meta name="description" content="Le preguntamos a ChatGPT y a Google lo mismo que tus pacientes y te mostramos cuánto te nombran frente a las clínicas de tu distrito. Pide tu diagnóstico gratis.">
   <meta name="robots" content="noindex">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-  <style>
-    :root { --acento: #E36414; }
-    main { max-width: 44rem; padding-top: 2.5rem; }
-    h1 { margin-bottom: .6rem; }
-    .lead { font-size: 1.15rem; }
-    .pasos { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
-    .pasos article { margin: 0; }
-    .barra { display: grid; grid-template-columns: 9rem 1fr; gap: .6rem; align-items: center; margin: .35rem 0; }
-    .riel { background: var(--pico-muted-border-color); border-radius: .3rem; height: 1.3rem; }
-    .relleno { background: var(--pico-primary-background); height: 100%; border-radius: .3rem; }
-    .barra.tu .relleno { background: var(--acento); }
-    .barra.tu span { color: var(--acento); font-weight: 700; }
-    .valor { font-size: .9rem; }
-    .trampa { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-    #resultado[hidden] { display: none; }
-    small.nota { color: var(--pico-muted-color); }
-    @media (max-width: 480px) { .barra { grid-template-columns: 1fr; } }
-  </style>
+  <link rel="icon" type="image/svg+xml" href="marca/simbolo.svg">
+  <link rel="stylesheet" href="landing.css">
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
-  <main class="container">
-    <h1>¿ChatGPT y Google recomiendan tu clínica?</h1>
-    <p class="lead">
-      Cada vez más pacientes en Lima le preguntan a la IA dónde atenderse. <strong>visible-ia</strong>
-      mide si tu clínica aparece cuando alguien busca tu especialidad en tu distrito, frente a tu
-      competencia, y qué hacer para aparecer más.
-    </p>
-    <p><a href="#pedir" role="button">Pide tu informe gratis</a></p>
+  <header class="encabezado">
+    <div class="envoltura">
+      <a class="logo" href="#inicio" aria-label="Eminia, ir al inicio"><img src="marca/logo.svg" alt="Eminia" width="160" height="32"></a>
+      <nav aria-label="Principal">
+        <a href="#como">Cómo funciona</a>
+        <a href="#planes">Planes</a>
+        <a href="#preguntas">Preguntas</a>
+        <a class="boton principal" href="#pedir">Diagnóstico gratis</a>
+      </nav>
+    </div>
+  </header>
 
-    <section>
-      <h2>Cómo funciona</h2>
-      <div class="pasos">
-        <article><strong>1. Preguntamos como un paciente.</strong><br>10 preguntas reales de tu especialidad y distrito, 3 veces cada una, a ChatGPT y a Google en su Modo IA.</article>
-        <article><strong>2. Contamos a quién nombra.</strong><br>En cuántas respuestas apareces tú y tus competidores, con un rango honesto de variación.</article>
-        <article><strong>3. Te decimos qué hacer.</strong><br>Qué fuentes usa la IA en tu mercado y 3 acciones concretas para aparecer más.</article>
+  <main id="inicio">
+    <section class="portada">
+      <div class="envoltura">
+        <div>
+          <h1>¿La IA recomienda tu clínica o la de tu competencia?</h1>
+          <p class="intro">Antes, el paciente buscaba en Google y veía 10 clínicas. Hoy le pregunta a la IA y recibe 3 o 4 nombres. Si no eres uno de ellos, ese paciente no te llama.</p>
+          <p>Le preguntamos a ChatGPT y a Google lo mismo que tus pacientes, 30 veces cada uno, y te damos tu <strong>Índice Eminia</strong>: el % de respuestas que nombran a tu clínica, con su rango, frente a las clínicas de tu distrito. Luego te ayudamos a que la IA te recomiende.</p>
+          <p class="oferta"><strong>Gratis y en 3 días hábiles:</strong> tu Índice Eminia frente a 3 competidores de tu distrito, y 3 arreglos concretos.</p>
+          <div class="acciones">
+            <a class="boton principal" href="#pedir">Quiero mi diagnóstico gratis</a>
+            <a class="boton secundario whatsapp" href="https://wa.me/51920857428?text=Hola%2C%20quiero%20mi%20diagn%C3%B3stico%20gratis%20de%20Eminia.%20Mi%20cl%C3%ADnica%20es%3A%20%5Bnombre%5D%2C%20en%20%5Bdistrito%5D." rel="noopener" target="_blank"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-4.2A8.5 8.5 0 1 1 20 11.5z"/></svg>Pídelo por WhatsApp</a>
+          </div>
+          <p class="nota">En PDF, por WhatsApp. Sin compromiso.</p>
+        </div>
+
+        <div class="chat" aria-label="Ejemplo de conversación con la IA, con nombres ficticios">
+          <span class="etiqueta">Ejemplo con nombres ficticios</span>
+          <p class="burbuja paciente paso">¿Qué clínica me recomiendas para ponerme implantes dentales en Miraflores?</p>
+          <div class="burbuja ia">
+            <span class="paso">Estas clínicas de Miraflores tienen buenas reseñas en implantes:</span>
+            <ol>
+              <li class="paso">Clínica Sonrisa Larco</li>
+              <li class="paso">Centro Dental Pardo</li>
+              <li class="paso">Implantes Benavides</li>
+            </ol>
+          </div>
+          <p class="ausente paso">Tu clínica no aparece.</p>
+        </div>
       </div>
     </section>
 
-    <section>
-      <h2>Así se ve tu informe</h2>
-      <p>Ejemplo basado en una medición real de un mercado de Lima, con nombres y datos cambiados. % de respuestas en que la IA nombró a cada clínica.</p>
-      <div class="barra"><span>Clínica A</span><div><div class="riel"><div class="relleno" style="width:50%"></div></div><div class="valor">50 % (entre 38 % y 62 %)</div></div></div>
-      <div class="barra"><span>Clínica B</span><div><div class="riel"><div class="relleno" style="width:37%"></div></div><div class="valor">37 % (entre 26 % y 49 %)</div></div></div>
-      <div class="barra"><span>Clínica C</span><div><div class="riel"><div class="relleno" style="width:30%"></div></div><div class="valor">30 % (entre 20 % y 43 %)</div></div></div>
-      <div class="barra tu"><span>Tu clínica</span><div><div class="riel"><div class="relleno" style="width:10%"></div></div><div class="valor">10 % (entre 5 % y 20 %) · excelentes reseñas en Google Maps</div></div></div>
-      <p>En este ejemplo, una clínica con excelentes reseñas en Google Maps casi no aparece en la IA. El informe (3–4 páginas, en PDF) incluye además respuestas reales de cada IA, las fuentes que consulta en tu mercado, tu brecha entre Maps y la IA, y 3 recomendaciones.</p>
+    <div class="vitrina" aria-label="Así se ve Eminia por dentro (ilustración)">
+      <div class="envoltura">
+        <div class="vitrina-marco asoma">
+          <div class="marco"><div class="marco-barra" aria-hidden="true"><span></span><span></span><span></span><em>eminia · tu panel</em></div><div class="marco-pantalla"><img src="marca/ilustra-panel.svg" width="480" height="300" alt="Ilustración del panel de Eminia: tu índice, una flecha que sube y un ranking con tu clínica en azul."></div></div>
+          <span class="flotante f1"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 11l4-4 3 3 3-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Subió frente al mes anterior</span>
+          <span class="flotante f2"><i class="luz-ambar" aria-hidden="true"></i>Tu web como fuente: Regular</span>
+          <span class="flotante f3"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Arreglo 1: hecho</span>
+        </div>
+      </div>
+    </div>
+
+    <aside class="garantias-franja" aria-label="Garantías">
+      <div class="envoltura">
+        <p><strong>Sin permanencia:</strong> cancelas cuando quieras.</p>
+        <p><strong>Entrega en 10 días hábiles.</strong></p>
+        <p><strong>Precio fundador</strong> para las 5 primeras clínicas.</p>
+      </div>
+    </aside>
+
+    <section class="seccion tinta" aria-labelledby="h-datos">
+      <div class="envoltura aparece">
+        <h2 id="h-datos" class="datos-titulo">La IA ya decide qué clínica eligen</h2>
+        <div class="datos">
+          <div class="dato">
+            <span class="cifra" data-contar="23" data-formato="{n} %">23 %</span>
+            <p>de las personas en Lima Metropolitana ya usa herramientas de IA: casi 1 de cada 4.</p>
+            <span class="fuente"><a href="https://dplnews.com/16-peruanos-usa-herramientas-inteligencia-artificial-erestel/" rel="noopener" target="_blank">Osiptel, ERESTEL 2025</a></span>
+          </div>
+          <div class="dato">
+            <span class="cifra" data-contar="45" data-formato="6 % → {n} %">6 % → 45 %</span>
+            <p>creció en un año la gente que pide a la IA recomendaciones de negocios locales (EE. UU.).</p>
+            <span class="fuente"><a href="https://www.brightlocal.com/research/lcrs-ai-trust/" rel="noopener" target="_blank">BrightLocal, 2026</a></span>
+          </div>
+          <div class="dato">
+            <span class="cifra" data-contar="8" data-formato="{n} % vs 15 %">8 % vs 15 %</span>
+            <p>de las visitas a Google terminan en un clic cuando aparece un resumen de IA, frente a cuando no aparece (EE. UU.).</p>
+            <span class="fuente"><a href="https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/" rel="noopener" target="_blank">Pew Research Center, 2025</a></span>
+          </div>
+          <div class="dato">
+            <span class="cifra" data-contar="32" data-formato="{n} %">32 %</span>
+            <p>de los adultos usó chatbots de IA para informarse sobre salud en el último año: 1 de cada 3 (EE. UU.).</p>
+            <span class="fuente"><a href="https://www.kff.org/health-information-trust/poll-1-in-3-adults-are-turning-to-ai-chatbots-for-health-information-equaling-the-share-who-use-social-media-for-health/" rel="noopener" target="_blank">KFF, 2026</a></span>
+          </div>
+          <div class="dato">
+            <span class="cifra" data-contar="230" data-formato="{n} millones">230 millones</span>
+            <p>de personas hacen preguntas de salud a ChatGPT cada semana, en todo el mundo.</p>
+            <span class="fuente"><a href="https://openai.com/index/introducing-chatgpt-health/" rel="noopener" target="_blank">OpenAI, 2026</a></span>
+          </div>
+          <div class="dato">
+            <span class="cifra" data-contar="34" data-formato="{n}">34</span>
+            <p>clínicas distintas nombró la IA en 60 respuestas sobre implantes en Miraflores.</p>
+            <span class="fuente">Medición propia, setiembre 2026</span>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="pedir">
-      <h2>Pide tu informe gratis</h2>
-      <p>Por ahora medimos implantología, estética dental, medicina estética y dermatología en Miraflores, San Isidro y Surco.</p>
-      <form id="formulario" novalidate>
-        <label>Tu nombre
-          <input name="name" required minlength="2" maxlength="120" autocomplete="name">
-        </label>
-        <label>Nombre de la clínica
-          <input name="clinic_name" required minlength="2" maxlength="160">
-        </label>
-        <div class="grid">
-          <label>Especialidad
-            <select name="category_code" required>
-              <option value="" selected disabled>Elige una</option>
-              <option value="IMP">Implantología</option>
-              <option value="EDE">Estética dental</option>
-              <option value="MES">Medicina estética</option>
-              <option value="DER">Dermatología</option>
-            </select>
-          </label>
-          <label>Distrito
-            <select name="district" required>
-              <option value="" selected disabled>Elige uno</option>
-              <option>Miraflores</option>
-              <option>San Isidro</option>
-              <option>Surco</option>
-              <option>Otro</option>
-            </select>
-          </label>
-        </div>
-        <label>WhatsApp o correo
-          <input name="contact" required minlength="6" maxlength="160" autocomplete="tel email" placeholder="+51 9xx xxx xxx o tu@correo.com">
-        </label>
-        <div class="trampa" aria-hidden="true">
-          <label>Deja este campo vacío <input name="website" tabindex="-1" autocomplete="off"></label>
-        </div>
-        <label>
-          <input type="checkbox" name="consent" required>
-          Acepto que visible-ia me contacte por este medio para enviarme el informe. Solo usamos tus datos para eso y puedes pedir que los borremos cuando quieras.
-        </label>
-        <button type="submit" id="enviar">Quiero mi informe gratis</button>
-        <p id="error" role="alert" hidden></p>
-      </form>
-      <article id="resultado" hidden>
-        <strong>¡Listo!</strong> Recibimos tu pedido. Te escribiremos en los próximos días con tu informe.
-      </article>
+    <section id="como" class="seccion" aria-labelledby="h-como">
+      <div class="envoltura aparece">
+        <h2 id="h-como">Cómo funciona</h2>
+        <ol class="pasos">
+          <li>
+            <svg class="trazo" viewBox="0 0 124 60" aria-hidden="true"><path pathLength="1" d="M6 40 C 30 10, 52 10, 70 30 S 104 54, 118 22" /><path pathLength="1" class="final" d="M110 16 L118 22 L112 30"/></svg>
+            <h3>Preguntamos como tus pacientes</h3>
+            <p>10 preguntas reales de tu especialidad y tu distrito, 3 veces cada una, a ChatGPT y a Google en su Modo IA.</p>
+          </li>
+          <li>
+            <svg class="trazo" viewBox="0 0 124 60" aria-hidden="true"><path pathLength="1" d="M8 48 L32 48 L32 34 L56 34 L56 22 L80 22" /><path pathLength="1" class="final" d="M80 22 L80 10 L110 10"/></svg>
+            <h3>Calculamos tu Índice Eminia</h3>
+            <p>El % de respuestas en que la IA te nombra a ti y a tu competencia, con un rango honesto de variación.</p>
+          </li>
+          <li>
+            <svg class="trazo" viewBox="0 0 124 60" aria-hidden="true"><path pathLength="1" d="M8 50 C 40 50, 60 44, 80 26" /><path pathLength="1" class="final" d="M80 26 L108 8 M96 8 L108 8 L108 20"/></svg>
+            <h3>Arreglamos lo que más pesa</h3>
+            <p>Vemos qué fuentes consulta la IA en tu mercado y trabajamos primero las que más pesan: tu ficha de Google, Doctoralia y tu web.</p>
+          </li>
+        </ol>
+      </div>
     </section>
 
-    <footer>
-      <small class="nota">No prometemos un "puesto #1": medimos con repeticiones y te mostramos el margen de variación. Nadie controla lo que responde la IA.</small>
-    </footer>
+    <section id="recibes" class="seccion niebla" aria-labelledby="h-recibes">
+      <div class="envoltura aparece">
+        <h2 id="h-recibes">Qué recibes cada mes</h2>
+        <ul class="recibe-grilla">
+          <li class="recibe"><span class="icono-caja"><svg class="icono" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22a11 11 0 0 1 22 0"/><path d="M16 22l6-7"/><circle cx="16" cy="22" r="1.6"/><path d="M5 26h22"/></svg></span><h3>Tu Índice Eminia con su rango</h3><p>Cuánto te nombra la IA en ChatGPT y Google, frente a las clínicas de tu distrito.</p></li>
+          <li class="recibe"><span class="icono-caja"><svg class="icono" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 26V16h6v10M13 26V8h6v18M21 26V12h6v14"/><path d="M4 26h24"/></svg></span><h3>Tu ranking y tus competidores</h3><p>Quién te gana, en qué IA, y si subiste o bajaste: solo te lo decimos cuando el cambio es claro.</p></li>
+          <li class="recibe"><span class="icono-caja"><svg class="icono" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 28s-8-7.2-8-13a8 8 0 0 1 16 0c0 5.8-8 13-8 13z"/><circle cx="16" cy="15" r="3"/></svg></span><h3>Las fuentes que mira la IA</h3><p>Google Maps, Doctoralia, webs y redes: las que más pesan en tu mercado.</p></li>
+          <li class="recibe"><span class="icono-caja"><svg class="icono" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="6" width="5" height="5" rx="1"/><path d="m6.5 8.6 1.2 1.2 2.2-2.4"/><path d="M14 8.5h13"/><rect x="5" y="14" width="5" height="5" rx="1"/><path d="M14 16.5h13"/><rect x="5" y="22" width="5" height="5" rx="1"/><path d="M14 24.5h9"/></svg></span><h3>Tu lista de arreglos en orden</h3><p>Qué hacer primero, y lo marcas como hecho en tu panel.</p></li>
+          <li class="recibe"><span class="icono-caja"><svg class="icono" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m11 10-6 6 6 6M21 10l6 6-6 6M18 7l-4 18"/></svg></span><h3>Código listo para tu web</h3><p>El código de tu clínica (JSON-LD) para que la IA entienda quién eres.</p></li>
+          <li class="recibe"><span class="icono-caja"><svg class="icono" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="11" r="4.5"/><path d="M5 26c0-4.4 3.6-8 8-8s8 3.6 8 8"/><path d="M24 11v8M20 15h8"/></svg></span><h3>Cuántos pacientes llegan por la IA</h3><p>El kit «¿Cómo nos conociste?» y el conteo del mes en tu reporte.</p></li>
+        </ul>
+
+        <div class="recorrido">
+          <div class="pestanas" role="tablist" aria-label="Lo que recibes, pieza por pieza">
+            <button type="button" role="tab" id="pestana-diagnostico" aria-controls="vista-diagnostico" aria-selected="true" tabindex="0">Diagnóstico</button>
+            <button type="button" role="tab" id="pestana-panel" aria-controls="vista-panel" aria-selected="false" tabindex="-1">Panel</button>
+            <button type="button" role="tab" id="pestana-mensual" aria-controls="vista-mensual" aria-selected="false" tabindex="-1">Informe mensual</button>
+            <button type="button" role="tab" id="pestana-checklist" aria-controls="vista-checklist" aria-selected="false" tabindex="-1">Checklist</button>
+            <button type="button" role="tab" id="pestana-kit" aria-controls="vista-kit" aria-selected="false" tabindex="-1">Kit</button>
+          </div>
+          <div role="tabpanel" id="vista-diagnostico" aria-labelledby="pestana-diagnostico" class="vista" tabindex="0">
+            <div class="marco"><div class="marco-barra" aria-hidden="true"><span></span><span></span><span></span><em>eminia · diagnóstico</em></div><div class="marco-pantalla"><img src="marca/ilustra-diagnostico.svg" width="480" height="300" alt="Ilustración: Un informe con barras, tu clínica en azul, y un semáforo de cuatro áreas."><span class="flotante chip-pestana">Semáforo de 4 áreas</span></div></div>
+            <ul class="vinetas">
+              <li>Tu Índice Eminia frente a 3 competidores de tu distrito.</li>
+              <li>Un semáforo de 4 áreas: dónde estás bien y dónde no.</li>
+              <li>3 arreglos concretos, con impacto y esfuerzo.</li>
+            </ul>
+          </div>
+          <div role="tabpanel" id="vista-panel" aria-labelledby="pestana-panel" class="vista" tabindex="0" hidden>
+            <div class="marco"><div class="marco-barra" aria-hidden="true"><span></span><span></span><span></span><em>eminia · panel</em></div><div class="marco-pantalla"><img src="marca/ilustra-panel.svg" width="480" height="300" alt="Ilustración: Un panel con tu índice, una flecha que sube y un ranking con tu clínica en azul."><span class="flotante chip-pestana">Solo cambios claros</span></div></div>
+            <ul class="vinetas">
+              <li>Tu índice y tu ranking, siempre a mano.</li>
+              <li>Si subiste o bajaste, solo cuando el cambio es claro.</li>
+              <li>Las fuentes que más pesan en tu distrito.</li>
+            </ul>
+          </div>
+          <div role="tabpanel" id="vista-mensual" aria-labelledby="pestana-mensual" class="vista" tabindex="0" hidden>
+            <div class="marco"><div class="marco-barra" aria-hidden="true"><span></span><span></span><span></span><em>eminia · informe mensual</em></div><div class="marco-pantalla"><img src="marca/ilustra-mensual.svg" width="480" height="300" alt="Ilustración: Un informe con barras que crecen mes a mes."><span class="flotante chip-pestana">Un PDF cada mes</span></div></div>
+            <ul class="vinetas">
+              <li>Un PDF cada mes con tu evolución.</li>
+              <li>Qué cambió frente al mes anterior y frente a tu competencia.</li>
+              <li>Cuántos pacientes llegaron por la IA.</li>
+            </ul>
+          </div>
+          <div role="tabpanel" id="vista-checklist" aria-labelledby="pestana-checklist" class="vista" tabindex="0" hidden>
+            <div class="marco"><div class="marco-barra" aria-hidden="true"><span></span><span></span><span></span><em>eminia · checklist</em></div><div class="marco-pantalla"><img src="marca/ilustra-checklist.svg" width="480" height="300" alt="Ilustración: Una lista de arreglos en orden, con los primeros marcados como hechos."><span class="flotante chip-pestana">Arreglo 1: hecho</span></div></div>
+            <ul class="vinetas">
+              <li>Qué arreglar primero, en orden.</li>
+              <li>Lo marcas como hecho en tu panel.</li>
+              <li>En el Plan Gestionado, lo hacemos nosotros.</li>
+            </ul>
+          </div>
+          <div role="tabpanel" id="vista-kit" aria-labelledby="pestana-kit" class="vista" tabindex="0" hidden>
+            <div class="marco"><div class="marco-barra" aria-hidden="true"><span></span><span></span><span></span><em>eminia · kit</em></div><div class="marco-pantalla"><img src="marca/ilustra-kit.svg" width="480" height="300" alt="Ilustración: Una tarjeta que cuenta los pacientes que llegan por la IA."><span class="flotante chip-pestana">+1 paciente por la IA</span></div></div>
+            <ul class="vinetas">
+              <li>La pregunta «¿Cómo nos conociste?», lista para usar.</li>
+              <li>Enlaces con UTM para tu web y Doctoralia.</li>
+              <li>Un cupón exclusivo para los lugares que lee la IA.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="cierre-recibe">En el Plan Gestionado, además, nosotros hacemos los arreglos. <a href="#planes">Ver planes</a></p>
+      </div>
+    </section>
+
+    <section id="fuentes" class="seccion" aria-labelledby="h-fuentes">
+      <div class="envoltura aparece">
+        <h2 id="h-fuentes">Qué mira la IA para elegir una clínica</h2>
+        <p>Antes de responder, la IA busca en internet. En nuestra prueba con ChatGPT, Gemini y Google Modo IA, esto fue lo que más consultó:</p>
+        <ul class="fuentes-ia">
+          <li><h3>Tu ficha de Google Maps</h3><p>La fuente principal: Gemini se apoyó en fichas de Maps en 10 de 10 respuestas y Google Modo IA, en 7 de 10.</p></li>
+          <li><h3>Doctoralia</h3><p>Citada en 5 de 11 respuestas de ChatGPT y en 4 de 10 de Google Modo IA.</p></li>
+          <li><h3>Facebook e Instagram</h3><p>Aparecieron en 6 de 10 respuestas de Google Modo IA.</p></li>
+          <li><h3>Tu web y los rankings</h3><p>Webs propias de las clínicas y sitios de rankings y directorios de Lima.</p></li>
+        </ul>
+        <p class="nota">Fuente: medición propia, setiembre 2026 (prueba de fuentes: 31 respuestas de ChatGPT, Gemini y Google Modo IA a preguntas de pacientes en Lima). Todas estas fuentes se pueden trabajar.</p>
+      </div>
+    </section>
+
+    <section class="seccion niebla informe" aria-labelledby="h-informe">
+      <div class="envoltura aparece">
+        <div>
+          <h2 id="h-informe">Así se ve tu diagnóstico</h2>
+          <p>7 páginas: tu Índice Eminia frente a tu competencia, lo que respondió la IA, las fuentes que consulta y 3 arreglos concretos.</p>
+          <div class="barras" aria-label="Ejemplo: Índice Eminia de cada clínica">
+            <div class="barra"><span class="nombre">Clínica A</span><div><div class="riel"><div class="relleno" style="--valor:50%"></div></div><div class="rango">50 % (entre 38 % y 62 %)</div></div></div>
+            <div class="barra"><span class="nombre">Clínica B</span><div><div class="riel"><div class="relleno" style="--valor:37%"></div></div><div class="rango">37 % (entre 26 % y 49 %)</div></div></div>
+            <div class="barra"><span class="nombre">Clínica C</span><div><div class="riel"><div class="relleno" style="--valor:30%"></div></div><div class="rango">30 % (entre 20 % y 43 %)</div></div></div>
+            <div class="barra tu"><span class="nombre">Tu clínica</span><div><div class="riel-envoltura"><div class="riel"><div class="relleno" style="--valor:10%"></div></div><span class="aqui" style="--valor:10%"><svg viewBox="0 0 20 12" width="20" height="12" aria-hidden="true"><path d="M19 6H2M7 1 2 6l5 5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>Aquí es donde trabajamos</span></div><div class="rango">10 % (entre 5 % y 20 %)</div></div></div>
+          </div>
+          <p class="nota">Barras de ejemplo, con nombres cambiados.</p>
+          <p class="caso"><strong>Un caso real, sin nombre:</strong> una clínica de implantes de Lima con 4.9 estrellas y más de 1,100 reseñas en Google Maps aparecía en solo 1 de cada 10 respuestas de la IA (setiembre 2026).</p>
+          <ul class="hallazgos">
+            <li>En <span data-contar="60" data-formato="{n}">60</span> respuestas, la IA nombró <strong><span data-contar="34" data-formato="{n}">34</span> clínicas distintas</strong>.</li>
+            <li>La más nombrada aparece en <strong>1 de cada 2 respuestas</strong>.</li>
+            <li><strong>5 de 9</strong> clínicas con 4.5 estrellas o más y más de 100 reseñas aparecen en 1 de cada 10 respuestas o menos.</li>
+          </ul>
+          <p class="nota">Implantes dentales en Miraflores, setiembre 2026: 60 respuestas de ChatGPT y Google Modo IA (medición propia).</p>
+        </div>
+        <figure class="hoja">
+          <picture><source srcset="marca/producto-diagnostico.webp" type="image/webp"><img src="marca/producto-diagnostico.jpg" width="1190" height="1684" loading="lazy"
+               alt="Portada de un diagnóstico de ejemplo con clínicas ficticias: Índice Eminia de 25 % (entre 16 % y 37 %), puesto 4 de 6, semáforo de 4 áreas, barras frente a 3 competidores y el próximo paso."></picture>
+          <figcaption class="nota">Página 1 de un diagnóstico, con clínicas ficticias.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="planes" class="seccion" aria-labelledby="h-planes">
+      <div class="envoltura aparece">
+        <h2 id="h-planes">Te ayudamos a que la IA te recomiende</h2>
+        <p class="intro">Nuestro servicio principal es el Plan Gestionado: medimos cada mes y nosotros hacemos los arreglos. Si prefieres que los haga tu equipo, está el Plan Medir. Para empezar, el diagnóstico es gratis.</p>
+        <div class="planes">
+          <article class="plan destacado">
+            <span class="sello">Servicio principal</span>
+            <h3>Plan Gestionado</h3>
+            <p class="precio">S/ 790 <small>al mes</small></p>
+            <p class="setup">por sede · puesta a punto S/ 990</p>
+            <p class="fundador">Precio fundador: puesta a punto a mitad de precio</p>
+            <ul>
+              <li>Nosotros hacemos 3 mejoras al mes: ficha de Google, Doctoralia, tu web y el pedido de reseñas</li>
+              <li>Cómo te describe la IA: lo leemos cada mes y te decimos qué corregir</li>
+              <li>Reescribimos las preguntas frecuentes y los textos de tu web para que la IA los entienda</li>
+              <li>Te ayudamos a pedir y responder reseñas</li>
+              <li>Una llamada de 15 minutos al mes para contarte cómo vas</li>
+              <li>Y todo lo del Plan Medir: tu Índice Eminia cada mes, tu panel y tu reporte</li>
+            </ul>
+            <a class="boton principal" href="#pedir">Empieza con el diagnóstico</a>
+          </article>
+          <article class="plan">
+            <span class="sello" aria-hidden="true"></span>
+            <h3>Plan Medir</h3>
+            <p class="precio">S/ 349 <small>al mes</small></p>
+            <p class="setup">por sede · puesta a punto S/ 490 · los arreglos los hace tu equipo</p>
+            <p class="fundador">Precio fundador: puesta a punto a mitad de precio</p>
+            <ul>
+              <li>Tu Índice Eminia cada mes, en ChatGPT y Google</li>
+              <li>Tu panel, con tu evolución mes a mes</li>
+              <li>Comparación con 3 competidores en tu reporte y el ranking de tu distrito en el panel</li>
+              <li>Las fuentes que consulta la IA en tu mercado</li>
+              <li>La lista de arreglos en orden, para tu equipo</li>
+              <li>Código listo para tu web (JSON-LD)</li>
+              <li>Kit «¿Cómo nos conociste?» para contar los pacientes que llegan por la IA</li>
+            </ul>
+            <a class="boton secundario" href="#pedir">Empieza con el diagnóstico</a>
+          </article>
+          <article class="plan">
+            <span class="sello" aria-hidden="true"></span>
+            <h3>Diagnóstico gratis</h3>
+            <p class="precio">S/ 0</p>
+            <p class="setup">Una vez, sin compromiso</p>
+            <ul>
+              <li>Informe de 7 páginas en PDF</li>
+              <li>Tu Índice Eminia en ChatGPT y Google frente a tu competencia</li>
+              <li>3 arreglos concretos para tu clínica</li>
+            </ul>
+            <a class="boton secundario" href="#pedir">Pide tu diagnóstico</a>
+          </article>
+        </div>
+        <div class="comparativa" role="region" aria-labelledby="h-comparativa" tabindex="0">
+          <table>
+            <caption id="h-comparativa">Qué incluye cada plan</caption>
+            <thead>
+              <tr><th scope="col"><span class="sr-only">Qué incluye</span></th><th scope="col">Diagnóstico gratis</th><th scope="col">Plan Medir</th><th scope="col" class="rec">Plan Gestionado <span class="sello">Recomendado</span></th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Tu Índice Eminia frente a tu competencia</th><td><span class="si" aria-label="Incluido">✓</span></td><td><span class="si" aria-label="Incluido">✓</span></td><td class="rec"><span class="si" aria-label="Incluido">✓</span></td></tr>
+              <tr><th scope="row">Por qué la IA elige a tu competencia</th><td><span class="si" aria-label="Incluido">✓</span></td><td><span class="si" aria-label="Incluido, en el diagnóstico inicial">✓*</span></td><td class="rec"><span class="si" aria-label="Incluido, en el diagnóstico inicial">✓*</span></td></tr>
+              <tr><th scope="row">Dónde te falta estar</th><td><span class="si" aria-label="Incluido">✓</span></td><td><span class="si" aria-label="Incluido, en el diagnóstico inicial">✓*</span></td><td class="rec"><span class="si" aria-label="Incluido, en el diagnóstico inicial">✓*</span></td></tr>
+              <tr><th scope="row">Medición cada mes</th><td><span class="no" aria-label="No incluido">—</span></td><td><span class="si" aria-label="Incluido">✓</span></td><td class="rec"><span class="si" aria-label="Incluido">✓</span></td></tr>
+              <tr><th scope="row">Panel con tu evolución</th><td><span class="no" aria-label="No incluido">—</span></td><td><span class="si" aria-label="Incluido">✓</span></td><td class="rec"><span class="si" aria-label="Incluido">✓</span></td></tr>
+              <tr><th scope="row">Lista de arreglos en orden</th><td><span class="si" aria-label="Incluido">✓</span></td><td><span class="si" aria-label="Incluido">✓</span></td><td class="rec"><span class="si" aria-label="Incluido">✓</span></td></tr>
+              <tr><th scope="row">Código para tu web</th><td><span class="no" aria-label="No incluido">—</span></td><td><span class="si" aria-label="Incluido">✓</span></td><td class="rec"><span class="si" aria-label="Incluido">✓</span></td></tr>
+              <tr><th scope="row">Conteo de pacientes que llegan por la IA</th><td><span class="no" aria-label="No incluido">—</span></td><td><span class="si" aria-label="Incluido">✓</span></td><td class="rec"><span class="si" aria-label="Incluido">✓</span></td></tr>
+              <tr><th scope="row">Nosotros hacemos los arreglos (3 al mes)</th><td><span class="no" aria-label="No incluido">—</span></td><td><span class="no" aria-label="No incluido">—</span></td><td class="rec"><span class="si" aria-label="Incluido">✓</span></td></tr>
+              <tr><th scope="row">Llamada mensual de 15 minutos</th><td><span class="no" aria-label="No incluido">—</span></td><td><span class="no" aria-label="No incluido">—</span></td><td class="rec"><span class="si" aria-label="Incluido">✓</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="nota comparativa-nota">Sin permanencia. Precios sin IGV. * En el diagnóstico con el que empieza tu plan.</p>
+        <div class="ganchos">
+          <p><strong>Sin permanencia.</strong> Cancelas cuando quieras.</p>
+          <p><strong>Precio fundador.</strong> Las 5 primeras clínicas pagan la puesta a punto a mitad de precio y congelan su mensualidad por 12 meses.</p>
+          <p><strong>Garantía de entrega.</strong> Si no te entregamos el checklist y los arreglos en 10 días hábiles, te devolvemos la puesta a punto.</p>
+        </div>
+        <p class="nota">Precios sin IGV. No garantizamos subir en la IA: nadie controla lo que responde. Lo que sí te damos cada mes es la medición con su rango, para que veas si subes.</p>
+      </div>
+    </section>
+
+    <section class="seccion niebla" aria-labelledby="h-despues">
+      <div class="envoltura aparece dos-bloques">
+        <div>
+          <h2 id="h-despues">Qué pasa después de pedirlo</h2>
+          <ol class="lista-pasos">
+            <li>Llenas el formulario: 1 minuto.</li>
+            <li>Medimos tu especialidad en tu distrito: 60 respuestas de ChatGPT y Google.</li>
+            <li>Te enviamos el PDF por WhatsApp en 3 días hábiles.</li>
+            <li>Si quieres, lo revisamos juntos en 15 minutos.</li>
+          </ol>
+        </div>
+        <div>
+          <h2>Para quién no es</h2>
+          <ul class="lista-no">
+            <li>Clínicas fuera de Lima o de otras especialidades: por ahora medimos implantología, estética dental, medicina estética y dermatología en Miraflores, San Isidro y Surco.</li>
+            <li>Quien busque que le garanticen el «puesto #1». Nadie controla lo que responde la IA.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials: show ONLY with the clinic's written permission (VOZ.md): remove `hidden`,
+         put the exact approved text, name, role, clinic and date of the permission. -->
+    <section id="testimonios" class="seccion" aria-labelledby="h-testimonios" hidden>
+      <div class="envoltura">
+        <h2 id="h-testimonios">Lo que dicen las clínicas</h2>
+        <figure class="testimonio">
+          <blockquote>[Texto exacto aprobado por la clínica]</blockquote>
+          <figcaption>[Nombre y cargo] · [Clínica, distrito] · [fecha del permiso]</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="preguntas" class="seccion" aria-labelledby="h-preguntas">
+      <div class="envoltura aparece">
+        <h2 id="h-preguntas">Preguntas frecuentes</h2>
+        <div class="preguntas">
+          <details>
+            <summary>Mis pacientes no usan ChatGPT.</summary>
+            <p>En Lima Metropolitana, el 23 % de las personas ya usa herramientas de IA (Osiptel, ERESTEL 2025). Y aunque no abran ChatGPT, Google ya muestra un resumen de IA arriba de sus resultados: cuando aparece, la gente hace clic en un enlace en el 8 % de las visitas; sin el resumen, en el 15 % (<a href="https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/" rel="noopener" target="_blank">Pew Research Center, julio 2025</a>, datos de EE. UU.). El diagnóstico gratis te muestra qué responde la IA hoy sobre tu especialidad en tu distrito.</p>
+          </details>
+          <details>
+            <summary>Ya tengo una agencia.</summary>
+            <p>Genial. Esto mide algo que tu agencia hoy no mide: cuánto te nombra la IA frente a tu competencia. Le podemos enviar el reporte y la lista de arreglos para que los trabaje.</p>
+          </details>
+          <details>
+            <summary>¿Y si lo mido yo?</summary>
+            <p>Puedes preguntarle a ChatGPT, y te lo recomendamos. Pero una sola pregunta dice poco: la IA cambia su respuesta de una vez a otra. Nosotros hacemos cada mes 10 preguntas de pacientes, 3 veces cada una, en ChatGPT y en Google (60 respuestas), con el mismo método, y te comparamos con tu competencia con un rango honesto. Y lo que de verdad importa no es medir: es saber qué arreglar y hacerlo. De eso nos encargamos en el Plan Gestionado.</p>
+          </details>
+          <details>
+            <summary>¿No es caro?</summary>
+            <p>Depende de cuánto te deja un paciente nuevo. En tratamientos como implantes, un solo paciente al mes suele pagar varios meses del servicio. Empieza por el diagnóstico gratis y decide con tus números.</p>
+          </details>
+          <details>
+            <summary>¿Me garantizan salir primero?</summary>
+            <p>No, y desconfía de quien lo haga: nadie controla lo que responde la IA. Te damos la medición con su rango cada mes, para que veas si subes, y la lista de arreglos que más pesan en tu mercado.</p>
+          </details>
+          <details>
+            <summary>Déjame pensarlo.</summary>
+            <p>Claro. Pide el diagnóstico gratis: no te compromete a nada y te sirve para decidir con datos de tu propia clínica.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion niebla" aria-labelledby="h-quien">
+      <div class="envoltura aparece">
+        <div class="persona">
+          <img class="foto" src="marca/gianpol.jpg" alt="Gianpol Rosazza, fundador de Eminia" width="160" height="160" loading="lazy">
+          <div>
+            <h2 id="h-quien">Quién está detrás</h2>
+            <p class="intro"><strong>Gianpol Rosazza</strong>, fundador de Eminia. Mido cómo la IA recomienda clínicas en Lima y te ayudo a aparecer más, con datos y sin promesas vacías.</p>
+            <p>Escríbeme por <a href="https://wa.me/51920857428" rel="noopener" target="_blank">WhatsApp: +51 920 857 428</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pedir" class="seccion pedir" aria-labelledby="h-pedir">
+      <div class="envoltura">
+        <h2 id="h-pedir">Pide tu diagnóstico gratis</h2>
+        <p class="intro">Te lo enviamos por WhatsApp en 3 días hábiles. Por ahora medimos implantología, estética dental, medicina estética y dermatología en Miraflores, San Isidro y Surco.</p>
+        <p class="garantias"><span>1 minuto</span><span>Sin compromiso</span><span>Te respondemos por WhatsApp</span></p>
+        <form id="formulario" class="tarjeta-formulario" novalidate>
+          <div class="campos">
+            <label>Tu nombre
+              <input name="name" required minlength="2" maxlength="120" autocomplete="name">
+            </label>
+            <label>Nombre de la clínica
+              <input name="clinic_name" required minlength="2" maxlength="160">
+            </label>
+            <label>Especialidad
+              <select name="category_code" required>
+                <option value="" selected disabled>Elige una</option>
+                <option value="IMP">Implantología</option>
+                <option value="EDE">Estética dental</option>
+                <option value="MES">Medicina estética</option>
+                <option value="DER">Dermatología</option>
+              </select>
+            </label>
+            <label>Distrito
+              <select name="district" required>
+                <option value="" selected disabled>Elige uno</option>
+                <option>Miraflores</option>
+                <option>San Isidro</option>
+                <option>Surco</option>
+              </select>
+            </label>
+            <label class="completo">WhatsApp o correo
+              <input name="contact" required minlength="6" maxlength="160" autocomplete="tel email" placeholder="+51 9xx xxx xxx o tu@correo.com">
+            </label>
+          </div>
+          <div class="trampa" aria-hidden="true">
+            <label>Deja este campo vacío <input name="website" tabindex="-1" autocomplete="off"></label>
+          </div>
+          <label class="consentimiento">
+            <input type="checkbox" name="consent" required>
+            <span>Acepto la <a href="privacidad.html" target="_blank">Política de privacidad</a> y que Eminia me contacte por este medio para enviarme el diagnóstico. Puedes pedir que borremos tus datos cuando quieras.</span>
+          </label>
+          <div class="enviar-fila">
+            <button type="submit" id="enviar" class="boton principal">Quiero mi diagnóstico gratis</button>
+            <span class="o-whatsapp">o <a href="https://wa.me/51920857428?text=Hola%2C%20quiero%20mi%20diagn%C3%B3stico%20gratis%20de%20Eminia.%20Mi%20cl%C3%ADnica%20es%3A%20%5Bnombre%5D%2C%20en%20%5Bdistrito%5D." rel="noopener" target="_blank">pídelo por WhatsApp</a></span>
+          </div>
+          <p id="error" role="alert" hidden></p>
+        </form>
+        <div id="resultado" role="status" hidden>
+          <strong>Listo.</strong> Recibimos tu pedido. En 3 días hábiles te llega tu diagnóstico por WhatsApp o correo. ¿Quieres adelantarlo? <a href="https://wa.me/51920857428" rel="noopener" target="_blank">Escríbenos por WhatsApp</a>.
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer class="pie">
+    <div class="envoltura">
+      <div>
+        <img src="marca/logo-claro.svg" alt="Eminia" width="160" height="32">
+        <p>Que la IA te nombre a ti.</p>
+        <p><a href="https://wa.me/51920857428" rel="noopener" target="_blank">WhatsApp: +51 920 857 428</a></p>
+      </div>
+      <div>
+        <nav aria-label="Legal"><a href="privacidad.html">Privacidad</a><a href="terminos.html">Términos</a><a href="reclamaciones.html">Libro de Reclamaciones</a></nav>
+        <p>© 2026 Gianpol Rosazza Bravo · RUC 10707993435</p>
+        <p>No prometemos un puesto #1: medimos con repeticiones y te mostramos el margen de variación.</p>
+      </div>
+    </div>
+  </footer>
+
   <script src="config.js"></script>
   <script src="app.js"></script>
+  <script src="landing.js"></script>
 </body>
 </html>

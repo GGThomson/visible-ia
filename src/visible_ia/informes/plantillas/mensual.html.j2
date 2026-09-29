@@ -10,6 +10,7 @@
   --acento: {{ marca.color_acento }};
   --suave: {{ marca.color_suave }};
 }
+{{ letras|safe }}
 {{ estilos|safe }}
 </style>
 </head>
@@ -29,11 +30,11 @@
   <h2>1. Este mes</h2>
   <p class="frase">{{ frase }}</p>
   <div class="brecha">
-    <div class="dato"><b>{{ actual.combinado }} %</b>índice combinado</div>
+    <div class="dato"><b>{{ actual.combinado }} %</b>Índice Eminia</div>
     <div class="dato"><b>{{ actual.chatgpt }} %</b>ChatGPT</div>
     <div class="dato"><b>{{ actual.google }} %</b>Google (Modo IA)</div>
   </div>
-  <p class="nota">Puesto {{ clinica.posicion }} de {{ clinica.total }} clínicas medidas. El índice es el % de respuestas de la IA en que te nombran.</p>
+  <p class="nota">Puesto {{ clinica.posicion }} de {{ clinica.total }} clínicas medidas. El Índice Eminia es el % de respuestas de la IA en que te nombran.</p>
 </section>
 
 <section data-seccion="evolucion">

@@ -10,106 +10,246 @@
   --acento: {{ marca.color_acento }};
   --suave: {{ marca.color_suave }};
 }
+{{ letras|safe }}
 {{ estilos|safe }}
+@page { margin: 20mm 15mm 16mm; } /* room for the repeated header and footer */
 </style>
 </head>
-<body>
+<body class="diag">
 
-<header class="portada">
-  <div>
-    <h1>¿Te recomienda la IA?</h1>
-    <p><b>{{ clinica.nombre }}</b> · {{ mercado.tratamiento|capitalize }} en {{ mercado.distrito }} · {{ mercado.mes }}</p>
+{# ---------------------------------------------------------------- 1 · Resumen (page 1 only) #}
+<section data-seccion="resumen" class="resumen">
+  <div class="banda">
+    <div>
+      <p class="banda-etiqueta">Diagnóstico de presencia en la IA</p>
+      <h1>{{ clinica.nombre }}</h1>
+      <p>{{ mercado.tratamiento|capitalize }} en {{ mercado.distrito }} · {{ mercado.mes }}</p>
+    </div>
+    <div class="marca-clara">{{ marca.nombre }}</div>
   </div>
-  <div class="marca">
-    {% if marca.logo_url %}<img src="{{ marca.logo_url }}" alt="{{ marca.nombre }}">{% else %}{{ marca.nombre }}{% endif %}
-  </div>
-</header>
 
-<section data-seccion="1-indice">
-  <h2>1. Cuánto te nombra la IA frente a tu competencia</h2>
-  <p class="frase">{{ frase }}</p>
-  <p>Hicimos las mismas {{ metodo.preguntas }} preguntas que hace un paciente ({{ metodo.repeticiones }} veces cada una) a ChatGPT y a Google en su Modo IA. El número es el <b>% de respuestas en que te nombran</b>; entre paréntesis, el rango en que está con seguridad.</p>
-  <div class="barras">
-    {% for r in ranking %}
-    <div class="barra{% if r.es_cliente %} cliente{% endif %}">
-      <div class="nombre">{{ r.nombre }}</div>
-      <div>
-        <div class="riel"><div class="relleno" style="width: {{ r.ancho }}%"></div></div>
-        <div class="valor">{{ r.combinado }} % (entre {{ r.bajo }} % y {{ r.alto }} %) · ChatGPT {{ r.chatgpt }} % · Google {{ r.google }} %</div>
-      </div>
+  <div class="cifras">
+    <div class="cifra-caja">
+      <b>{{ nuevo.cifras.indice }} %</b>
+      <span>Índice Eminia</span>
+      <small>entre {{ nuevo.cifras.bajo }} % y {{ nuevo.cifras.alto }} % de las respuestas</small>
+    </div>
+    <div class="cifra-caja">
+      <b>{{ nuevo.cifras.puesto }} de {{ nuevo.cifras.total }}</b>
+      <span>Tu puesto</span>
+      <small>entre las clínicas medidas en {{ mercado.distrito }}</small>
+    </div>
+    <div class="cifra-caja">
+      <b>{{ nuevo.cifras.posicion }}</b>
+      <span>Posición promedio</span>
+      <small>lugar en que te nombra, cuando te nombra</small>
+    </div>
+  </div>
+  <p class="consecuencia">{{ nuevo.consecuencia }}</p>
+
+  <h2 class="sub">Cómo estás en 4 áreas, frente al líder</h2>
+  <div class="semaforo">
+    {% for s in nuevo.semaforo %}
+    <div class="luz {{ s.clase }}">
+      <span class="punto" aria-hidden="true"></span>
+      <div><b>{{ s.nombre }}</b><span class="nivel">{{ s.nivel }}</span><small>{{ s.valor }}</small></div>
     </div>
     {% endfor %}
   </div>
+
+  <h2 class="sub">Frente a tu competencia</h2>
+  <div class="barras compactas">
+    {% for r in nuevo.barras %}
+    <div class="barra{% if r.es_cliente %} cliente{% endif %}">
+      <span class="nombre">{{ r.nombre }}</span>
+      <div><div class="riel"><div class="relleno" style="width: {{ r.ancho }}%"></div></div>
+        <div class="valor">{{ r.combinado }} % (entre {{ r.bajo }} % y {{ r.alto }} %)</div></div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h2 class="sub">Lo más importante</h2>
+  <ul class="hallazgos">
+    {% for h in nuevo.hallazgos %}<li>{{ h }}</li>{% endfor %}
+  </ul>
+
+  <div class="proximo">
+    <b>Próximo paso:</b> revisemos juntos tu diagnóstico en 15 minutos{% if marca.contacto %} · {{ marca.contacto }}{% endif %}.
+  </div>
+</section>
+
+{# ---------------------------------------------------------------- 2 · Tú frente a tu competencia #}
+<section data-seccion="competencia">
+  <h2>Tú frente a tu competencia</h2>
+  <p class="frase">{{ frase }}</p>
+  <table class="tabla-comp">
+    <thead><tr><th>Clínica</th><th class="num">Índice Eminia</th><th class="num">ChatGPT</th><th class="num">Google</th><th class="num">Posición promedio</th><th class="num">Cuota de menciones</th></tr></thead>
+    <tbody>
+      {% for r in nuevo.competencia %}
+      <tr{% if r.es_cliente %} class="cliente"{% endif %}><td>{{ r.nombre }}</td><td class="num">{{ r.combinado }} %<br><small>{{ r.bajo }}–{{ r.alto }} %</small></td><td class="num">{{ r.chatgpt }} %</td><td class="num">{{ r.google }} %</td><td class="num">{{ r.posicion }}</td><td class="num">{{ r.cuota }} %</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <ul class="nota leyenda-tabla">
+    <li><b>Índice Eminia:</b> % de las {{ metodo.respuestas }} respuestas que nombran a la clínica, con su rango.</li>
+    <li><b>Posición promedio:</b> en qué lugar la nombra la IA cuando la nombra (1 = primera).</li>
+    <li><b>Cuota de menciones:</b> de todas las veces que la IA nombró a una clínica, qué parte fue para esta.</li>
+  </ul>
   <p class="nota">Estás en el puesto {{ clinica.posicion }} de {{ clinica.total_clinicas }} clínicas medidas en {{ mercado.distrito }}. Si dos rangos se cruzan, la diferencia entre esas clínicas no es clara.</p>
 </section>
 
-<section data-seccion="2-ejemplos">
-  <h2>2. Lo que respondió la IA</h2>
+{# ---------------------------------------------------------------- 3 · En qué preguntas apareces #}
+{% if nuevo.cuadricula.grupos %}
+<section data-seccion="preguntas">
+  {% for g in nuevo.cuadricula.grupos %}
+  {% if loop.first %}<div class="cabeza"><h2>En qué preguntas apareces</h2>
+  <p>Cada pregunta se hizo 3 veces a ChatGPT y 3 a Google Modo IA. Un punto lleno es una respuesta que nombra a esa clínica.</p>
+  <p class="leyenda-puntos"><span class="p lleno"></span> te nombra · <span class="p"></span> no te nombra · en cada celda: 3 puntos de ChatGPT | 3 de Google</p>{% endif %}
+  <table class="cuadricula">
+    <thead><tr><th>{{ g.forma }}</th>{% for c in nuevo.cuadricula.clinicas %}<th class="col-clinica{% if c.es_cliente %} cliente{% endif %}">{{ c.nombre }}</th>{% endfor %}</tr></thead>
+    <tbody>
+      {% for q in g.preguntas %}
+      <tr><td class="pregunta">{{ q.pregunta }}</td>
+        {% for celda in q.celdas %}<td class="puntos{% if nuevo.cuadricula.clinicas[loop.index0].es_cliente %} cliente{% endif %}">{% for p in celda %}<span class="p{% if p %} lleno{% endif %}"></span>{% if loop.index == 3 %}<span class="sep"></span>{% endif %}{% endfor %}</td>{% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% if loop.first %}</div>{% endif %}
+  {% endfor %}
+  {% if nuevo.consistencia %}
+  <div class="consistencia">
+    <p><b>La IA cambia de respuesta: por eso medimos {{ metodo.respuestas }} veces y no una.</b> En las mismas preguntas, cuántas veces te nombró:</p>
+    <table>
+      <thead><tr><th></th><th class="num">En las 3 repeticiones</th><th class="num">En 1 o 2</th><th class="num">En ninguna</th></tr></thead>
+      <tbody>{% for c in nuevo.consistencia %}<tr><td>{{ c.superficie }}</td><td class="num">{{ c.todas }} preguntas</td><td class="num">{{ c.algunas }} preguntas</td><td class="num">{{ c.ninguna }} preguntas</td></tr>{% endfor %}</tbody>
+    </table>
+  </div>
+  {% endif %}
+  <p class="nota">Fuente: {{ profundo.fuente if profundo.hay else metodo.respuestas ~ " respuestas" }}.</p>
+</section>
+{% endif %}
+
+{# ---------------------------------------------------------------- 4 · Por qué eligió a tu competencia #}
+<section data-seccion="razones">
+  {% if profundo.hay and profundo.razones %}
+  {% for r in profundo.razones %}
+  {% if loop.first %}<div class="cabeza"><h2>Por qué la IA eligió a tu competencia</h2>
+  <p>Frases copiadas tal cual de las respuestas de la IA, sin cambiar una palabra.</p>{% endif %}
+  <div class="tarjeta">
+    <p class="pregunta">{{ r.nombre }} · Índice Eminia {{ r.indice }} %</p>
+    {% for f in r.frases %}
+    <blockquote>«{{ f.texto }}»<br><small>{{ f.superficie }} · «{{ f.pregunta }}» ({{ f.fecha }})</small></blockquote>
+    {% else %}
+    <p class="nota">La IA la nombró sin dar una razón que se pueda citar.</p>
+    {% endfor %}
+  </div>
+  {% if loop.first %}</div>{% endif %}
+  {% endfor %}
+  {% else %}
+  <h2>Por qué la IA eligió a tu competencia</h2>
+  {% endif %}
+  <h3>Dos respuestas completas de ejemplo</h3>
   {% for e in ejemplos %}
-  <div class="ejemplo">
+  <div class="tarjeta ejemplo">
     <p class="pregunta">{{ e.superficie }} · «{{ e.pregunta }}» <small>({{ e.fecha }})</small></p>
     {% if e.nombres %}
     <p>Nombró, en este orden:</p>
-    <ol>
-      {% for n in e.nombres %}<li{% if n.es_cliente %} class="cliente"{% endif %}>{{ n.nombre }}</li>{% endfor %}
-    </ol>
+    <ol>{% for n in e.nombres %}<li{% if n.es_cliente %} class="cliente"{% endif %}>{{ n.nombre }}</li>{% endfor %}</ol>
     {% else %}
     <p>No nombró ninguna clínica.</p>
     {% endif %}
     <blockquote>{{ e.cita }}</blockquote>
   </div>
   {% endfor %}
+  <p class="nota">Fuente: {{ profundo.fuente if profundo.hay else metodo.respuestas ~ " respuestas" }}. Los nombres de profesionales están ocultos.</p>
 </section>
 
-<section data-seccion="3-fuentes">
-  <h2>3. Dónde se informa la IA en tu mercado</h2>
-  <p>Antes de responder, la IA busca en la web. Estas son las fuentes que citó en las {{ metodo.respuestas }} respuestas:</p>
-  <table>
-    <thead><tr><th>Tipo de fuente</th><th class="num">% de respuestas que la citan</th></tr></thead>
-    <tbody>
-      {% for t in fuentes.tipos %}<tr><td>{{ t.nombre }}</td><td class="num">{{ t.pct }} %</td></tr>{% endfor %}
-    </tbody>
-  </table>
-  <h3>Sitios más citados</h3>
-  <table>
-    <thead><tr><th>Sitio</th><th>Tipo</th><th class="num">% de respuestas</th></tr></thead>
-    <tbody>
-      {% for s in fuentes.top %}<tr><td>{{ s.dominio }}</td><td>{{ s.tipo }}</td><td class="num">{{ s.pct }} %</td></tr>{% endfor %}
-    </tbody>
-  </table>
-  <p>{% if fuentes.propia_citada %}Tu web aparece entre las fuentes que la IA consultó.{% else %}<b>Tu web no apareció entre las fuentes que la IA consultó.</b>{% endif %}</p>
-</section>
-
-<section data-seccion="4-brecha">
-  <h2>4. Tu reputación en Google Maps frente a la IA</h2>
-  <div class="brecha">
-    <div class="dato"><b>{% if brecha.rating %}{{ brecha.rating }} ★{% else %}—{% endif %}</b>en Google Maps</div>
-    <div class="dato"><b>{% if brecha.resenas is not none %}{{ brecha.resenas }}{% else %}—{% endif %}</b>reseñas</div>
-    <div class="dato"><b>{{ brecha.indice }} %</b>de las respuestas de la IA</div>
+{# ---------------------------------------------------------------- 5 · Dónde te falta estar #}
+<section data-seccion="faltantes">
+  <div class="cabeza"><h2>Dónde te falta estar</h2>
+  <div class="tarjeta">
+    <h3>Dónde se informa la IA en tu mercado</h3>
+    <table>
+      <thead><tr><th>Tipo de fuente</th><th class="num">% de respuestas que la citan</th></tr></thead>
+      <tbody>{% for t in fuentes.tipos %}<tr><td>{{ t.nombre }}</td><td class="num">{{ t.pct }} %</td></tr>{% endfor %}</tbody>
+    </table>
+  </div></div>
+  {% if profundo.hay %}
+  <div class="tarjeta">
+    <h3>Páginas que te faltan</h3>
+    {% if profundo.faltantes %}
+    <p>Citadas al recomendar a tu competencia y nunca en respuestas que te nombran a ti:</p>
+    <table>
+      <thead><tr><th>Página</th><th>Tipo</th><th class="num">Respuestas</th></tr></thead>
+      <tbody>{% for p in profundo.faltantes %}<tr><td class="url">{{ p.corta }}</td><td>{{ p.tipo }}</td><td class="num">{{ p.veces }}</td></tr>{% endfor %}</tbody>
+    </table>
+    {% else %}
+    <p>No encontramos páginas citadas junto a tu competencia que falten junto a ti.</p>
+    {% endif %}
+    {% if profundo.instagram.otras or profundo.instagram.tuya %}<p>La IA citó el Instagram de otras clínicas en {{ profundo.instagram.otras }} respuestas; el tuyo, en {{ profundo.instagram.tuya }}.</p>{% endif %}
+    <p class="nota">Solo lugares donde tú puedes estar: no incluimos las webs, las fichas de Google ni las redes de otras clínicas.</p>
   </div>
-  {% if brecha.tiene_brecha %}
-  <p class="frase">Tus pacientes te valoran mucho en Google Maps, pero la IA casi no te nombra. Esa diferencia es una oportunidad: tu reputación todavía no se traduce en recomendaciones.</p>
-  {% else %}
-  <p>{{ brecha.lider.nombre }}, la clínica más nombrada, aparece en {{ brecha.lider.indice }} % de las respuestas. La IA no ordena solo por estrellas: también pesa lo que encuentra sobre ti en la web.</p>
   {% endif %}
-  {% if brecha.fecha %}<p class="nota">Estrellas y reseñas tomadas de Google Maps el {{ brecha.fecha }}.</p>{% endif %}
+  <div class="tarjeta">
+    <h3>Tu web</h3>
+    <p>{% if fuentes.propia_citada %}Tu web se citó como fuente en {{ fuentes.web_tuya }} de {{ metodo.respuestas }} respuestas{% else %}<b>Tu web no apareció como fuente en ninguna respuesta</b>{% endif %}{% if profundo.hay %}; las webs propias de otras clínicas, en {{ profundo.webs.competidores }} respuestas que nombran a tu competencia{% endif %}.</p>
+  </div>
+  <div class="tarjeta">
+    <h3>Tu reputación en Google Maps frente a la IA</h3>
+    <div class="brecha">
+      <div class="dato"><b>{% if brecha.rating %}{{ brecha.rating }} ★{% else %}—{% endif %}</b>en Google Maps</div>
+      <div class="dato"><b>{% if brecha.resenas is not none %}{{ brecha.resenas }}{% else %}—{% endif %}</b>reseñas</div>
+      <div class="dato"><b>{{ brecha.indice }} %</b>Índice Eminia</div>
+    </div>
+    {% if brecha.tiene_brecha %}
+    <p>Tus pacientes te valoran mucho en Google Maps, pero la IA casi no te nombra: tu reputación todavía no se traduce en recomendaciones.</p>
+    {% else %}
+    <p>{{ brecha.lider.nombre }}, la clínica más nombrada, aparece en {{ brecha.lider.indice }} % de las respuestas. La IA no ordena solo por estrellas: también pesa lo que encuentra sobre ti en la web.</p>
+    {% endif %}
+    {% if brecha.fecha %}<p class="nota">Estrellas y reseñas tomadas de Google Maps el {{ brecha.fecha }}.</p>{% endif %}
+  </div>
 </section>
 
-<section data-seccion="5-recomendaciones">
-  <h2>5. Tres cosas que puedes hacer</h2>
-  <ol class="recomendaciones">
-    {% for r in recomendaciones %}<li><b>{{ r.titulo }}.</b> {{ r.texto }}</li>{% endfor %}
+{# ---------------------------------------------------------------- 6 · Tu plan de acción #}
+<section data-seccion="plan">
+  {% for r in nuevo.plan %}
+  {% if loop.first %}<div class="cabeza"><h2>Tu plan de acción</h2>{% endif %}
+  <div class="tarjeta arreglo">
+    <p class="pregunta">{{ loop.index }}. {{ r.titulo }}</p>
+    <p>{{ r.texto }}</p>
+    <p class="etiquetas"><span>{{ r.impacto_texto }}</span><span>Esfuerzo: {{ r.esfuerzo }}</span></p>
+  </div>
+  {% if loop.first %}</div>{% endif %}
+  {% endfor %}
+  <p class="nota">Ordenado de mayor a menor impacto: cuántas de las {{ metodo.respuestas }} respuestas te separan del líder en esa área.</p>
+  <p class="quien"><b>Quién lo hace:</b> {{ nuevo.quien }}.</p>
+  <div class="proximo">
+    <b>Próximo paso:</b> revisemos juntos tu diagnóstico en 15 minutos{% if marca.contacto %} · {{ marca.contacto }}{% endif %}. Si quieres, en el Plan Gestionado hacemos estos arreglos por ti.
+  </div>
+</section>
+
+{# ---------------------------------------------------------------- Anexo · Método Eminia #}
+<section data-seccion="metodo" class="anexo">
+  <h2>Anexo · Método Eminia</h2>
+  <ol class="pasos-metodo">
+    <li><b>Preguntamos como tus pacientes.</b> {{ metodo.preguntas }} preguntas de pacientes sobre {{ mercado.tratamiento }} en {{ mercado.distrito }}, {{ metodo.repeticiones }} veces cada una, a ChatGPT (con búsqueda web y ubicación en Lima) y a Google Modo IA: {{ metodo.respuestas }} respuestas en {{ metodo.mes }}.</li>
+    <li><b>Identificamos y revisamos las clínicas.</b> Un programa lee cada respuesta y anota qué clínicas nombra y en qué orden; una persona revisa los casos dudosos.</li>
+    <li><b>Damos un rango, no un número exacto.</b> Las respuestas cambian de una vez a otra; con estos datos, un cambio de menos de {{ metodo.detectable }} puntos entre un mes y otro no se distingue del azar.</li>
+    <li><b>Cruzamos las fuentes con tu competencia.</b> Vemos qué páginas cita la IA cuando recomienda a otras clínicas y cuáles faltan cuando te nombra a ti.</li>
   </ol>
-</section>
-
-<section data-seccion="6-metodo">
-  <h2>6. Cómo lo medimos</h2>
-  <p>En {{ metodo.mes }} hicimos {{ metodo.preguntas }} preguntas de pacientes sobre {{ mercado.tratamiento }} en {{ mercado.distrito }}, {{ metodo.repeticiones }} veces cada una, a ChatGPT (por su API, con búsqueda web y ubicación en Lima) y a Google Modo IA: {{ metodo.respuestas }} respuestas en total. Contamos en cuántas te nombran.</p>
-  <p>Las respuestas de la IA cambian de una vez a otra; por eso damos un rango y no un número exacto. Con estos datos, un cambio de menos de {{ metodo.detectable }} puntos entre un mes y otro no se puede distinguir del azar.</p>
-  {% if metodo.google_sin_nombres %}<p>{{ metodo.google_sin_nombres }} respuestas de Google no nombraron clínicas o mostraron fichas cuyo nombre no pudimos leer; esas no suman a ninguna clínica.</p>{% endif %}
+  {% if metodo.google_sin_nombres %}<p class="nota">{{ metodo.google_sin_nombres }} respuestas de Google no nombraron clínicas o mostraron fichas cuyo nombre no pudimos leer; esas no suman a ninguna clínica.</p>{% endif %}
+  <h3>Glosario</h3>
+  <dl class="glosario">
+    <dt>Índice Eminia</dt><dd>% de las respuestas de la IA que nombran a tu clínica, con su rango.</dd>
+    <dt>Rango</dt><dd>Entre qué valores está el índice con seguridad; si dos rangos se cruzan, la diferencia no es clara.</dd>
+    <dt>Posición promedio</dt><dd>En qué lugar te nombra la IA cuando te nombra.</dd>
+    <dt>Cuota de menciones</dt><dd>De todas las veces que la IA nombró a una clínica, qué parte fue para ti.</dd>
+    <dt>Fuente</dt><dd>Página que la IA consultó y citó para responder.</dd>
+    <dt>Semáforo</dt><dd>Tu cifra frente a la del líder: «Bien» si llegas al 80 % de la suya o más, «Regular» entre 40 % y 80 %, «Bajo» por debajo del 40 %. Si el líder está en 0, «Sin datos». En Maps se comparan las reseñas. Es criterio Eminia, igual para todas las clínicas.</dd>
+  </dl>
   <p><b>No garantizamos un puesto #1.</b> Medimos cómo te ve la IA hoy y qué puedes mejorar; nadie controla lo que responde.</p>
 </section>
 
-<footer>{{ marca.nombre }} · {{ marca.lema }}{% if marca.contacto %} · {{ marca.contacto }}{% endif %} · {{ marca.web }}</footer>
 </body>
 </html>

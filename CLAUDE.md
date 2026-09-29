@@ -8,3 +8,7 @@
 - El director está aprendiendo Git/GitHub. Cuando ejecutes comandos de Git, explica en una línea qué hace cada uno y por qué.
 - Usa el modo plan para tareas grandes y muestra el plan antes de modificar muchos archivos.
 - Si existe un MCP de Gemini configurado, puedes pedirle una segunda opinión en decisiones de arquitectura o revisiones de código grandes. Anota su respuesta en el ADR o el acta correspondiente.
+
+## Web y textos de venta
+- Antes de cambiar `web/` o escribir textos de venta, lee `docs/marca/DESIGN.md`, `docs/marca/VOZ.md` y las skills `frontend-design`, `copywriting` y `marketing-psychology` (en `.claude/skills/`).
+- Después de cada cambio visual, saca capturas con Playwright en 390, 768 y 1440 px, míralas y corrige antes de mostrar nada.

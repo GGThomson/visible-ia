@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" role="img" aria-label="Ilustración: un panel con tu índice, una flecha que sube y un ranking con tu clínica en azul">
+  <rect width="480" height="300" fill="#F4F6F9"/>
+  <rect x="40" y="30" width="400" height="240" rx="12" fill="#FFFFFF" stroke="#D9DEE7" stroke-width="2"/>
+  <rect x="62" y="80" width="150" height="90" rx="10" fill="#FFFFFF" stroke="#D9DEE7" stroke-width="2"/>
+  <circle cx="137" cy="125" r="30" fill="none" stroke="#D9DEE7" stroke-width="10"/>
+  <path d="M137 95 A30 30 0 0 1 164 138" fill="none" stroke="#2447C8" stroke-width="10" stroke-linecap="round"/>
+  <rect x="62" y="186" width="150" height="62" rx="10" fill="#FFFFFF" stroke="#D9DEE7" stroke-width="2"/>
+  <path d="M80 232 L110 218 L135 224 L165 202 L192 196" fill="none" stroke="#2447C8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M184 190 L194 195 L186 204" fill="none" stroke="#2447C8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <g>
+    <rect x="232" y="84" width="60" height="8" rx="4" fill="#0F1B2D"/>
+    <rect x="232" y="104" width="186" height="14" rx="5" fill="#F4F6F9"/><rect x="232" y="104" width="150" height="14" rx="5" fill="#51607A"/>
+    <rect x="232" y="130" width="186" height="14" rx="5" fill="#F4F6F9"/><rect x="232" y="130" width="122" height="14" rx="5" fill="#51607A"/>
+    <rect x="232" y="156" width="186" height="14" rx="5" fill="#F4F6F9"/><rect x="232" y="156" width="104" height="14" rx="5" fill="#2447C8"/>
+    <rect x="232" y="182" width="186" height="14" rx="5" fill="#F4F6F9"/><rect x="232" y="182" width="84" height="14" rx="5" fill="#51607A"/>
+    <rect x="232" y="208" width="186" height="14" rx="5" fill="#F4F6F9"/><rect x="232" y="208" width="60" height="14" rx="5" fill="#51607A"/>
+  </g>
+</svg>
