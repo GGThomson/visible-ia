@@ -30,9 +30,9 @@
 >
 > | Plan | Precio | Incluye |
 > |---|---|---|
-> | **Diagnóstico gratis** | S/ 0 | El informe de 3–4 páginas de hoy |
+> | **Diagnóstico gratis** | S/ 0 | El informe de 7 páginas (resumen con semáforo y plan de acción; con «Por qué la IA eligió a tu competencia», «En qué preguntas apareces» y «Dónde te falta estar», C-008) |
 > | **Plan Medir** | **S/ 349/mes** por sede + **S/ 490** de puesta a punto | Medición mensual en ChatGPT y Google Modo IA; panel; comparación con **3 competidores** en el reporte y el ranking completo en el panel; checklist; JSON-LD listo para la web; kit «¿Cómo nos conociste?» |
-> | **Plan Gestionado** («más completo») | **S/ 790/mes** + **S/ 990** de puesta a punto | Todo lo de Medir y, además, **nosotros** hacemos 3 mejoras al mes (ficha de Google, Doctoralia, web, pedido de reseñas) y una llamada de 15 min al mes. Es servicio manual: no se construye nada (C-004, H9) |
+> | **Plan Gestionado** (**servicio principal**, «te ayudamos a que la IA te recomiende»; Director, 28/09) | **S/ 790/mes** + **S/ 990** de puesta a punto | Todo lo de Medir y, además, **nosotros** hacemos 3 mejoras al mes (ficha de Google, Doctoralia, web, pedido de reseñas) y una llamada de 15 min al mes. Es servicio manual: no se construye nada (C-004, H9) |
 >
 > Las agencias (S/ 690) **no van en la landing de clínicas**: tendrán su propia página en C10.
 >
