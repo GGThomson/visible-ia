@@ -43,6 +43,7 @@ from visible_ia.puntaje.fuentes import TYPE_LABELS, load_citations, top_sources,
 from visible_ia.puntaje.indice import RankingRow, ScoreError, ranking
 
 HERE = Path(__file__).resolve().parent
+MAX_PAGES = 8  # PRD HU-14: the free diagnostic fits in 8 pages
 BRAND_TOML = HERE / "marca.toml"
 RECOMMENDATIONS_TOML = HERE / "recomendaciones.toml"
 
@@ -58,8 +59,8 @@ SURFACE_NAMES = {"chatgpt_api": "ChatGPT", "google_ai_mode": "Google (Modo IA)"}
 PROFESSIONAL = re.compile(
     r"\b(?:Dr|Dra|Doctor|Doctora)\.?\s+[A-ZÁÉÍÓÚÑ][\wáéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][\wáéíóúñ]+){0,3}"
 )
-QUOTE_CHARS = 700  # example answers end at a full sentence before this
-SENTENCE_END = re.compile(r"(?<=[.!?:])\s+")
+QUOTE_CHARS = 400  # example answers end at a full sentence before this (HU-14: ≤ 8 pages)
+SENTENCE_END = re.compile(r"(?<=[.!?])\s+")
 MD_LINK = re.compile(r"\(?\[([^\]]+)\]\([^)]*\)\)?")
 
 
@@ -200,6 +201,8 @@ def example_quote(a: ExampleAnswer, clinic_id: int) -> str:
         if out and len(" ".join([*out, x])) > QUOTE_CHARS:
             break
         out.append(x)
+    if len(out) > 1 and out[-1].rstrip().endswith(":"):  # a lead-in to a list we cut off
+        out.pop()
     return " ".join(out)
 
 
@@ -433,7 +436,20 @@ def _redesign(data, me, competitors, leader, position, appearances, facts, light
     }
 
 
-def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict[str, Any]:
+def _of_named(k: int, named: int) -> str:
+    """'3 de las 15 respuestas que te nombran', with the singular and zero cases right."""
+    if named == 0:
+        return "ninguna respuesta, porque ninguna te nombra"
+    if named == 1:
+        return "la única respuesta que te nombra" if k else "ninguna: solo 1 respuesta te nombra"
+    return f"{k} de las {named} respuestas que te nombran"
+
+
+def build_context(
+    data: ReportData, brand: dict[str, str] | None = None, *, compact: bool = False
+) -> dict[str, Any]:
+    """Template context. `compact` keeps one example answer instead of two, for a diagnostic
+    that would otherwise go over MAX_PAGES."""
     brand = brand or load_brand()
     rows = {r.clinic_id: r for r in data.ranking}
     if data.clinic.id not in rows:
@@ -496,11 +512,7 @@ def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict
         "rating": dec(data.clinic.rating),
         "indice": _pct(me.combined),
         "web_tuya": f"en {facts.me.web} de {total}" if facts.me.web else "en ninguna",
-        "dir_tuyo": (
-            f"{facts.me.directories} de las {facts.me.named}"
-            if facts.me.named
-            else "ninguna de las"
-        ),  # fmt: skip
+        "dir_tuyo": _of_named(facts.me.directories, facts.me.named),
     }
     ref_reviews = facts.ref.reviews if facts.ref and facts.ref.reviews else 200
     applies = {
@@ -519,7 +531,7 @@ def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict
         _example_context(e, data, allowed)
         for surface in SURFACE_NAMES
         if (e := pick_example(data.examples, surface, focus)) is not None
-    ]
+    ][: 1 if compact else None]
 
     return {
         "marca": brand,
@@ -576,6 +588,20 @@ def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict
 # --- database ------------------------------------------------------------------------------
 
 
+def load_market_names(conn: psycopg.Connection, market_id: int) -> dict[int, list[str]]:
+    """Every establishment of the market: id -> [name, *aliases]."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "select c.id, c.name, "
+            "coalesce(array_agg(a.alias) filter (where a.alias is not null), '{}') "
+            "from public.clinics c join public.clinic_markets cm on cm.clinic_id = c.id "
+            "left join public.aliases a on a.clinic_id = c.id "
+            "where cm.market_id = %s group by c.id",
+            (market_id,),
+        )
+        return {cid: [n, *aliases] for cid, n, aliases in cur.fetchall()}
+
+
 def load_report_data(
     conn: psycopg.Connection,
     clinic_id: int,
@@ -608,15 +634,7 @@ def load_report_data(
             "select category_code, district from public.markets where id = %s", (market_id,)
         )
         category, district = cur.fetchone()
-        cur.execute(
-            "select c.id, c.name, "
-            "coalesce(array_agg(a.alias) filter (where a.alias is not null), '{}') "
-            "from public.clinics c join public.clinic_markets cm on cm.clinic_id = c.id "
-            "left join public.aliases a on a.clinic_id = c.id "
-            "where cm.market_id = %s group by c.id",
-            (market_id,),
-        )
-        market_names = {cid: [n, *aliases] for cid, n, aliases in cur.fetchall()}
+        market_names = load_market_names(conn, market_id)
         cur.execute(
             "select c.id, c.website, c.instagram, c.rating, c.review_count from public.clinics c "
             "join public.clinic_markets cm on cm.clinic_id = c.id where cm.market_id = %s",

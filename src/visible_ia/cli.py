@@ -1134,6 +1134,34 @@ def _add_reasons(conn, data, settings, *, market_id: int, use_model: bool) -> No
         )
 
 
+def _diagnostic_pdf(conn, settings, clinic_id, market_id, month, chosen, use_model, out_dir):
+    """Loads the stored data, picks the reasons and writes the free diagnostic (HTML + PDF).
+    Raises ScoreError or PdfError. Returns (data, path of the PDF)."""
+    from visible_ia.informes.contexto import (
+        MAX_PAGES,
+        build_context,
+        load_brand,
+        load_report_data,
+    )
+    from visible_ia.informes.pdf import html_to_pdf, page_count, report_filename
+    from visible_ia.informes.render import diagnostic_frame, render_diagnostic
+
+    data = load_report_data(conn, clinic_id, market_id, month, chosen)
+    _add_reasons(conn, data, settings, market_id=market_id, use_model=use_model)
+    path = out_dir / report_filename(data.clinic.name, data.month)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    for compact in (False, True):  # over the page limit: again with one example answer
+        context = build_context(data, load_brand(), compact=compact)
+        html = render_diagnostic(context)
+        path.with_suffix(".html").write_text(html, encoding="utf-8")
+        html_to_pdf(html, path, *diagnostic_frame(context))
+        if page_count(path) <= MAX_PAGES:
+            break
+    else:
+        typer.echo(f"Aviso: {path.name} tiene {page_count(path)} páginas (máximo {MAX_PAGES}).")
+    return data, path
+
+
 @informe_app.command("diagnostico")
 def informe_diagnostico(
     clinica: int = typer.Option(..., help="Id de la clínica prospecto."),
@@ -1153,16 +1181,7 @@ def informe_diagnostico(
     """Genera el informe gratis de diagnóstico en PDF (HU-14, C-008)."""
     import time
 
-    from visible_ia.informes.contexto import build_context, load_brand, load_report_data
-    from visible_ia.informes.pdf import (
-        OUTPUT_DIR,
-        PdfError,
-        html_to_pdf,
-        record_report,
-        report_filename,
-        upload,
-    )
-    from visible_ia.informes.render import diagnostic_frame, render_diagnostic
+    from visible_ia.informes.pdf import OUTPUT_DIR, PdfError, record_report, upload
     from visible_ia.puntaje.indice import ScoreError
 
     started = time.monotonic()
@@ -1171,19 +1190,10 @@ def informe_diagnostico(
     settings = get_settings()
     with _connect_or_exit(target, autocommit=True) as conn:
         try:
-            data = load_report_data(conn, clinica, mercado, _parse_month(mes), chosen)
-            _add_reasons(conn, data, settings, market_id=mercado, use_model=ia)
-            context = build_context(data, load_brand())
-            html = render_diagnostic(context)
-        except ScoreError as exc:
-            typer.echo(str(exc))
-            raise typer.Exit(code=1) from None
-        path = OUTPUT_DIR / report_filename(data.clinic.name, data.month)
-        path.with_suffix(".html").parent.mkdir(parents=True, exist_ok=True)
-        path.with_suffix(".html").write_text(html, encoding="utf-8")
-        try:
-            html_to_pdf(html, path, *diagnostic_frame(context))
-        except PdfError as exc:
+            data, path = _diagnostic_pdf(
+                conn, settings, clinica, mercado, _parse_month(mes), chosen, ia, OUTPUT_DIR
+            )
+        except (ScoreError, PdfError) as exc:
             typer.echo(str(exc))
             raise typer.Exit(code=1) from None
         typer.echo(f"PDF: {path} ({path.stat().st_size / 1024:.0f} KB)")
@@ -1204,6 +1214,63 @@ def informe_diagnostico(
             report_id = record_report(conn, data.clinic.id, data.month, stored)
             typer.echo(f"Subido a Storage ({stored}) y registrado como informe {report_id}.")
     typer.echo(f"Listo en {time.monotonic() - started:.0f} s.")
+
+
+diagnostico_app = typer.Typer(help="Diagnósticos gratis en lote (C-010).", no_args_is_help=True)
+app.add_typer(diagnostico_app, name="diagnostico")
+
+
+@diagnostico_app.command("lote")
+def diagnostico_lote(
+    archivo: Path = typer.Argument(..., help="Texto con un nombre o id por línea (# comenta)."),
+    mercado: int = typer.Option(..., help="Id del mercado."),
+    mes: str = typer.Option(None, help="AAAA-MM de los datos (por defecto, el último calculado)."),
+    ia: bool = typer.Option(
+        True, "--ia/--sin-ia", help="Elegir las frases de la competencia con gpt-5-nano."
+    ),
+    env: str = typer.Option(None, help="dev o prod."),
+) -> None:
+    """Genera el diagnóstico gratis y un primer mensaje de WhatsApp por cada nombre de la
+    lista, solo con datos ya medidos (sin corridas nuevas)."""
+    from visible_ia.informes.contexto import load_brand, load_market_names
+    from visible_ia.informes.lote import UnknownName, match, read_list, whatsapp_message
+    from visible_ia.informes.pdf import OUTPUT_DIR, PdfError, slug
+    from visible_ia.nicho import load_niche
+    from visible_ia.puntaje.indice import ScoreError
+
+    lines = read_list(archivo.read_text(encoding="utf-8"))
+    if not lines:
+        typer.echo(f"{archivo} no tiene nombres.")
+        raise typer.Exit(code=2)
+    target = _resolve_env(env)
+    settings, niche, brand = get_settings(), load_niche(), load_brand()
+    month = _parse_month(mes)
+    messages, failed = [], []
+    with _connect_or_exit(target, autocommit=True) as conn:
+        names = load_market_names(conn, mercado)
+        for line in lines:
+            try:
+                cid = match(line, names)
+                out = OUTPUT_DIR / "diagnosticos" / (f"{month:%Y-%m}" if month else "ultimo")
+                data, path = _diagnostic_pdf(conn, settings, cid, mercado, month, None, ia, out)
+            except (UnknownName, ScoreError, PdfError) as exc:
+                failed.append(line)
+                typer.echo(f"✗ {exc}")
+                continue
+            text = whatsapp_message(data, niche, brand)
+            path.with_name(f"whatsapp-{slug(data.clinic.name)}.txt").write_text(
+                text + "\n", encoding="utf-8"
+            )
+            messages.append((data.clinic.name, path, text))
+            typer.echo(f"✓ {data.clinic.name}: {path.name}")
+    if messages:
+        summary = messages[0][1].parent / "mensajes.md"
+        blocks = [f"## {name}\n\nPDF: {path.name}\n\n{text}\n" for name, path, text in messages]
+        summary.write_text("\n".join(blocks), encoding="utf-8")
+        typer.echo(f"{len(messages)} diagnósticos y mensajes en {summary.parent}")
+    if failed:
+        typer.echo(f"Sin generar ({len(failed)}): {', '.join(failed)}")
+        raise typer.Exit(code=1)
 
 
 @informe_app.command("crear-bucket")

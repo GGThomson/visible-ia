@@ -229,3 +229,24 @@ def test_default_brand_is_eminia_with_the_embedded_logo():
     embedded = base64.b64decode(brand["logo_url"][len(prefix) :])
     # Git may turn the file into CRLF on Windows: compare the content, not the line endings.
     assert embedded.replace(b"\r\n", b"\n") == logo.read_bytes().replace(b"\r\n", b"\n")
+
+
+@pytest.mark.parametrize(
+    "k, named, expected",
+    [(3, 15, "3 de las 15 respuestas que te nombran"),
+     (1, 1, "la única respuesta que te nombra"),
+     (0, 1, "ninguna: solo 1 respuesta te nombra"),
+     (0, 0, "ninguna respuesta, porque ninguna te nombra")],
+)  # fmt: skip
+def test_directory_phrase_reads_well_in_singular_and_zero(k, named, expected):
+    from visible_ia.informes.contexto import _of_named
+
+    assert _of_named(k, named) == expected
+
+
+def test_compact_report_keeps_one_example_answer():
+    """Safety net for the 8-page limit (HU-14): the batch re-renders with one example."""
+    assert len(build_context(_data())["ejemplos"]) == 2
+    ctx = build_context(_data(), compact=True)
+    assert len(ctx["ejemplos"]) == 1
+    assert "Una respuesta completa de ejemplo" in render_diagnostic(ctx)

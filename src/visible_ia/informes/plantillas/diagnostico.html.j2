@@ -149,7 +149,7 @@
   {% else %}
   <h2>Por qué la IA eligió a tu competencia</h2>
   {% endif %}
-  <h3>Dos respuestas completas de ejemplo</h3>
+  <h3>{{ "Dos respuestas completas de ejemplo" if ejemplos|length > 1 else "Una respuesta completa de ejemplo" }}</h3>
   {% for e in ejemplos %}
   <div class="tarjeta ejemplo">
     <p class="pregunta">{{ e.superficie }} · «{{ e.pregunta }}» <small>({{ e.fecha }})</small></p>
@@ -218,12 +218,11 @@
   <div class="tarjeta arreglo">
     <p class="pregunta">{{ loop.index }}. {{ r.titulo }}</p>
     <p>{{ r.texto }}</p>
-    <p class="etiquetas"><span>{{ r.impacto_texto }}</span><span>Esfuerzo: {{ r.esfuerzo }}</span></p>
+    <p class="etiquetas">{{ r.impacto_texto }} · Esfuerzo: {{ r.esfuerzo }}</p>
   </div>
   {% if loop.first %}</div>{% endif %}
   {% endfor %}
-  <p class="nota">Ordenado de mayor a menor impacto: cuántas de las {{ metodo.respuestas }} respuestas te separan del líder en esa área.</p>
-  <p class="quien"><b>Quién lo hace:</b> {{ nuevo.quien }}.</p>
+  <p class="quien"><b>Quién lo hace:</b> {{ nuevo.quien }}. <span class="nota">Ordenado de mayor a menor impacto: cuántas de las {{ metodo.respuestas }} respuestas te separan del líder en esa área.</span></p>
   <div class="proximo">
     <b>Próximo paso:</b> revisemos juntos tu diagnóstico en 15 minutos{% if marca.contacto %} · {{ marca.contacto }}{% endif %}. Si quieres, en el Plan Gestionado hacemos estos arreglos por ti.
   </div>
