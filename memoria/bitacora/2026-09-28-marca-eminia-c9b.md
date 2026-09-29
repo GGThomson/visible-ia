@@ -71,3 +71,31 @@
   - fusionar el PR #67, con lo que se publica la landing en `visible-ia.pages.dev`.
 - **1/10:** aprobar la corrida de octubre (issue «Corridas de octubre»).
 - **Después:** C10 (agencias) y planificar C-009 (ADR-006).
+
+---
+
+# Sesión 2026-09-28 (noche) · Ajustes del PR #67: foto, RUC, reclamaciones y diagnóstico coherente
+
+- **Fase / tareas:** C9b (ajustes del Director sobre el PR #67)
+- **Rama(s):** `feat/C9b-marca-y-oferta` (PR #67, sin fusionar ni publicar)
+- **Commits:** d404d43 feat(C9b): foto, pie con RUC y Libro de Reclamaciones; diagnóstico coherente · e37cac6 fix(C9b): semáforo como % del líder; plan siempre con 3 acciones
+
+## Qué se hizo
+- **Landing:** foto del Director (`web/marca/gianpol.jpg`); pie «Gianpol Rosazza Bravo · RUC 10707993435» en landing, privacidad y términos (sin dirección); **Libro de Reclamaciones** pasó de `docs/legal/borradores/` a `web/reclamaciones.html`, enlazado en todos los pies. La hoja se envía por WhatsApp (sin tabla nueva en la base).
+- **Diagnóstico:** semáforo, hallazgos, plan y página 5 leen un único `Facts` (`semaforo.py`, `build_facts` en `contexto.py`); prueba que falla si se contradicen. Redes propias de otras clínicas fuera de «Páginas que te faltan», con línea aparte de Instagram. Plan ordenado por impacto calculado (respuestas de diferencia con el líder), «Quién lo hace» una vez. Portada con la consecuencia («1 de cada 4 veces; al líder, 5 de cada 10»), leyenda arriba de la cuadrícula, ejemplos en frases completas desde la clínica, un solo formato de números (4,9 · 1 135 · 25 %).
+- **Semáforo (regla del Director):** tu cifra ÷ la del líder: Bien ≥ 80 %, Regular 40–80 %, Bajo < 40 %, «Sin datos» si el líder está en 0. En Maps se comparan las reseñas. El plan muestra siempre las 3 acciones de mayor impacto, aunque el área esté en «Bien».
+- **Clínicas para el diagnóstico gratis (Implantes · Miraflores, setiembre, sin corridas):** NEODENTIS (2 %) y Clínica Virtual Dent (2 %), casi no nombradas; Clínica Dental Cano (17 %) y The Dental Clinic & GT Concept (15 %), nivel medio. Todas con web y WhatsApp visibles. Alternativas: Odontologists (10 %), Prosmile (2 %).
+
+## Qué se decidió (y dónde quedó registrado)
+- Regla del semáforo contra el líder (80 % / 40 %): `src/visible_ia/informes/semaforo.toml` y anexo del informe.
+- Plan de acción: siempre 3 acciones por impacto: docstring de `_plan` en `contexto.py`.
+- Libro de Reclamaciones publicado sin dirección del proveedor: comentario en `web/reclamaciones.html`.
+
+## Problemas y cómo se resolvieron
+- «Rangos que se cruzan» dejaba casi todo en «Bien» con 60 respuestas → regla de proporción del líder.
+- El impacto de Doctoralia contaba respuestas y no porcentajes (salía «alto» con 100 % vs 100 %) → usa la misma proporción que el semáforo.
+
+## Para la próxima sesión
+- OK escrito del Director para publicar el PR #67 (antes, la migración que hace obligatoria `consent_version`).
+- Libro de Reclamaciones: falta, según el reglamento, domicilio del proveedor, número correlativo y copia al correo (revisión legal).
+- Ofrecer el diagnóstico gratis a las 4 clínicas elegidas.
