@@ -27,6 +27,7 @@ from visible_ia.informes.profundo import (
     question_table,
 )
 from visible_ia.informes.semaforo import (
+    GAP_MEASURE,
     Facts,
     Side,
     dec,
@@ -262,8 +263,19 @@ def _plan(values: dict[str, Any], applies: dict[str, bool], facts: Facts) -> lis
         return (r["id"] == "mantener", -gaps[r["id"]])
 
     fixes = [r for r in items if r["id"] != "mantener"]
-    chosen = sorted((r for r in fixes if applies.get(r["id"])), key=order)[:3]
-    chosen += sorted((r for r in fixes if r not in chosen), key=order)[: 3 - len(chosen)]
+    chosen: list[dict] = []
+    measures: set[str] = set()
+    # Fixes that apply first, then the rest; never two fixes with the same measure (the one
+    # of highest impact stays; on a tie, the first in recomendaciones.toml).
+    for pool in (
+        sorted((r for r in fixes if applies.get(r["id"])), key=order),
+        sorted((r for r in fixes if not applies.get(r["id"])), key=order),
+    ):
+        for r in pool:
+            measure = GAP_MEASURE.get(r["id"], r["id"])
+            if len(chosen) < 3 and measure not in measures:
+                chosen.append(r)
+                measures.add(measure)
     # A leader usually has no gap anywhere: with the 3 tied at 0, keeping the lead goes third.
     keep = next((r for r in items if r["id"] == "mantener"), None)
     if keep and applies.get("mantener") and not any(gaps[r["id"]] for r in chosen):

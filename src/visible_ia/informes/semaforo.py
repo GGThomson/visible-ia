@@ -144,6 +144,11 @@ def lights(facts: Facts, rules: dict | None = None) -> list[Light]:
 # --- action plan -----------------------------------------------------------------------------
 
 
+# What each fix's impact measures. Fixes that share a measure show the same difference, so the
+# plan keeps only one of them (29/09/2026).
+GAP_MEASURE = {"resenas": "presencia", "brecha": "presencia"}
+
+
 def gap(fix_id: str, facts: Facts) -> int:
     """How many answers of the month the fix's area separates the clinic from the leader."""
     me, ref = facts.me, facts.ref
