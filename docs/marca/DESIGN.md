@@ -100,7 +100,8 @@ Escala (base 16 px; interlineado del texto 1.6, de los títulos 1.15):
 | Nivel | Uso | Sombra |
 |---|---|---|
 | 0 | Casi todo: secciones, tarjetas, campos | Ninguna (borde 1 px línea) |
-| 1 | Tarjeta de chat de ejemplo, tarjeta del formulario, tarjetas al pasar el mouse, marco de las capturas | `0 8px 24px rgba(15, 27, 45, 0.08)` |
+| 1 | Tarjeta de chat de ejemplo, tarjeta del formulario, tarjetas al pasar el mouse, marco de las capturas, tarjetas flotantes | `0 8px 24px rgba(15, 27, 45, 0.08)` |
+| 2 · panel | El panel que asoma bajo la portada | `0 16px 40px rgba(15, 27, 45, 0.14)` |
 | 2 | Imagen del informe (inclinada 2–3°) | `0 16px 40px rgba(15, 27, 45, 0.14)` |
 
 Radios: 4 px (barras), 8 px (botones y campos), 12 px (tarjetas), 16 px (foto de la persona).
@@ -137,6 +138,11 @@ Radios: 4 px (barras), 8 px (botones y campos), 12 px (tarjetas), 16 px (foto de
   6. **Tarjetas** de planes y de «Qué recibes»: suben 4 px con sombra al pasar el mouse. Nada más.
   7. **Pestañas del recorrido del producto:** la imagen cambia con un fundido de 250 ms.
   8. **Encabezado:** al bajar, gana una sombra fina.
+  9. **Panel que asoma** (inspirado en el ritmo de trendos.com, sin copiar nada): bajo la portada, el panel ilustrado aparece a medio mostrar y, al verse, sube 40 px y se asienta (600 ms, una vez).
+  10. **Tarjetas flotantes:** etiquetas pequeñas con frases verdaderas del producto, sin cifras («Subió frente al mes anterior», «Arreglo 1: hecho»). Aparecen escalonadas sobre el panel (450, 600 y 750 ms) y una por pestaña al cambiar.
+  11. **Líneas guía:** líneas verticales de 1 px a los bordes de la columna de 1120 px y una línea entre secciones claras. Son planas, sin degradados, y se ocultan por debajo de 1180 px.
+  12. **Trazos que se dibujan:** cada paso de «Cómo funciona» lleva un trazo propio (pizarra, con el tramo final en cobalto) que se dibuja una vez (700 ms).
+  13. **Un solo ritmo:** todas las transiciones de botones, tarjetas, pestañas y encabezado usan `--mov: 250ms cubic-bezier(0.4, 0, 0.2, 1)`.
 - **`prefers-reduced-motion: reduce` apaga todo** y muestra el estado final (cifras finales, barras llenas, sin desplazamientos).
 - **Accesibilidad:** foco visible en todo lo que se puede tocar, textos alternativos en las imágenes, contraste AA.
 

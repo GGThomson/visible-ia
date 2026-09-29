@@ -53,7 +53,7 @@
   }
 
   var chatSteps = $$(".chat .paso");
-  var reveal = $$(".aparece, .barras");
+  var reveal = $$(".aparece, .barras, .asoma");
   if (reduce || !canObserve) {
     chatSteps.concat(reveal).forEach(function (el) { el.classList.add("visible"); });
     return;  // counters keep the final figure already written in the HTML

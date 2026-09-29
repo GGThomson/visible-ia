@@ -1,9 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" role="img" aria-label="Ilustración: un panel con tu índice, una flecha que sube y un ranking con tu clínica en azul">
   <rect width="480" height="300" fill="#F4F6F9"/>
   <rect x="40" y="30" width="400" height="240" rx="12" fill="#FFFFFF" stroke="#D9DEE7" stroke-width="2"/>
-  <rect x="40" y="30" width="400" height="30" rx="12" fill="#F4F6F9"/>
-  <rect x="40" y="48" width="400" height="12" fill="#F4F6F9"/>
-  <circle cx="58" cy="45" r="4" fill="#D9DEE7"/><circle cx="72" cy="45" r="4" fill="#D9DEE7"/><circle cx="86" cy="45" r="4" fill="#D9DEE7"/>
   <rect x="62" y="80" width="150" height="90" rx="10" fill="#FFFFFF" stroke="#D9DEE7" stroke-width="2"/>
   <circle cx="137" cy="125" r="30" fill="none" stroke="#D9DEE7" stroke-width="10"/>
   <path d="M137 95 A30 30 0 0 1 164 138" fill="none" stroke="#2447C8" stroke-width="10" stroke-linecap="round"/>

@@ -24,6 +24,7 @@
   --sombra-1: 0 8px 24px rgba(15, 27, 45, 0.08);
   --sombra-2: 0 16px 40px rgba(15, 27, 45, 0.14);
   --alto-encabezado: 64px;
+  --mov: 250ms cubic-bezier(0.4, 0, 0.2, 1);  /* one rhythm for every hover and press */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -61,7 +62,7 @@ p { margin: 0 0 16px; max-width: 65ch; }
   min-height: 48px; padding: 12px 24px; border-radius: var(--radio);
   font: 600 16px/1.2 var(--sans); text-decoration: none; cursor: pointer;
   border: 1.5px solid transparent;
-  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+  transition: background-color var(--mov), color var(--mov), transform var(--mov), box-shadow var(--mov), border-color var(--mov);
 }
 .boton:active { transform: translateY(0) scale(0.98); box-shadow: none; }
 .boton.principal { background: var(--cobalto); color: var(--blanco); }
@@ -73,7 +74,7 @@ p { margin: 0 0 16px; max-width: 65ch; }
 /* Header */
 .encabezado {
   position: sticky; top: 0; z-index: 10; background: var(--blanco);
-  border-bottom: 1px solid transparent; transition: box-shadow 200ms ease, border-color 200ms ease;
+  border-bottom: 1px solid transparent; transition: box-shadow var(--mov), border-color var(--mov);
 }
 .encabezado.con-sombra { border-bottom-color: var(--linea); box-shadow: 0 2px 12px rgba(15, 27, 45, 0.06); }
 .encabezado .envoltura { display: flex; align-items: center; justify-content: space-between; height: var(--alto-encabezado); gap: 24px; }
@@ -125,6 +126,40 @@ p { margin: 0 0 16px; max-width: 65ch; }
 .pasos h3 { margin-bottom: 8px; }
 .pasos p { color: var(--pizarra); margin: 0; }
 
+/* 1 + 2 · The panel that peeks below the hero, with floating cards */
+.vitrina { margin-top: -48px; padding-bottom: 72px; position: relative; z-index: 2; }
+.vitrina-marco { position: relative; max-width: 880px; margin: 0 auto; }
+.vitrina .marco { box-shadow: var(--sombra-2); }
+.flotante {
+  position: absolute; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+  background: var(--blanco); color: var(--tinta); border: 1px solid var(--linea); border-radius: 999px;
+  padding: 8px 14px; font-size: 14px; font-weight: 600; box-shadow: var(--sombra-1);
+}
+.flotante svg { color: var(--cobalto); flex: none; }
+.vitrina .f1 { left: -40px; top: 26%; }
+.vitrina .f2 { right: -48px; top: 48%; }
+.vitrina .f3 { left: 8%; bottom: -18px; }
+.luz-ambar { width: 10px; height: 10px; border-radius: 50%; background: #B7791F; display: inline-block; }
+.marco-pantalla .chip-pestana { right: 16px; bottom: 16px; }
+
+/* 3 · Thin guide lines framing the content column, and section dividers */
+main { position: relative; }
+main::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: var(--ancho); transform: translateX(-50%);
+  border-left: 1px solid rgba(15, 27, 45, 0.07); border-right: 1px solid rgba(15, 27, 45, 0.07);
+  pointer-events: none; z-index: 1;
+}
+.seccion:not(.tinta) { border-top: 1px solid var(--linea); }
+
+/* 4 · Strokes that draw themselves in "Cómo funciona" */
+.pasos li { position: relative; }
+.trazo { position: absolute; top: 18px; right: 0; width: 124px; height: 60px; fill: none; stroke: var(--pizarra); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; opacity: 0.8; }
+.trazo .final { stroke: var(--cobalto); }
+.trazo path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+/* 5 · Founder badge on paid plans */
+.fundador { display: inline-block; margin: -12px 0 20px; padding: 6px 10px; border-radius: 8px; background: rgba(36, 71, 200, 0.08); color: var(--cobalto); font-size: 13px; font-weight: 600; }
+
 /* What you get every month */
 .recibe-grilla { list-style: none; padding: 0; margin: 48px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .recibe { background: var(--blanco); border: 1px solid var(--linea); border-radius: var(--radio-tarjeta); padding: 28px; }
@@ -136,7 +171,7 @@ p { margin: 0 0 16px; max-width: 65ch; }
 .pestanas [role=tab] {
   min-height: 44px; padding: 8px 18px; border-radius: 999px; border: 1.5px solid var(--linea);
   background: var(--blanco); color: var(--tinta); font: 600 15px var(--sans); cursor: pointer;
-  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+  transition: background-color var(--mov), border-color var(--mov), color var(--mov);
 }
 .pestanas [role=tab]:hover { border-color: var(--pizarra); }
 .pestanas [role=tab][aria-selected=true] { background: var(--tinta); border-color: var(--tinta); color: var(--blanco); }
@@ -162,7 +197,7 @@ p { margin: 0 0 16px; max-width: 65ch; }
 
 /* Cards lift on hover (mouse only) */
 @media (hover: hover) {
-  .plan, .recibe { transition: transform 200ms ease, box-shadow 200ms ease; }
+  .plan, .recibe { transition: transform var(--mov), box-shadow var(--mov); }
   .plan:hover, .recibe:hover { transform: translateY(-4px); box-shadow: var(--sombra-1); }
 }
 
@@ -225,6 +260,20 @@ p { margin: 0 0 16px; max-width: 65ch; }
 .plan ul { margin: 0 0 32px; padding-left: 20px; font-size: 16px; }
 .plan li { margin: 8px 0; }
 .plan .boton { margin-top: auto; width: 100%; }
+.comparativa { margin-top: 48px; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--linea); border-radius: var(--radio-tarjeta); background: var(--blanco); }
+.comparativa table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 16px; }
+.comparativa caption { text-align: left; font-family: var(--serif); font-weight: 600; font-size: 22px; padding: 20px 24px 8px; }
+.comparativa th, .comparativa td { padding: 14px 16px; border-bottom: 1px solid var(--linea); text-align: center; }
+.comparativa tbody th { text-align: left; font-weight: 400; }
+.comparativa thead th { font-weight: 600; vertical-align: bottom; }
+.comparativa tbody tr:last-child th, .comparativa tbody tr:last-child td { border-bottom: 0; }
+.comparativa .rec { background: rgba(36, 71, 200, 0.06); }
+.comparativa thead .rec { color: var(--cobalto); }
+.comparativa thead .sello { display: block; margin: 4px 0 0; }
+.comparativa .si { color: var(--cobalto); font-weight: 600; font-size: 18px; }
+.comparativa .no { color: var(--pizarra); }
+.comparativa-nota { margin-top: 12px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .ganchos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--linea); }
 .ganchos p { margin: 0; font-size: 16px; }
 .ganchos + .nota { margin-top: 32px; }
@@ -287,6 +336,17 @@ p { margin: 0 0 16px; max-width: 65ch; }
 /* The label shows once the "Tu clínica" bar has grown */
 .js .barras .aqui { opacity: 0; transform: translate(-6px, -50%); transition: opacity 300ms ease 650ms, transform 300ms ease 650ms; }
 .js .barras.visible .aqui { opacity: 1; transform: translate(0, -50%); }
+/* The panel settles (600 ms) and the floating cards pop in one after another */
+.js .asoma { opacity: 0; transform: translateY(40px) scale(0.97); transition: opacity 600ms var(--mov-curva, ease-out), transform 600ms ease-out; }
+.js .asoma.visible { opacity: 1; transform: none; }
+.js .asoma .flotante { opacity: 0; transform: translateY(8px); transition: opacity 300ms ease-out, transform 300ms ease-out; }
+.js .asoma.visible .f1 { opacity: 1; transform: none; transition-delay: 450ms; }
+.js .asoma.visible .f2 { opacity: 1; transform: none; transition-delay: 600ms; }
+.js .asoma.visible .f3 { opacity: 1; transform: none; transition-delay: 750ms; }
+.js .aparece .trazo path { stroke-dashoffset: 1; transition: stroke-dashoffset 700ms ease-out 200ms; }
+.js .aparece.visible .trazo path { stroke-dashoffset: 0; }
+.js .aparece.visible .trazo .final { transition-delay: 800ms; transition-duration: 300ms; }
+.vista.entrando .chip-pestana { animation: fundido 250ms ease 150ms both; }
 /* Tab image fade (250 ms) */
 .vista.entrando .marco-pantalla > * { animation: fundido 250ms ease both; }
 @keyframes fundido { from { opacity: 0; } to { opacity: 1; } }
@@ -296,11 +356,14 @@ p { margin: 0 0 16px; max-width: 65ch; }
   .boton:hover, .boton:active, .plan:hover, .recibe:hover { transform: none; }
   .js .barras .aqui { opacity: 1; transform: translate(0, -50%); transition: none; }
   .vista.entrando .marco-pantalla > * { animation: none; }
-  .js .aparece, .js .chat .paso { opacity: 1; transform: none; transition: none; }
+  .js .aparece, .js .chat .paso, .js .asoma, .js .asoma .flotante { opacity: 1; transform: none; transition: none; }
+  .js .aparece .trazo path { stroke-dashoffset: 0; transition: none; }
+  .vista.entrando .chip-pestana { animation: none; }
   .js .barras .relleno { width: var(--valor); transition: none; }
 }
 
 /* Tablet */
+@media (max-width: 1180px) { main::before { display: none; } .vitrina .f1 { left: -8px; } .vitrina .f2 { right: -8px; } }
 @media (max-width: 960px) {
   :root { --seccion: 88px; }
   h1 { font-size: 40px; }
@@ -331,6 +394,10 @@ p { margin: 0 0 16px; max-width: 65ch; }
   .tarjeta-formulario { padding: 24px; }
   .campos { grid-template-columns: 1fr; }
   .fuentes-ia { grid-template-columns: 1fr; gap: 24px; }
+  .vitrina { margin-top: -24px; padding-bottom: 56px; }
+  .flotante { font-size: 12px; padding: 6px 10px; }
+  .vitrina .f1 { left: 4px; top: 18%; } .vitrina .f2 { right: 4px; top: 52%; } .vitrina .f3 { left: 4px; bottom: -14px; }
+  .trazo { width: 96px; height: 46px; top: 22px; }
   .recibe-grilla { grid-template-columns: 1fr; gap: 16px; }
   .garantias-franja .envoltura { grid-template-columns: 1fr; }
   .garantias-franja p { text-align: left; }

@@ -152,6 +152,18 @@
   - testimonios en una sección oculta hasta tener el primero real con permiso escrito.
 - Las capturas reales del producto ya no están en la landing: se guardan en `salida/capturas-producto/`.
 
+### C9b · Tabla comparativa y 5 efectos (Director, 29/09)
+- **Tabla «Qué incluye cada plan»** debajo de las tarjetas: 10 filas con ✓ o —, el Gestionado como «Recomendado» y la línea «Sin permanencia. Precios sin IGV.».
+  - Las filas que solo existen en el diagnóstico van con ✓\* en los planes pagados.
+  - En celular se desplaza de lado dentro de su caja.
+- **Efectos inspirados en trendos.com, sin copiar textos, imágenes, íconos ni código:**
+  - el panel que asoma;
+  - las tarjetas flotantes;
+  - las líneas guía;
+  - los trazos que se dibujan;
+  - un solo ritmo de 250 ms y el distintivo de precio fundador.
+  - Todos se apagan con `prefers-reduced-motion` y están documentados en DESIGN.md §8.
+
 ## Demo de la fase
 - El Director ve en la vista previa del PR la landing nueva en su celular y en la computadora, el panel y un PDF de ejemplo con la marca Eminia.
 - Si los aprueba, se publica en Cloudflare Pages al fusionar a `main`.
