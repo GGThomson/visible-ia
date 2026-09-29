@@ -21,7 +21,7 @@ from datetime import date
 from urllib.parse import urlsplit
 
 MODEL = "gpt-5-nano"
-MAX_REASONS = 3
+MAX_REASONS = 2  # C-008: 2–3 per competitor; 2 keeps the diagnostic within 8 pages (HU-14)
 MAX_CANDIDATES = 40
 MAX_PAGES = 8
 FORM_LABELS = {"M": "Mejor", "R": "Recomendación", "C": "Criterio", "P": "Procedimiento"}
@@ -271,8 +271,8 @@ def question_table(answers: list[Answer], clinic_id: int, leader_id: int) -> lis
 
 INSTRUCTIONS = (
     "Recibes frases numeradas, copiadas de respuestas de un asistente de IA a pacientes que "
-    "buscan una clínica en Lima. Elige hasta 3 frases que mejor explican POR QUÉ la IA "
-    "recomienda a la clínica indicada (reseñas, especialidad, tecnología, precio, trato, "
+    f"buscan una clínica en Lima. Elige hasta {MAX_REASONS} frases que mejor explican POR QUÉ "
+    "la IA recomienda a la clínica indicada (reseñas, especialidad, tecnología, precio, trato, "
     "ubicación…). Prefiere frases con una razón concreta y distintas entre sí. Si ninguna da una "
     "razón, elige las que mejor la describen. Devuelve solo los números."
 )

@@ -21,6 +21,11 @@ class PdfError(RuntimeError):
     pass
 
 
+def page_count(path: Path) -> int:
+    """Pages of a PDF made by Chromium (one "/Type /Page" object each), without a PDF library."""
+    return len(re.findall(rb"/Type\s*/Page(?![a-zA-Z])", path.read_bytes()))
+
+
 def html_to_pdf(
     html: str, path: Path, header: str | None = None, footer: str | None = None
 ) -> Path:

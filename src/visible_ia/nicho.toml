@@ -1,0 +1,19 @@
+# Words of the niche (C-010). New code takes its vocabulary from here instead of writing
+# "clínica" or "paciente" in the code, so the same tools can serve another niche by changing
+# only this file.
+
+[negocio]  # what we measure: the establishments of a market
+singular = "clínica"
+plural = "clínicas"
+
+[cliente_final]  # who asks the AI
+singular = "paciente"
+plural = "pacientes"
+articulo = "un"
+
+# Market category code -> what the end customer is looking for, in plain words.
+[categorias]
+IMP = "implantes dentales"
+EDE = "estética dental"
+MES = "medicina estética"
+DER = "dermatología"

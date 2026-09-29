@@ -24,7 +24,7 @@ texto = "Tienes {resenas} reseñas; las clínicas que más recomienda la IA en t
 id = "doctoralia"
 esfuerzo = "bajo"  # bajo / medio / alto (redesign 28/09)
 titulo = "Un perfil completo en Doctoralia"
-texto = "Doctoralia aparece como fuente en {pct_doctoralia} % de las respuestas de tu mercado, y Doctoralia o algún directorio, en {dir_tuyo} respuestas que te nombran. Completa el perfil de la clínica y de cada especialista, con {tratamiento} como servicio y opiniones verificadas."
+texto = "Doctoralia aparece como fuente en {pct_doctoralia} % de las respuestas de tu mercado, y Doctoralia o algún directorio, en {dir_tuyo}. Completa el perfil de la clínica y de cada especialista, con {tratamiento} como servicio y opiniones verificadas."
 
 [[recomendacion]]
 id = "chatgpt"

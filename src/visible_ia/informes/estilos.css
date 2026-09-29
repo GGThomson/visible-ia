@@ -127,8 +127,7 @@ tr.grupo td { background: var(--suave); }
 .diag .sep { display: inline-block; width: 1px; height: 9px; background: #D9DEE7; margin: 0 3px; vertical-align: middle; }
 .diag .consistencia { margin-top: 0.4em; }
 .diag td.url { word-break: break-all; }
-.diag .etiquetas { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0.3em 0 0; font-size: 11pt; color: #51607A; }
-.diag .etiquetas span { font-family: "IBM Plex Mono", Consolas, monospace; }
+.diag .etiquetas { margin: 0.3em 0 0; font-size: 11pt; font-weight: 600; color: #51607A; }
 .diag .pasos-metodo { padding-left: 1.2em; }
 .diag .pasos-metodo li { margin-bottom: 0.5em; }
 .diag .glosario { display: grid; grid-template-columns: 11em 1fr; gap: 0.3em 1em; margin: 0.4em 0 1em; }
