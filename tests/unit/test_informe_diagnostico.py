@@ -159,7 +159,10 @@ def test_leader_gets_a_leader_sentence_and_keep_advice():
     )
     ctx = build_context(data)
     assert "es la clínica más recomendada" in ctx["frase"]
-    assert any(r["titulo"] == "Mantén y amplía tu ventaja" for r in ctx["recomendaciones"])
+    # Always the 3 of highest impact: the leader trails the runner-up in Google (43 % vs 63 %).
+    plan = ctx["recomendaciones"]
+    assert len(plan) == 3 and plan[0]["id"] == "google"
+    assert "diferencia con la n.º 2" in plan[0]["impacto_texto"]
     assert ctx["fuentes"]["propia_citada"] is True
 
 

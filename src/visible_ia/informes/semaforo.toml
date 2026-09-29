@@ -1,40 +1,30 @@
-# Traffic light of the free diagnostic's summary (redesign, 28/09/2026; compared with the leader
-# since 29/09/2026). Each area is "Bien" only when the clinic's range reaches the leader's range
-# (Maps: stars within `margen_estrellas` and at least `fraccion_resenas` of the leader's reviews);
-# otherwise "Regular" when the value reaches `regular`, and "Bajo" below. `bien` is only used when
-# there is no leader to compare with. A missing value shows "Sin datos" (grey), never an invented
-# colour. The report's annex calls these rules "criterio Eminia". Tested in test_semaforo.py.
+# Traffic light of the free diagnostic's summary (redesign 28/09/2026; rule of 29/09/2026,
+# approved by the Director). Each area compares the clinic's figure with the leader's (the
+# runner-up when the clinic leads): "Bien" when it reaches `bien` of the leader's figure,
+# "Regular" when it reaches `regular`, "Bajo" below. A missing figure, or a leader at 0, shows
+# "Sin datos" (grey), never an invented colour. The report's annex calls this "criterio Eminia".
+# Tested in tests/unit/test_semaforo.py.
+
+[corte]
+bien = 0.8     # 80 % of the leader's figure or more
+regular = 0.4  # from 40 % to 80 %
 
 [[area]]
 id = "presencia"
 nombre = "Presencia en IA"
-mide = "Índice Eminia: % de respuestas que te nombran"
-bien = 25
-regular = 10
+mide = "% de respuestas que te nombran (Índice Eminia)"
 
 [[area]]
 id = "web"
 nombre = "Tu web como fuente"
 mide = "% de respuestas que citan tu web (0 % si no tienes web registrada)"
-bien = 15
-regular = 1
 
 [[area]]
 id = "directorios"
 nombre = "Doctoralia y directorios"
 mide = "% de las respuestas que te nombran que citan Doctoralia o directorios"
-bien = 40
-regular = 15
 
 [[area]]
 id = "maps"
 nombre = "Reputación en Maps"
-mide = "Estrellas y número de reseñas en Google Maps"
-# Both conditions must hold for each level.
-bien_estrellas = 4.7
-bien_resenas = 200
-regular_estrellas = 4.3
-regular_resenas = 50
-# Against the leader:
-margen_estrellas = 0.2
-fraccion_resenas = 0.5
+mide = "Número de reseñas en Google Maps (las estrellas casi no varían entre clínicas)"

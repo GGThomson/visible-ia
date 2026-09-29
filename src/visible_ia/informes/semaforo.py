@@ -4,31 +4,18 @@ All pure functions over one `Facts` built once from the data the diagnostic alre
 new runs): the traffic light, the findings, the action plan and page 5 read the same numbers,
 so they cannot contradict each other (tested in tests/unit/test_semaforo.py).
 
-Each area is compared with the leader (29/09/2026): "Bien" only when the clinic's range reaches
-the leader's; otherwise the fixed thresholds of semaforo.toml ("criterio Eminia") split
-"Regular" from "Bajo".
+Each area compares the clinic's figure with the leader's (29/09/2026): "Bien" from 80 % of the
+leader's figure, "Regular" from 40 %, "Bajo" below; "Sin datos" when the leader is at 0. The
+cut-offs live in semaforo.toml ("criterio Eminia").
 """
 
 import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
-from visible_ia.puntaje.estadistica import wilson
-
 HERE = Path(__file__).resolve().parent
 RULES_TOML = HERE / "semaforo.toml"
 LEVELS = ("Bien", "Regular", "Bajo", "Sin datos")
-# Which areas each fix of recomendaciones.toml improves. A fix is only proposed when one of its
-# areas is not "Bien" ("mantener" has none: it is advice for clinics already doing well).
-FIX_AREAS = {
-    "web": ("web",),
-    "google": ("presencia", "maps"),
-    "resenas": ("maps",),
-    "doctoralia": ("directorios",),
-    "chatgpt": ("directorios", "presencia"),
-    "brecha": ("presencia", "web"),
-    "mantener": (),
-}
 
 
 @dataclass(frozen=True)
@@ -66,8 +53,10 @@ class Light:
     value: str  # one line: what it measures, the clinic and the leader
 
 
-def load_rules(path: Path = RULES_TOML) -> dict[str, dict]:
-    return {a["id"]: a for a in tomllib.loads(path.read_text(encoding="utf-8"))["area"]}
+def load_rules(path: Path = RULES_TOML) -> dict:
+    """{"corte": {"bien": 0.8, "regular": 0.4}, "areas": {id: {...}}}."""
+    data = tomllib.loads(path.read_text(encoding="utf-8"))
+    return {"corte": data["corte"], "areas": {a["id"]: a for a in data["area"]}}
 
 
 # --- number format: the same everywhere in the report ---------------------------------------
@@ -100,95 +89,55 @@ def one_in(value: float | None) -> str:
 # --- levels ----------------------------------------------------------------------------------
 
 
-def level(value: float | None, good: float, fair: float) -> str:
-    """Fixed thresholds: used when there is no leader to compare with."""
-    if value is None:
+def compared_level(mine: float | None, ref: float | None, cuts: dict) -> str:
+    """The clinic's figure as a share of the leader's: "Bien" from `bien` (0.8), "Regular" from
+    `regular` (0.4), "Bajo" below. No figure, or a leader at 0, is "Sin datos"."""
+    if mine is None or not ref:
         return "Sin datos"
-    return "Bien" if value >= good else "Regular" if value >= fair else "Bajo"
+    ratio = mine / ref
+    return "Bien" if ratio >= cuts["bien"] else "Regular" if ratio >= cuts["regular"] else "Bajo"
 
 
-def compared_level(
-    mine: tuple[float, float, float] | None,
-    ref: tuple[float, float, float] | None,
-    rule: dict,
-) -> str:
-    """(value, low, high) against the leader's: "Bien" when the clinic's range reaches the
-    leader's range (or it is above); never "Bien" at 0 %."""
-    if mine is None:
-        return "Sin datos"
-    value, _, high = mine
-    if ref is None:
-        return level(value, rule["bien"], rule["regular"])
-    if value > 0 and high >= ref[1]:
-        return "Bien"
-    return "Regular" if value >= rule["regular"] else "Bajo"
+def share(k: int, n: int) -> float | None:
+    return 100 * k / n if n else None
 
 
-def maps_level(rating: float | None, reviews: int | None, rule: dict,
-               ref: Side | None = None) -> str:  # fmt: skip
-    if rating is None or reviews is None:
-        return "Sin datos"
-    if ref is not None and ref.rating is not None and ref.reviews is not None:
-        good = (rating >= ref.rating - rule["margen_estrellas"]
-                and reviews >= ref.reviews * rule["fraccion_resenas"])  # fmt: skip
-    else:
-        good = rating >= rule["bien_estrellas"] and reviews >= rule["bien_resenas"]
-    if good:
-        return "Bien"
-    if rating >= rule["regular_estrellas"] and reviews >= rule["regular_resenas"]:
-        return "Regular"
-    return "Bajo"
-
-
-def share_range(k: int, n: int) -> tuple[float, float, float] | None:
-    interval = wilson(k, n)
-    return None if interval is None else (100 * k / n, 100 * interval[0], 100 * interval[1])
-
-
-def _index_range(s: Side) -> tuple[float, float, float] | None:
-    if s.index is None:
-        return None
-    low = s.index if s.index_low is None else s.index_low
-    high = s.index if s.index_high is None else s.index_high
-    return (s.index, low, high)
-
-
-def lights(facts: Facts, rules: dict[str, dict] | None = None) -> list[Light]:
-    """The 4 areas, each with one line: '25 % · el líder 50 %'."""
-    r = rules or load_rules()
+def lights(facts: Facts, rules: dict | None = None) -> list[Light]:
+    """The 4 areas, each with one line: 'Te nombra en 25 % · el líder 50 %'."""
+    rules = rules or load_rules()
+    r, cuts = rules["areas"], rules["corte"]
     me, ref, vs = facts.me, facts.ref, facts.ref_label
     n = facts.total if facts.has_answers else 0
 
-    web_me = share_range(me.web, n)
-    if web_me is None and n and not facts.has_web:
-        web_me = (0.0, 0.0, 0.0)
-    web_ref = share_range(ref.web, n) if ref else None
-    dir_me = share_range(me.directories, me.named) if facts.has_answers else None
-    if dir_me is None and facts.has_answers:
-        dir_me = (0.0, 0.0, 0.0)  # never named: nothing to cite it with
-    dir_ref = share_range(ref.directories, ref.named) if ref else None
+    web_me = share(me.web, n)
+    web_ref = share(ref.web, n) if ref else None
+    dir_me = (share(me.directories, me.named) or 0.0) if facts.has_answers else None
+    dir_ref = share(ref.directories, ref.named) if ref and facts.has_answers else None
 
     def line(what: str, mine, theirs) -> str:
-        out = f"{what} {pct(mine[0]) if mine else '—'}"
-        return f"{out} · {vs} {pct(theirs[0])}" if theirs else out
+        out = f"{what} {pct(mine)}"
+        return f"{out} · {vs} {pct(theirs)}" if theirs is not None else out
 
-    def maps_text(s: Side) -> str:
-        return f"{dec(s.rating)} ★ y {thousands(s.reviews or 0)} reseñas"
-
-    maps_line = "—" if me.rating is None else maps_text(me)
-    if me.rating is not None and ref and ref.rating is not None:
-        maps_line += f" · {vs} {dec(ref.rating)} ★ y {thousands(ref.reviews or 0)}"
+    maps_line = "—"
+    if me.rating is not None:
+        maps_line = f"{dec(me.rating)} ★ y {thousands(me.reviews or 0)} reseñas"
+        if ref and ref.rating is not None:
+            maps_line += f" · {vs} {dec(ref.rating)} ★ y {thousands(ref.reviews or 0)}"
+    ref_index = ref.index if ref else None
+    ref_reviews = ref.reviews if ref and ref.rating is not None else None
+    my_reviews = me.reviews if me.rating is not None else None
     return [
         Light("presencia", r["presencia"]["nombre"],
-              compared_level(_index_range(me), ref and _index_range(ref), r["presencia"]),
-              line("Te nombra en", _index_range(me), ref and _index_range(ref))),
-        Light("web", r["web"]["nombre"], compared_level(web_me, web_ref, r["web"]),
+              compared_level(me.index, ref_index, cuts),
+              line("Te nombra en", me.index, ref_index)),
+        Light("web", r["web"]["nombre"], compared_level(web_me, web_ref, cuts),
               line("Cita tu web en", web_me, web_ref)),
         Light("directorios", r["directorios"]["nombre"],
-              compared_level(dir_me, dir_ref, r["directorios"]),
+              compared_level(dir_me, dir_ref, cuts),
               line("Cita Doctoralia o directorios en", dir_me, dir_ref)),
+        # Maps compares the number of reviews: stars barely differ between clinics.
         Light("maps", r["maps"]["nombre"],
-              maps_level(me.rating, me.reviews, r["maps"], ref), maps_line),
+              compared_level(my_reviews, ref_reviews, cuts), maps_line),
     ]  # fmt: skip
 
 
@@ -208,7 +157,10 @@ def gap(fix_id: str, facts: Facts) -> int:
     return max(
         {
             "web": ref.web - me.web,
-            "doctoralia": ref.directories - me.directories,
+            # Same measure as the traffic light: share of the answers that name each clinic.
+            "doctoralia": points(
+                share(ref.directories, ref.named), share(me.directories, me.named), facts.total
+            ),
             "google": points(ref.google, me.google, per_surface),
             "chatgpt": points(ref.chatgpt, me.chatgpt, per_surface),
             "resenas": points(ref.index, me.index, facts.total),
@@ -224,12 +176,6 @@ def impact(answers: int, total: int) -> str:
     if total and answers * 20 >= total:  # 3 of 60 or more
         return "medio"
     return "bajo"
-
-
-def allowed(fix_id: str, by_area: dict[str, str]) -> bool:
-    """A fix is proposed only if it improves an area that is not already "Bien"."""
-    areas = FIX_AREAS.get(fix_id, ())
-    return not areas or any(by_area.get(a) != "Bien" for a in areas)
 
 
 # --- findings --------------------------------------------------------------------------------

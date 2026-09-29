@@ -37,7 +37,6 @@ from visible_ia.informes.semaforo import (
     one_in,
     thousands,
 )
-from visible_ia.informes.semaforo import allowed as fix_allowed
 from visible_ia.mercados.alias import fold
 from visible_ia.puntaje.brecha import has_gap
 from visible_ia.puntaje.fuentes import TYPE_LABELS, load_citations, top_sources, type_shares
@@ -249,24 +248,23 @@ def build_facts(data: ReportData, me: RankingRow) -> Facts:
     )
 
 
-def _plan(values: dict[str, Any], applies: dict[str, bool], facts: Facts,
-          by_area: dict[str, str]) -> list[dict[str, Any]]:  # fmt: skip
-    """Up to 3 fixes, only for areas that are not already "Bien", ordered by how many answers
-    separate the clinic from the leader in that area (the computed impact)."""
+def _plan(values: dict[str, Any], applies: dict[str, bool], facts: Facts) -> list[dict[str, Any]]:
+    """Always the 3 fixes of highest impact: how many answers separate the clinic from the
+    leader in that area. Only fixes whose text is true for the clinic (`applies`) compete; the
+    rest only fill in when fewer than 3 apply. An area in "Bien" does not block its fix."""
     items = tomllib.loads(RECOMMENDATIONS_TOML.read_text(encoding="utf-8"))["recomendacion"]
-    usable = [r for r in items if fix_allowed(r["id"], by_area)]
-    gaps = {r["id"]: gap(r["id"], facts) for r in usable}
+    gaps = {r["id"]: gap(r["id"], facts) for r in items}
 
     def order(r):
         return (r["id"] == "mantener", -gaps[r["id"]])
 
-    chosen = sorted((r for r in usable if applies.get(r["id"])), key=order)[:3]
-    # Fill only with fixes whose text is true for any clinic.
-    chosen += sorted(
-        (r for r in usable if r not in chosen and r["id"] in ("web", "doctoralia")
-         and gaps[r["id"]] > 0),
-        key=order,
-    )[: 3 - len(chosen)]  # fmt: skip
+    fixes = [r for r in items if r["id"] != "mantener"]
+    chosen = sorted((r for r in fixes if applies.get(r["id"])), key=order)[:3]
+    chosen += sorted((r for r in fixes if r not in chosen), key=order)[: 3 - len(chosen)]
+    # A leader usually has no gap anywhere: with the 3 tied at 0, keeping the lead goes third.
+    keep = next((r for r in items if r["id"] == "mantener"), None)
+    if keep and applies.get("mantener") and not any(gaps[r["id"]] for r in chosen):
+        chosen[2] = keep
     out = []
     for r in sorted(chosen, key=order):
         answers = gaps[r["id"]]
@@ -484,7 +482,6 @@ def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict
 
     facts = build_facts(data, me)
     light = lights(facts)
-    by_area = {x.id: x.level for x in light}
     gap_found = has_gap(data.clinic.rating, data.clinic.reviews, me.combined or 0)
     total = data.total_answers
     values = {
@@ -508,7 +505,7 @@ def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict
     ref_reviews = facts.ref.reviews if facts.ref and facts.ref.reviews else 200
     applies = {
         "brecha": gap_found,
-        "web": True,  # proposed unless the web area is "Bien" (see semaforo.allowed)
+        "web": True,
         "google": (me.google or 0) < (me.chatgpt or 0) or (me.google or 0) < 10,
         "chatgpt": (me.chatgpt or 0) < (me.google or 0),
         "doctoralia": True,
@@ -516,7 +513,7 @@ def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict
         "mantener": position <= 3,
     }
 
-    recs = _plan(values, applies, facts, by_area)
+    recs = _plan(values, applies, facts)
     focus = [data.clinic.id, *[c.clinic_id for c in competitors]]
     examples = [
         _example_context(e, data, allowed)

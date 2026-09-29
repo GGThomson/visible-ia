@@ -9,47 +9,26 @@ from visible_ia.informes.profundo import Answer, consistency, question_grid
 from visible_ia.informes.semaforo import (
     Facts,
     Side,
-    allowed,
+    compared_level,
     findings,
     impact,
-    level,
     lights,
     load_rules,
-    maps_level,
     one_in,
 )
 
-RULES = load_rules()
+CUTS = load_rules()["corte"]
 
 
 @pytest.mark.parametrize(
-    "value, expected",
-    [(25, "Bien"), (24.9, "Regular"), (10, "Regular"), (9.9, "Bajo"), (0, "Bajo"),
-     (None, "Sin datos")],
+    "mine, leader, expected",
+    [(40, 50, "Bien"), (60, 50, "Bien"), (39.9, 50, "Regular"), (20, 50, "Regular"),
+     (19.9, 50, "Bajo"), (0, 50, "Bajo"), (10, 0, "Sin datos"), (0, 0, "Sin datos"),
+     (None, 50, "Sin datos"), (10, None, "Sin datos")],
 )  # fmt: skip
-def test_presence_thresholds(value, expected):
-    rule = RULES["presencia"]
-    assert level(value, rule["bien"], rule["regular"]) == expected
-
-
-@pytest.mark.parametrize(
-    "area, good, fair, low",
-    [("web", 15, 1, 0), ("directorios", 40, 15, 14.9)],
-)
-def test_share_thresholds(area, good, fair, low):
-    rule = RULES[area]
-    assert [level(v, rule["bien"], rule["regular"]) for v in (good, fair, low)] == [
-        "Bien", "Regular", "Bajo"
-    ]  # fmt: skip
-
-
-@pytest.mark.parametrize(
-    "rating, reviews, expected",
-    [(4.7, 200, "Bien"), (4.9, 199, "Regular"), (4.3, 50, "Regular"), (4.2, 5000, "Bajo"),
-     (4.9, 49, "Bajo"), (None, 300, "Sin datos"), (4.8, None, "Sin datos")],
-)  # fmt: skip
-def test_maps_needs_both_stars_and_reviews(rating, reviews, expected):
-    assert maps_level(rating, reviews, RULES["maps"]) == expected
+def test_level_is_the_clinics_figure_as_a_share_of_the_leaders(mine, leader, expected):
+    assert CUTS == {"bien": 0.8, "regular": 0.4}
+    assert compared_level(mine, leader, CUTS) == expected
 
 
 def test_lights_have_the_four_areas_and_no_invented_colour():
@@ -60,23 +39,25 @@ def test_lights_have_the_four_areas_and_no_invented_colour():
     assert {x.level for x in got} == {"Sin datos"}
 
 
-def test_bien_only_when_the_range_reaches_the_leaders():
-    leader = Side(50, 38, 62, web=12, named=30, directories=15, rating=4.9, reviews=1135)
-    close = Side(25, 38, 45, web=10, named=15, directories=8, rating=4.8, reviews=600)
-    far = Side(12, 6, 22, web=0, named=7, directories=0, rating=4.9, reviews=120)
-    got = {x.id: x for x in lights(Facts(60, close, leader))}
-    assert got["presencia"].level == "Bien"
-    assert got["presencia"].value == "Te nombra en 25 % · el líder 50 %"
-    assert got["maps"].value == "4,8 ★ y 600 reseñas · el líder 4,9 ★ y 1 135"
-    assert {x.id: x.level for x in lights(Facts(60, far, leader))} == {
-        "presencia": "Regular", "web": "Bajo", "directorios": "Bajo", "maps": "Regular",
+def test_each_area_compares_with_the_leader():
+    leader = Side(50, web=12, named=30, directories=15, rating=4.9, reviews=1135)
+    # 25 of 50 = 50 % (Regular), web 10 of 12 = 83 % (Bien), directories 53 % of 50 % (Bien),
+    # reviews 400 of 1135 = 35 % (Bajo).
+    me = Side(25, web=10, named=15, directories=8, rating=4.8, reviews=400)
+    got = {x.id: x for x in lights(Facts(60, me, leader))}
+    assert {k: x.level for k, x in got.items()} == {
+        "presencia": "Regular", "web": "Bien", "directorios": "Bien", "maps": "Bajo",
     }  # fmt: skip
+    assert got["presencia"].value == "Te nombra en 25 % · el líder 50 %"
+    assert got["maps"].value == "4,8 ★ y 400 reseñas · el líder 4,9 ★ y 1 135"
+    # A leader at 0 cannot be compared with.
+    zero = Side(50, web=0, named=30, directories=0, rating=4.9, reviews=1135)
+    got = {x.id: x.level for x in lights(Facts(60, me, zero))}
+    assert got["web"] == got["directorios"] == "Sin datos"
 
 
-def test_impact_comes_from_the_gap_and_fixes_skip_areas_already_good():
+def test_impact_levels_and_consequence():
     assert [impact(n, 60) for n in (12, 10, 3, 2)] == ["alto", "alto", "medio", "bajo"]
-    assert not allowed("doctoralia", {"directorios": "Bien"})
-    assert allowed("mantener", {"presencia": "Bien"})
     assert one_in(25) == "1 de cada 4 veces" and one_in(50) == "5 de cada 10 veces"
 
 
@@ -92,12 +73,11 @@ def test_findings_use_real_figures_and_are_three_at_most():
 
 
 def test_summary_findings_plan_and_page_5_never_contradict_each_other():
-    """The same numbers everywhere: the web cited 7 times and Doctoralia "Bien" must not
-    produce "your web was not a source" or "complete Doctoralia" (bug of 28/09/2026)."""
+    """The same numbers everywhere: the web cited 7 times must not produce "your web was not
+    a source" in the plan (bug of 28/09/2026)."""
     from test_diagnostico_profundo import _answer
 
     from visible_ia.informes.contexto import build_context
-    from visible_ia.informes.semaforo import allowed as fix_allowed
 
     web = ("https://www.odontologists.com/implantes", "odontologists.com", "own_website")
     doc = ("https://www.doctoralia.pe/clinicas/x", "doctoralia.pe", "doctoralia")
@@ -112,23 +92,14 @@ def test_summary_findings_plan_and_page_5_never_contradict_each_other():
         ]  # fmt: skip
         ctx = build_context(data)
         new, deep = ctx["nuevo"], ctx["profundo"]
-        by_area = {
-            "Presencia en IA": "presencia",
-            "Tu web como fuente": "web",
-            "Doctoralia y directorios": "directorios",
-            "Reputación en Maps": "maps",
-        }
-        levels = {by_area[s["nombre"]]: s["nivel"] for s in new["semaforo"]}
         # One count of "your web as a source" everywhere.
         assert new["web_respuestas"] == deep["webs"]["tuya"] == ctx["fuentes"]["web_tuya"] == n_web
         web_finding = next(h for h in new["hallazgos"] if h.startswith("Tu web"))
         assert (f"en {n_web} de 60" in web_finding) if n_web else ("ninguna" in web_finding)
+        assert len(new["plan"]) == 3  # always the 3 of highest impact, even in "Bien" areas
         for r in new["plan"]:
-            assert fix_allowed(r["id"], levels), (r["id"], levels)  # never fix what is "Bien"
             if r["id"] == "web":
                 assert (f"en {n_web} de 60" in r["texto"]) if n_web else "en ninguna" in r["texto"]
-        if levels["directorios"] == "Bien":
-            assert "doctoralia" not in [r["id"] for r in new["plan"]]
         assert [r["respuestas"] for r in new["plan"]] == sorted(
             (r["respuestas"] for r in new["plan"]), reverse=True
         )
