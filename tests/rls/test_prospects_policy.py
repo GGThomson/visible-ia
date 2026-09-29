@@ -47,6 +47,7 @@ def _prospect(tag, **extra):
         "contact": "+51 999 999 999",
         "utm": {"utm_source": "test"},
         "consent": True,
+        "consent_version": "2026-09-28",  # required since 0011
         **extra,
     }
 
@@ -86,6 +87,7 @@ def test_the_form_sends_the_same_policy_version_the_page_shows():
         {"contact": "x"},
         {"consent_at": "2020-01-01T00:00:00Z"},
         {"consent_version": "la última"},
+        {"consent_version": None},  # 0011: the policy version is required
     ],
 )
 def test_anon_cannot_skip_consent_or_set_internal_fields(api, marker, extra):
