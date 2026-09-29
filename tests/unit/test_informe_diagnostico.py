@@ -250,3 +250,16 @@ def test_compact_report_keeps_one_example_answer():
     ctx = build_context(_data(), compact=True)
     assert len(ctx["ejemplos"]) == 1
     assert "Una respuesta completa de ejemplo" in render_diagnostic(ctx)
+
+
+def test_plan_never_repeats_two_fixes_with_the_same_measure():
+    """Reviews and the Maps gap both measure the distance in presence: only one of them, and a
+    third fix fills the plan (Director, 29/09/2026)."""
+    from dataclasses import replace
+
+    data = _data()
+    data.clinic = replace(data.clinic, reviews=127)  # Virtual Dent: 4.9 ★, 127 reviews, low index
+    data.profiles = {SMILES: {"website": None, "instagram": None, "rating": 4.7, "reviews": 355}}
+    ids = [r["id"] for r in build_context(data)["recomendaciones"]]
+    assert len(ids) == 3
+    assert len({"resenas", "brecha"} & set(ids)) == 1
