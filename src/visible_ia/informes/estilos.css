@@ -137,3 +137,7 @@ tr.grupo td { background: var(--suave); }
 .diag .anexo { break-before: page; }
 .diag .cabeza { break-inside: avoid; }
 .diag td.num { font-family: "IBM Plex Sans", "Segoe UI", Arial, sans-serif; font-variant-numeric: tabular-nums; }
+.diag .consecuencia { font-size: 13pt; font-weight: 600; color: var(--primario); margin: 8px 0 2px; }
+.diag .leyenda-puntos { font-size: 11pt; color: #51607A; margin: 0 0 6px; }
+.diag .leyenda-puntos .p { vertical-align: middle; }
+.diag .quien { margin: 0.4em 0 0.8em; }

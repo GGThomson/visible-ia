@@ -1,12 +1,12 @@
-# Base checklist of the free diagnostic report (HU-14, action plan). The report picks 3, in this
-# priority order, among those whose condition applies to the clinic (see informes/contexto.py).
+# Base checklist of the free diagnostic report (HU-14, action plan). The report picks up to 3 among
+# those whose area is not already "Bien", ordered by their computed impact (informes/contexto.py).
 # Wording is for the clinic owner: plain Spanish from Peru, no jargon. Placeholders in {braces}.
 
 [[recomendacion]]
 id = "web"
 esfuerzo = "medio"  # bajo / medio / alto (redesign 28/09)
 titulo = "Una página clara de {tratamiento} en tu web"
-texto = "Las webs propias son la fuente más citada por la IA en tu mercado ({pct_web} % de las respuestas), pero la tuya no apareció como fuente. Crea una página dedicada a {tratamiento} en {distrito}: quién atiende, tecnología, precios de referencia, preguntas frecuentes y datos de contacto, con marcado schema de clínica."
+texto = "Las webs propias son la fuente más citada por la IA en tu mercado ({pct_web} % de las respuestas); la tuya se citó {web_tuya}. Crea una página dedicada a {tratamiento} en {distrito}: quién atiende, tecnología, precios de referencia, preguntas frecuentes y datos de contacto, con marcado schema de clínica."
 
 [[recomendacion]]
 id = "google"
@@ -24,7 +24,7 @@ texto = "Tienes {resenas} reseñas; las clínicas que más recomienda la IA en t
 id = "doctoralia"
 esfuerzo = "bajo"  # bajo / medio / alto (redesign 28/09)
 titulo = "Un perfil completo en Doctoralia"
-texto = "Doctoralia aparece como fuente en {pct_doctoralia} % de las respuestas de tu mercado. Completa el perfil de la clínica y de cada especialista, con {tratamiento} como servicio y opiniones verificadas."
+texto = "Doctoralia aparece como fuente en {pct_doctoralia} % de las respuestas de tu mercado, y Doctoralia o algún directorio, en {dir_tuyo} respuestas que te nombran. Completa el perfil de la clínica y de cada especialista, con {tratamiento} como servicio y opiniones verificadas."
 
 [[recomendacion]]
 id = "chatgpt"

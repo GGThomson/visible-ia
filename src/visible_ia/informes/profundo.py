@@ -34,6 +34,9 @@ PAGE_TYPES = {
     "social": "Redes",
     "other": "Otras",
 }
+# Clinics' own social profiles: you cannot "be" on another clinic's Instagram, so they leave the
+# missing pages and are summed up in one line (instagram_counts).
+SOCIAL_PROFILES = ("instagram.com", "facebook.com", "tiktok.com")
 SURFACE_LABELS = {"chatgpt_api": "ChatGPT", "google_ai_mode": "Google (Modo IA)"}
 # Words that usually carry the reason ("porque destaca por sus reseñas…"): fallback order only.
 REASON_WORDS = (
@@ -199,6 +202,8 @@ def missing_pages(
                 continue
             if kind == "google_profile":  # another clinic's Google profile: not for you
                 continue
+            if _is_social_profile(url):  # another clinic's Instagram or Facebook: not for you
+                continue
             if not with_rival or url in mine or kind not in PAGE_TYPES:
                 continue
             counts[url] += 1
@@ -210,6 +215,35 @@ def missing_pages(
         best[p.kind] = max(best.get(p.kind, 0), p.answers)
     pages.sort(key=lambda p: (-best[p.kind], p.kind, -p.answers))
     return pages, {"competidores": len(own_rivals), "tuya": len(own_mine)}
+
+
+def _is_social_profile(url: str) -> bool:
+    host = _domain(url)
+    return any(host == d or host.endswith("." + d) for d in SOCIAL_PROFILES)
+
+
+def _instagram_handle(value: str | None) -> str | None:
+    """'@clinica', 'clinica' or an instagram.com URL -> 'clinica' (None when empty)."""
+    if not value:
+        return None
+    if "instagram.com" in value:
+        path = urlsplit(value if "//" in value else f"https://{value}").path
+        value = path.strip("/").split("/")[0]
+    return value.lstrip("@").strip("/").lower() or None
+
+
+def instagram_counts(answers: list[Answer], clinic_instagram: str | None) -> dict[str, int]:
+    """Answers citing another clinic's Instagram, and answers citing the clinic's own."""
+    mine = _instagram_handle(clinic_instagram)
+    others = own = 0
+    for a in answers:
+        handles = {
+            _instagram_handle(url) for url, _, _ in a.urls if _domain(url).endswith("instagram.com")
+        }
+        handles.discard(None)
+        own += bool(mine and mine in handles)
+        others += bool(handles - {mine})
+    return {"otras": others, "tuya": own}
 
 
 def question_table(answers: list[Answer], clinic_id: int, leader_id: int) -> list[dict]:

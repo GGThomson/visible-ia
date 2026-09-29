@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Libro de Reclamaciones · Eminia</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="marca/simbolo.svg">
+  <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+  <!-- Virtual complaints book (C9b-D4). Back in web/ with the RUC (28/09). No database table
+       yet: the sheet is sent by WhatsApp and the consumer keeps a copy on screen. The provider's
+       address is left out on the Director's decision (pending legal review). -->
+  <header class="encabezado">
+    <div class="envoltura">
+      <a class="logo" href="./" aria-label="Eminia, ir al inicio"><img src="marca/logo.svg" alt="Eminia" width="160" height="32"></a>
+      <nav aria-label="Principal"><a class="boton principal" href="./#pedir">Diagnóstico gratis</a></nav>
+    </div>
+  </header>
+
+  <main class="legal">
+    <div class="envoltura">
+      <h1>Libro de Reclamaciones</h1>
+      <p class="nota">Conforme al Código de Protección y Defensa del Consumidor (Ley N.º 29571) y al Reglamento del Libro de Reclamaciones (D.S. N.º 011-2011-PCM y modificatorias).</p>
+      <p>Completa la hoja y pulsa «Enviar»: se abre WhatsApp con tu hoja lista para mandarla al <a href="https://wa.me/51920857428">+51 920 857 428</a>. Te respondemos con el número de tu hoja y la respuesta en un plazo máximo de 15 días hábiles.</p>
+
+      <form class="hoja-reclamo" id="hoja" aria-describedby="nota-reclamo">
+        <p><strong>Hoja de reclamación virtual N.º</strong> te lo damos al recibirla · Fecha: <span id="fecha-hoja"></span></p>
+        <p><strong>Proveedor:</strong> Gianpol Rosazza Bravo (marca Eminia) · RUC 10707993435</p>
+
+        <fieldset>
+          <legend>1. Identificación del consumidor reclamante</legend>
+          <label>Nombre completo <input name="nombre" autocomplete="name" required></label>
+          <label>Domicilio <input name="domicilio" autocomplete="street-address" required></label>
+          <label>Tipo y n.º de documento (DNI / CE) <input name="documento" required></label>
+          <label>Teléfono <input name="telefono" autocomplete="tel"></label>
+          <label>Correo electrónico (te enviaremos aquí la copia de esta hoja) <input name="correo" type="email" autocomplete="email" required></label>
+          <label>Si eres menor de edad: nombre del padre, madre o apoderado <input name="apoderado"></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>2. Identificación del bien contratado</legend>
+          <div class="opciones">
+            <label><input type="radio" name="tipo_bien" value="producto" required> Producto</label>
+            <label><input type="radio" name="tipo_bien" value="servicio" required> Servicio</label>
+          </div>
+          <label>Monto reclamado (S/) <input name="monto" inputmode="decimal"></label>
+          <label>Descripción <input name="descripcion_bien" placeholder="Por ejemplo: Plan Medir, mes de octubre" required></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>3. Detalle de la reclamación y pedido del consumidor</legend>
+          <div class="opciones">
+            <label><input type="radio" name="tipo" value="reclamo" required> Reclamo</label>
+            <label><input type="radio" name="tipo" value="queja" required> Queja</label>
+          </div>
+          <label>Detalle <textarea name="detalle" rows="5" required></textarea></label>
+          <label>Pedido <textarea name="pedido" rows="3" required></textarea></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>4. Observaciones y acciones adoptadas por el proveedor</legend>
+          <p>Las completa Eminia al responder. Fecha de comunicación de la respuesta: <span class="pendiente">[—]</span></p>
+        </fieldset>
+
+        <button type="submit" class="boton principal">Enviar hoja de reclamación</button>
+        <p id="copia" class="nota" hidden>Se abrió WhatsApp con tu hoja. Guarda esta página o una captura como copia.</p>
+
+        <div id="nota-reclamo" class="nota">
+          <p><strong>Reclamo:</strong> disconformidad relacionada a los productos o servicios. <strong>Queja:</strong> disconformidad no relacionada a los productos o servicios, o malestar o descontento respecto a la atención al público.</p>
+          <p>La formulación del reclamo no impide acudir a otras vías de solución de controversias ni es requisito previo para interponer una denuncia ante el INDECOPI.</p>
+          <p>El proveedor deberá dar respuesta al reclamo o queja en un plazo no mayor a quince (15) días hábiles improrrogables.</p>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const form = document.getElementById("hoja");
+      const hoy = new Date().toLocaleDateString("es-PE");
+      document.getElementById("fecha-hoja").textContent = hoy;
+      const etiquetas = {
+        nombre: "Nombre", domicilio: "Domicilio", documento: "Documento", telefono: "Teléfono",
+        correo: "Correo", apoderado: "Padre, madre o apoderado", tipo_bien: "Bien contratado",
+        monto: "Monto reclamado (S/)", descripcion_bien: "Descripción", tipo: "Tipo",
+        detalle: "Detalle", pedido: "Pedido",
+      };
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (!form.reportValidity()) return;
+        const datos = new FormData(form);
+        const lineas = [`HOJA DE RECLAMACIÓN VIRTUAL · Eminia · RUC 10707993435`, `Fecha: ${hoy}`];
+        for (const [clave, texto] of Object.entries(etiquetas)) {
+          const valor = (datos.get(clave) || "").toString().trim();
+          if (valor) lineas.push(`${texto}: ${valor}`);
+        }
+        window.open(`https://wa.me/51920857428?text=${encodeURIComponent(lineas.join("
+"))}`, "_blank", "noopener");
+        document.getElementById("copia").hidden = false;
+      });
+    })();
+  </script>
+
+  <footer class="pie">
+    <div class="envoltura">
+      <div>
+        <img src="marca/logo-claro.svg" alt="Eminia" width="160" height="32">
+        <p>Que la IA te nombre a ti.</p>
+        <p><a href="https://wa.me/51920857428" rel="noopener" target="_blank">WhatsApp: +51 920 857 428</a></p>
+      </div>
+      <div>
+        <nav aria-label="Legal"><a href="privacidad.html">Privacidad</a><a href="terminos.html">Términos</a><a href="reclamaciones.html">Libro de Reclamaciones</a></nav>
+        <p>© 2026 Gianpol Rosazza Bravo · RUC 10707993435</p>
+        <p>No prometemos un puesto #1: medimos con repeticiones y te mostramos el margen de variación.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

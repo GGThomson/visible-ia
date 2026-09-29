@@ -45,8 +45,9 @@
       <small>lugar en que te nombra, cuando te nombra</small>
     </div>
   </div>
+  <p class="consecuencia">{{ nuevo.consecuencia }}</p>
 
-  <h2 class="sub">Cómo estás en 4 áreas</h2>
+  <h2 class="sub">Cómo estás en 4 áreas, frente al líder</h2>
   <div class="semaforo">
     {% for s in nuevo.semaforo %}
     <div class="luz {{ s.clase }}">
@@ -102,7 +103,8 @@
 <section data-seccion="preguntas">
   {% for g in nuevo.cuadricula.grupos %}
   {% if loop.first %}<div class="cabeza"><h2>En qué preguntas apareces</h2>
-  <p>Cada pregunta se hizo 3 veces a ChatGPT y 3 a Google Modo IA. Un punto lleno es una respuesta que nombra a esa clínica.</p>{% endif %}
+  <p>Cada pregunta se hizo 3 veces a ChatGPT y 3 a Google Modo IA. Un punto lleno es una respuesta que nombra a esa clínica.</p>
+  <p class="leyenda-puntos"><span class="p lleno"></span> te nombra · <span class="p"></span> no te nombra · en cada celda: 3 puntos de ChatGPT | 3 de Google</p>{% endif %}
   <table class="cuadricula">
     <thead><tr><th>{{ g.forma }}</th>{% for c in nuevo.cuadricula.clinicas %}<th class="col-clinica{% if c.es_cliente %} cliente{% endif %}">{{ c.nombre }}</th>{% endfor %}</tr></thead>
     <tbody>
@@ -115,7 +117,6 @@
   </table>
   {% if loop.first %}</div>{% endif %}
   {% endfor %}
-  <p class="nota">En cada celda: 3 puntos de ChatGPT | 3 de Google.</p>
   {% if nuevo.consistencia %}
   <div class="consistencia">
     <p><b>La IA cambia de respuesta: por eso medimos {{ metodo.respuestas }} veces y no una.</b> En las mismas preguntas, cuántas veces te nombró:</p>
@@ -186,12 +187,13 @@
     {% else %}
     <p>No encontramos páginas citadas junto a tu competencia que falten junto a ti.</p>
     {% endif %}
-    <p class="nota">Solo lugares donde tú puedes estar: no incluimos las webs ni las fichas de Google de otras clínicas.</p>
+    {% if profundo.instagram.otras or profundo.instagram.tuya %}<p>La IA citó el Instagram de otras clínicas en {{ profundo.instagram.otras }} respuestas; el tuyo, en {{ profundo.instagram.tuya }}.</p>{% endif %}
+    <p class="nota">Solo lugares donde tú puedes estar: no incluimos las webs, las fichas de Google ni las redes de otras clínicas.</p>
   </div>
   {% endif %}
   <div class="tarjeta">
     <h3>Tu web</h3>
-    <p>{% if fuentes.propia_citada %}Tu web aparece entre las fuentes que la IA consultó{% else %}<b>Tu web no apareció entre las fuentes que la IA consultó</b>{% endif %}{% if profundo.hay %}: se citó en {{ profundo.webs.tuya }} respuestas; las webs propias de otras clínicas, en {{ profundo.webs.competidores }} respuestas que nombran a tu competencia{% endif %}.</p>
+    <p>{% if fuentes.propia_citada %}Tu web se citó como fuente en {{ fuentes.web_tuya }} de {{ metodo.respuestas }} respuestas{% else %}<b>Tu web no apareció como fuente en ninguna respuesta</b>{% endif %}{% if profundo.hay %}; las webs propias de otras clínicas, en {{ profundo.webs.competidores }} respuestas que nombran a tu competencia{% endif %}.</p>
   </div>
   <div class="tarjeta">
     <h3>Tu reputación en Google Maps frente a la IA</h3>
@@ -216,10 +218,12 @@
   <div class="tarjeta arreglo">
     <p class="pregunta">{{ loop.index }}. {{ r.titulo }}</p>
     <p>{{ r.texto }}</p>
-    <p class="etiquetas"><span>Impacto: {{ r.impacto }}</span><span>Esfuerzo: {{ r.esfuerzo }}</span><span>Quién: {{ r.quien }}</span></p>
+    <p class="etiquetas"><span>{{ r.impacto_texto }}</span><span>Esfuerzo: {{ r.esfuerzo }}</span></p>
   </div>
   {% if loop.first %}</div>{% endif %}
   {% endfor %}
+  <p class="nota">Ordenado de mayor a menor impacto: cuántas de las {{ metodo.respuestas }} respuestas te separan del líder en esa área.</p>
+  <p class="quien"><b>Quién lo hace:</b> {{ nuevo.quien }}.</p>
   <div class="proximo">
     <b>Próximo paso:</b> revisemos juntos tu diagnóstico en 15 minutos{% if marca.contacto %} · {{ marca.contacto }}{% endif %}. Si quieres, en el Plan Gestionado hacemos estos arreglos por ti.
   </div>
@@ -242,7 +246,7 @@
     <dt>Posición promedio</dt><dd>En qué lugar te nombra la IA cuando te nombra.</dd>
     <dt>Cuota de menciones</dt><dd>De todas las veces que la IA nombró a una clínica, qué parte fue para ti.</dd>
     <dt>Fuente</dt><dd>Página que la IA consultó y citó para responder.</dd>
-    <dt>Semáforo</dt><dd>Los umbrales de Bien, Regular y Bajo son criterio Eminia, iguales para todas las clínicas.</dd>
+    <dt>Semáforo</dt><dd>«Bien» solo si tu rango llega al del líder; si no, «Regular» o «Bajo» según umbrales fijos. Es criterio Eminia, igual para todas las clínicas.</dd>
   </dl>
   <p><b>No garantizamos un puesto #1.</b> Medimos cómo te ve la IA hoy y qué puedes mejorar; nadie controla lo que responde.</p>
 </section>

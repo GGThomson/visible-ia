@@ -21,11 +21,23 @@ from visible_ia.informes.profundo import (
     Answer,
     Reasons,
     consistency,
+    instagram_counts,
     missing_pages,
     question_grid,
     question_table,
 )
-from visible_ia.informes.semaforo import findings, impact, lights
+from visible_ia.informes.semaforo import (
+    Facts,
+    Side,
+    dec,
+    findings,
+    gap,
+    impact,
+    lights,
+    one_in,
+    thousands,
+)
+from visible_ia.informes.semaforo import allowed as fix_allowed
 from visible_ia.mercados.alias import fold
 from visible_ia.puntaje.brecha import has_gap
 from visible_ia.puntaje.fuentes import TYPE_LABELS, load_citations, top_sources, type_shares
@@ -47,7 +59,8 @@ SURFACE_NAMES = {"chatgpt_api": "ChatGPT", "google_ai_mode": "Google (Modo IA)"}
 PROFESSIONAL = re.compile(
     r"\b(?:Dr|Dra|Doctor|Doctora)\.?\s+[A-ZÁÉÍÓÚÑ][\wáéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][\wáéíóúñ]+){0,3}"
 )
-QUOTE_CHARS = 320
+QUOTE_CHARS = 700  # example answers end at a full sentence before this
+SENTENCE_END = re.compile(r"(?<=[.!?:])\s+")
 MD_LINK = re.compile(r"\(?\[([^\]]+)\]\([^)]*\)\)?")
 
 
@@ -59,6 +72,7 @@ class ClinicInfo:
     reviews: int | None
     data_date: date | None
     website: str | None
+    instagram: str | None = None
 
 
 @dataclass(frozen=True)
@@ -88,6 +102,9 @@ class ReportData:
     # cited URLs, and the literal reasons picked for the top competitors.
     deep_answers: list[Answer] = field(default_factory=list)
     reasons: list[Reasons] = field(default_factory=list)
+    # Website, Instagram, stars and reviews of every clinic of the market (to compare with the
+    # leader): clinic -> {"website", "instagram", "rating", "reviews"}.
+    profiles: dict[int, dict[str, Any]] = field(default_factory=dict)
 
 
 def load_brand(path: Path = BRAND_TOML) -> dict[str, str]:
@@ -161,44 +178,116 @@ def _example_context(a: ExampleAnswer, data: ReportData, allowed: list[str]) -> 
             name = mask_professionals(raw_name, allowed)
         if name not in [n["nombre"] for n in names]:
             names.append({"nombre": name, "es_cliente": clinic_id == data.clinic.id})
-    flat = plain_text(a.text)
-    anchor = next((raw for _, raw, cid in sorted(a.mentions) if cid == data.clinic.id), None)
-    start = (
-        max(flat.lower().find(anchor.lower()) - 60, 0)
-        if anchor and anchor.lower() in flat.lower()
-        else 0
-    )
-    quote = flat[start : start + QUOTE_CHARS].strip()
-    if start > 0:
-        quote = "…" + quote
-    if start + QUOTE_CHARS < len(flat):
-        quote += "…"
     return {
         "superficie": SURFACE_NAMES[a.surface],
         "pregunta": a.question,
         "fecha": a.asked_on.strftime("%d/%m/%Y"),
         "nombres": names,
-        "cita": mask_professionals(quote, allowed),
+        "cita": mask_professionals(example_quote(a, data.clinic.id), allowed),
     }
 
 
-def _recommendations(values: dict[str, Any], applies: dict[str, bool]) -> list[dict[str, str]]:
-    items = tomllib.loads(RECOMMENDATIONS_TOML.read_text(encoding="utf-8"))["recomendacion"]
-    chosen = [r for r in items if applies.get(r["id"])]
-    for r in items:  # always 3: fill with the rest, in priority order
-        if len(chosen) >= 3:
+def example_quote(a: ExampleAnswer, clinic_id: int) -> str:
+    """Whole sentences, from the one where the clinic (else the first clinic) is named."""
+    sentences = [x for x in SENTENCE_END.split(plain_text(a.text)) if x]
+    ordered = sorted(a.mentions)
+    anchors = [raw for _, raw, cid in ordered if cid == clinic_id] or [raw for _, raw, _ in ordered]
+    start = next(
+        (i for i, x in enumerate(sentences) if any(n.lower() in x.lower() for n in anchors[:1])),
+        0,
+    )
+    out: list[str] = []
+    for x in sentences[start:]:
+        if out and len(" ".join([*out, x])) > QUOTE_CHARS:
             break
-        if r not in chosen and r["id"] in ("web", "doctoralia", "mantener"):
-            chosen.append(r)
-    return [
-        {
+        out.append(x)
+    return " ".join(out)
+
+
+def _site(value: str | None) -> str:
+    return re.sub(r"^https?://(www\.)?", "", (value or "").lower()).split("/")[0]
+
+
+def build_facts(data: ReportData, me: RankingRow) -> Facts:
+    """The numbers every section of the diagnostic reads: computed once, here."""
+    answers = data.deep_answers
+    others = [r for r in data.ranking if r.clinic_id != me.clinic_id]
+    leads = data.ranking[0].clinic_id == me.clinic_id
+    ref = (others[0] if others else None) if leads else data.ranking[0]
+
+    def side(row: RankingRow, website: str | None, rating, reviews) -> Side:
+        domain = _site(website)
+        if answers:
+            named = [a for a in answers if row.clinic_id in a.clinics]
+            web = sum(
+                1
+                for a in answers
+                if domain and any(domain in (_site(u), _site(d)) for u, d, _ in a.urls)
+            )
+            dirs = sum(
+                1 for a in named if any(k in ("doctoralia", "directory") for _, _, k in a.urls)
+            )
+            n_named = len(named)
+        else:  # only the aggregated citations
+            web = len({rid for rid, _, d, _ in data.citations if domain and _site(d) == domain})
+            n_named, dirs = round((row.combined or 0) * data.total_answers / 100), 0
+        return Side(row.combined, row.ci_low, row.ci_high, row.chatgpt, row.google,
+                    web, n_named, dirs, rating, reviews)  # fmt: skip
+
+    ref_side = None
+    if ref is not None:
+        p = data.profiles.get(ref.clinic_id, {})
+        ref_side = side(ref, p.get("website"), p.get("rating"), p.get("reviews"))
+    return Facts(
+        total=data.total_answers,
+        me=side(me, data.clinic.website, data.clinic.rating, data.clinic.reviews),
+        ref=ref_side,
+        ref_label="la n.º 2" if leads else "el líder",
+        has_web=bool(data.clinic.website),
+        has_answers=bool(answers),
+        per_surface=sum(1 for a in answers if a.surface == "chatgpt_api"),
+    )
+
+
+def _plan(values: dict[str, Any], applies: dict[str, bool], facts: Facts,
+          by_area: dict[str, str]) -> list[dict[str, Any]]:  # fmt: skip
+    """Up to 3 fixes, only for areas that are not already "Bien", ordered by how many answers
+    separate the clinic from the leader in that area (the computed impact)."""
+    items = tomllib.loads(RECOMMENDATIONS_TOML.read_text(encoding="utf-8"))["recomendacion"]
+    usable = [r for r in items if fix_allowed(r["id"], by_area)]
+    gaps = {r["id"]: gap(r["id"], facts) for r in usable}
+
+    def order(r):
+        return (r["id"] == "mantener", -gaps[r["id"]])
+
+    chosen = sorted((r for r in usable if applies.get(r["id"])), key=order)[:3]
+    # Fill only with fixes whose text is true for any clinic.
+    chosen += sorted(
+        (r for r in usable if r not in chosen and r["id"] in ("web", "doctoralia")
+         and gaps[r["id"]] > 0),
+        key=order,
+    )[: 3 - len(chosen)]  # fmt: skip
+    out = []
+    for r in sorted(chosen, key=order):
+        answers = gaps[r["id"]]
+        level = impact(answers, facts.total)
+        if r["id"] == "mantener":
+            text = "Impacto: mantiene tu puesto"
+        elif answers:
+            text = (f"Impacto {level} · {answers} de {facts.total} respuestas de diferencia "
+                    f"con {facts.ref_label}")  # fmt: skip
+        else:
+            text = f"Impacto {level}"
+        out.append({
             "id": r["id"],
             "titulo": r["titulo"].format(**values),
             "texto": r["texto"].format(**values),
             "esfuerzo": r.get("esfuerzo", "medio"),
-        }
-        for r in chosen[:3]
-    ]
+            "respuestas": answers,
+            "impacto": level,
+            "impacto_texto": text,
+        })  # fmt: skip
+    return out
 
 
 def reason_filter(data: ReportData):
@@ -215,7 +304,9 @@ def reason_targets(data: ReportData) -> list[tuple[int, str, float]]:
     ]
 
 
-def _deep_context(data: ReportData, competitors: list, allowed: list[str]) -> dict[str, Any]:
+def _deep_context(
+    data: ReportData, competitors: list, allowed: list[str], facts: Facts
+) -> dict[str, Any]:
     """Sections of the deeper diagnostic (C-008); empty when there are no stored answers."""
     if not data.deep_answers:
         return {"hay": False}
@@ -223,6 +314,7 @@ def _deep_context(data: ReportData, competitors: list, allowed: list[str]) -> di
     pages, own = missing_pages(
         data.deep_answers, data.clinic.id, [c.clinic_id for c in competitors], data.clinic.website
     )
+    own["tuya"] = facts.me.web  # the same count as the summary and the action plan
     return {
         "hay": True,
         "fuente": f"{len(data.deep_answers)} respuestas de ChatGPT y Google Modo IA, "
@@ -256,6 +348,7 @@ def _deep_context(data: ReportData, competitors: list, allowed: list[str]) -> di
             for p in pages
         ],  # fmt: skip
         "webs": own,
+        "instagram": instagram_counts(data.deep_answers, data.clinic.instagram),
     }
 
 
@@ -266,40 +359,18 @@ def _short_url(url: str, limit: int = 60) -> str:
 
 def _position(value: float | None) -> str:
     """Average position when named, Peruvian style (2,3)."""
-    return "—" if value is None else f"{value:.1f}".replace(".", ",")
+    return dec(value)
 
 
-def _share(answers: list[Answer], test) -> float | None:
-    return 100 * sum(1 for a in answers if test(a)) / len(answers) if answers else None
-
-
-def _redesign(data, me, competitors, leader, position, appearances, website_domain, recs):
+def _redesign(data, me, competitors, leader, position, appearances, facts, light, recs):
     """Summary, comparison, question grid and action plan of the redesigned diagnostic."""
     answers = data.deep_answers
     total = data.total_answers
-
-    def cites_web(a):
-        return bool(website_domain) and any(
-            re.sub(r"^www\.", "", (d or "").lower()) == website_domain for _, d, _ in a.urls
-        )
-
-    naming_me = [a for a in answers if data.clinic.id in a.clinics]
-    web_answers = sum(1 for a in answers if cites_web(a))
-    web_share = (100 * web_answers / len(answers)) if answers else None
-    if answers and not website_domain:
-        web_share = 0.0
-    directory_share = _share(
-        naming_me, lambda a: any(k in ("doctoralia", "directory") for _, _, k in a.urls)
-    )
-    if answers and not naming_me:
-        directory_share = 0.0
-    light = lights(me.combined, web_share, directory_share, data.clinic.rating,
-                   data.clinic.reviews)  # fmt: skip
-    by_area = {x.id: x.level for x in light}
     compared = sorted([me, *competitors], key=lambda r: -(r.combined or 0))
     leader_appearances = round((leader.combined or 0) * total / 100)
     clinic_ids = [data.clinic.id, *[c.clinic_id for c in competitors]]
     names = {r.clinic_id: r.name for r in data.ranking}
+    is_leader = me.clinic_id == leader.clinic_id
 
     def row(r):
         return {
@@ -310,6 +381,12 @@ def _redesign(data, me, competitors, leader, position, appearances, website_doma
             "cuota": _pct(r.mention_share), "ancho": max(r.combined or 0, 0.5),
         }  # fmt: skip
 
+    consequence = (
+        f"La IA te nombra {one_in(me.combined)}: eres la clínica más nombrada."
+        if is_leader
+        else f"La IA te nombra {one_in(me.combined)}; al líder, {leader.name}, "
+        f"{one_in(leader.combined)}."
+    )
     return {
         "cifras": {
             "indice": _pct(me.combined),
@@ -319,10 +396,10 @@ def _redesign(data, me, competitors, leader, position, appearances, website_doma
             "total": len(data.ranking),
             "posicion": _position(me.avg_position),
         },
+        "consecuencia": consequence,
         "semaforo": [
             {
                 "nombre": x.name,
-                "mide": x.measures,
                 "nivel": x.level,
                 "valor": x.value,
                 "clase": {"Bien": "bien", "Regular": "regular", "Bajo": "bajo"}.get(x.level, "sin"),
@@ -336,10 +413,10 @@ def _redesign(data, me, competitors, leader, position, appearances, website_doma
             total=total,
             leader=leader.name,
             leader_appearances=leader_appearances,
-            is_leader=me.clinic_id == leader.clinic_id,
+            is_leader=is_leader,
             rating=data.clinic.rating,
             reviews=data.clinic.reviews,
-            web_answers=web_answers,
+            web_answers=facts.me.web,
             chatgpt=me.chatgpt,
             google=me.google,
         ),  # fmt: skip
@@ -352,15 +429,9 @@ def _redesign(data, me, competitors, leader, position, appearances, website_doma
             "grupos": question_grid(answers, clinic_ids),
         },
         "consistencia": consistency(answers, data.clinic.id),
-        "plan": [
-            {
-                **r,
-                "impacto": impact(r["id"], by_area),
-                "quien": "Tu equipo en el Plan Medir · nosotros en el Plan Gestionado",
-            }
-            for r in recs
-        ],  # fmt: skip
-        "web_respuestas": web_answers,
+        "plan": recs,
+        "quien": "tu equipo, con la guía del Plan Medir, o nosotros, en el Plan Gestionado",
+        "web_respuestas": facts.me.web,
     }
 
 
@@ -410,19 +481,12 @@ def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict
         (r for rows_ in top.values() for r in rows_ if r.source_type != "google_profile"),
         key=lambda r: -r.answers,
     )[:6]
-    cited_own = {
-        r.domain
-        for r in top_sources(data.citations, data.total_answers, per_type=999).get(
-            "own_website", []
-        )
-    }
-    website_domain = (
-        re.sub(r"^https?://(www\.)?", "", data.clinic.website or "").split("/")[0].lower()
-        if data.clinic.website
-        else ""
-    )
 
-    gap = has_gap(data.clinic.rating, data.clinic.reviews, me.combined or 0)
+    facts = build_facts(data, me)
+    light = lights(facts)
+    by_area = {x.id: x.level for x in light}
+    gap_found = has_gap(data.clinic.rating, data.clinic.reviews, me.combined or 0)
+    total = data.total_answers
     values = {
         "tratamiento": treatment,
         "distrito": data.district,
@@ -431,21 +495,28 @@ def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict
         "pct_directorios": _pct(shares.get("directory", 0)),
         "google": _pct(me.google),
         "chatgpt": _pct(me.chatgpt),
-        "resenas": data.clinic.reviews if data.clinic.reviews is not None else "pocas",
-        "rating": data.clinic.rating if data.clinic.rating is not None else "—",
+        "resenas": thousands(data.clinic.reviews) if data.clinic.reviews is not None else "pocas",
+        "rating": dec(data.clinic.rating),
         "indice": _pct(me.combined),
+        "web_tuya": f"en {facts.me.web} de {total}" if facts.me.web else "en ninguna",
+        "dir_tuyo": (
+            f"{facts.me.directories} de las {facts.me.named}"
+            if facts.me.named
+            else "ninguna de las"
+        ),  # fmt: skip
     }
+    ref_reviews = facts.ref.reviews if facts.ref and facts.ref.reviews else 200
     applies = {
-        "brecha": gap,
-        "web": not website_domain or website_domain not in cited_own,
+        "brecha": gap_found,
+        "web": True,  # proposed unless the web area is "Bien" (see semaforo.allowed)
         "google": (me.google or 0) < (me.chatgpt or 0) or (me.google or 0) < 10,
         "chatgpt": (me.chatgpt or 0) < (me.google or 0),
-        "doctoralia": shares.get("doctoralia", 0) >= 15,
-        "resenas": data.clinic.reviews is not None and data.clinic.reviews < 100,
+        "doctoralia": True,
+        "resenas": data.clinic.reviews is not None and data.clinic.reviews < ref_reviews / 2,
         "mantener": position <= 3,
     }
 
-    recs = _recommendations(values, applies)
+    recs = _plan(values, applies, facts, by_area)
     focus = [data.clinic.id, *[c.clinic_id for c in competitors]]
     examples = [
         _example_context(e, data, allowed)
@@ -478,20 +549,21 @@ def build_context(data: ReportData, brand: dict[str, str] | None = None) -> dict
                 {"dominio": r.domain, "tipo": TYPE_LABELS[r.source_type], "pct": _pct(r.share)}
                 for r in top_rows
             ],
-            "propia_citada": bool(website_domain and website_domain in cited_own),
+            "propia_citada": facts.me.web > 0,
+            "web_tuya": facts.me.web,
         },
         "brecha": {
-            "rating": data.clinic.rating,
-            "resenas": data.clinic.reviews,
+            "rating": dec(data.clinic.rating) if data.clinic.rating is not None else None,
+            "resenas": thousands(data.clinic.reviews) if data.clinic.reviews is not None else None,
             "fecha": data.clinic.data_date.strftime("%d/%m/%Y") if data.clinic.data_date else None,
             "indice": _pct(me.combined),
-            "tiene_brecha": gap,
+            "tiene_brecha": gap_found,
             "lider": {"nombre": leader.name, "indice": _pct(leader.combined)},
         },
         "recomendaciones": recs,
-        "profundo": _deep_context(data, competitors, allowed),
+        "profundo": _deep_context(data, competitors, allowed, facts),
         "nuevo": _redesign(
-            data, me, competitors, leader, position, appearances, website_domain, recs
+            data, me, competitors, leader, position, appearances, facts, light, recs
         ),
         "metodo": {
             "preguntas": 10,
@@ -517,7 +589,7 @@ def load_report_data(
     month, rows = ranking(conn, market_id, month)
     with conn.cursor() as cur:
         cur.execute(
-            "select c.id, c.name, c.rating, c.review_count, c.data_date, c.website "
+            "select c.id, c.name, c.rating, c.review_count, c.data_date, c.website, c.instagram "
             "from public.clinics c join public.clinic_markets cm on cm.clinic_id = c.id "
             "where c.id = %s and cm.market_id = %s",
             (clinic_id, market_id),
@@ -525,9 +597,15 @@ def load_report_data(
         row = cur.fetchone()
         if row is None:
             raise ScoreError(f"La clínica {clinic_id} no es del mercado {market_id}")
-        cid, name, rating, reviews, data_date, website = row
+        cid, name, rating, reviews, data_date, website, instagram = row
         clinic = ClinicInfo(
-            cid, name, None if rating is None else float(rating), reviews, data_date, website
+            cid,
+            name,
+            None if rating is None else float(rating),
+            reviews,
+            data_date,
+            website,
+            instagram,
         )
         cur.execute(
             "select category_code, district from public.markets where id = %s", (market_id,)
@@ -542,6 +620,16 @@ def load_report_data(
             (market_id,),
         )
         market_names = {cid: [n, *aliases] for cid, n, aliases in cur.fetchall()}
+        cur.execute(
+            "select c.id, c.website, c.instagram, c.rating, c.review_count from public.clinics c "
+            "join public.clinic_markets cm on cm.clinic_id = c.id where cm.market_id = %s",
+            (market_id,),
+        )
+        profiles = {
+            cid: {"website": w, "instagram": ig,
+                  "rating": None if r is None else float(r), "reviews": n}
+            for cid, w, ig, r, n in cur.fetchall()
+        }  # fmt: skip
         cur.execute(
             "select r.id, r.surface, q.text, (r.created_at at time zone 'America/Lima')::date, "
             "coalesce(r.text, '') from public.responses r "
@@ -617,4 +705,5 @@ def load_report_data(
         market_names=market_names,
         competitors=competitors,
         deep_answers=deep_answers,
+        profiles=profiles,
     )

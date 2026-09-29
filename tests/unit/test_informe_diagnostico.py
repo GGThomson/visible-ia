@@ -145,8 +145,10 @@ def test_gap_and_recommendations():
     assert ctx["brecha"]["tiene_brecha"] is True
     titles = [r["titulo"] for r in ctx["recomendaciones"]]
     assert len(titles) == 3
-    assert titles[0].startswith("Una página clara de implantes dentales")  # its web was not cited
-    assert any("Maps" in t for t in titles)  # gap
+    assert titles[0].startswith("Convierte tu reputación en Maps")  # biggest gap: 24 of 60
+    assert any(t.startswith("Una página clara de implantes dentales") for t in titles)
+    gaps = [r["respuestas"] for r in ctx["recomendaciones"]]
+    assert gaps == sorted(gaps, reverse=True)
 
 
 def test_leader_gets_a_leader_sentence_and_keep_advice():

@@ -6,7 +6,18 @@ from datetime import date
 import pytest
 
 from visible_ia.informes.profundo import Answer, consistency, question_grid
-from visible_ia.informes.semaforo import findings, impact, level, lights, load_rules, maps_level
+from visible_ia.informes.semaforo import (
+    Facts,
+    Side,
+    allowed,
+    findings,
+    impact,
+    level,
+    lights,
+    load_rules,
+    maps_level,
+    one_in,
+)
 
 RULES = load_rules()
 
@@ -42,16 +53,31 @@ def test_maps_needs_both_stars_and_reviews(rating, reviews, expected):
 
 
 def test_lights_have_the_four_areas_and_no_invented_colour():
-    got = lights(None, None, None, None, None)
+    got = lights(Facts(total=0, me=Side(), ref=None, has_answers=False))
     assert [x.name for x in got] == [
         "Presencia en IA", "Tu web como fuente", "Doctoralia y directorios", "Reputación en Maps"
     ]  # fmt: skip
     assert {x.level for x in got} == {"Sin datos"}
 
 
-def test_impact_is_high_only_when_a_related_area_is_low():
-    assert impact("web", {"web": "Bajo"}) == "alto"
-    assert impact("web", {"web": "Regular", "maps": "Bajo"}) == "medio"
+def test_bien_only_when_the_range_reaches_the_leaders():
+    leader = Side(50, 38, 62, web=12, named=30, directories=15, rating=4.9, reviews=1135)
+    close = Side(25, 38, 45, web=10, named=15, directories=8, rating=4.8, reviews=600)
+    far = Side(12, 6, 22, web=0, named=7, directories=0, rating=4.9, reviews=120)
+    got = {x.id: x for x in lights(Facts(60, close, leader))}
+    assert got["presencia"].level == "Bien"
+    assert got["presencia"].value == "Te nombra en 25 % · el líder 50 %"
+    assert got["maps"].value == "4,8 ★ y 600 reseñas · el líder 4,9 ★ y 1 135"
+    assert {x.id: x.level for x in lights(Facts(60, far, leader))} == {
+        "presencia": "Regular", "web": "Bajo", "directorios": "Bajo", "maps": "Regular",
+    }  # fmt: skip
+
+
+def test_impact_comes_from_the_gap_and_fixes_skip_areas_already_good():
+    assert [impact(n, 60) for n in (12, 10, 3, 2)] == ["alto", "alto", "medio", "bajo"]
+    assert not allowed("doctoralia", {"directorios": "Bien"})
+    assert allowed("mantener", {"presencia": "Bien"})
+    assert one_in(25) == "1 de cada 4 veces" and one_in(50) == "5 de cada 10 veces"
 
 
 def test_findings_use_real_figures_and_are_three_at_most():
@@ -59,10 +85,56 @@ def test_findings_use_real_figures_and_are_three_at_most():
                    leader_appearances=30, is_leader=False, rating=4.9, reviews=1135,
                    web_answers=0, chatgpt=17, google=3)  # fmt: skip
     assert got == [
-        "Tienes 4.9 ★ y 1,135 reseñas en Google Maps, pero la IA te nombra en 6 de 60 respuestas.",
+        "Tienes 4,9 ★ y 1 135 reseñas en Google Maps, pero la IA te nombra en 6 de 60 respuestas.",
         "Líder aparece en 30 de 60 respuestas; Tu Clínica, en 6.",
         "Tu web no apareció como fuente en ninguna respuesta.",
     ]
+
+
+def test_summary_findings_plan_and_page_5_never_contradict_each_other():
+    """The same numbers everywhere: the web cited 7 times and Doctoralia "Bien" must not
+    produce "your web was not a source" or "complete Doctoralia" (bug of 28/09/2026)."""
+    from test_diagnostico_profundo import _answer
+
+    from visible_ia.informes.contexto import build_context
+    from visible_ia.informes.semaforo import allowed as fix_allowed
+
+    web = ("https://www.odontologists.com/implantes", "odontologists.com", "own_website")
+    doc = ("https://www.doctoralia.pe/clinicas/x", "doctoralia.pe", "doctoralia")
+    ig = ("https://www.instagram.com/smilesperu/", "instagram.com", "social")
+    for n_web, with_doc in ((7, True), (0, False)):
+        data = _deep_data()
+        data.deep_answers = [
+            _answer(10 + i, "Texto.", {1, 4} if i % 2 else {1}, question_id=1 + i % 10,
+                    form="MRCP"[i % 4], surface="chatgpt_api" if i < 30 else "google_ai_mode",
+                    urls=[*([web] if i < n_web else []), *([doc] if with_doc else []), ig])
+            for i in range(60)
+        ]  # fmt: skip
+        ctx = build_context(data)
+        new, deep = ctx["nuevo"], ctx["profundo"]
+        by_area = {
+            "Presencia en IA": "presencia",
+            "Tu web como fuente": "web",
+            "Doctoralia y directorios": "directorios",
+            "Reputación en Maps": "maps",
+        }
+        levels = {by_area[s["nombre"]]: s["nivel"] for s in new["semaforo"]}
+        # One count of "your web as a source" everywhere.
+        assert new["web_respuestas"] == deep["webs"]["tuya"] == ctx["fuentes"]["web_tuya"] == n_web
+        web_finding = next(h for h in new["hallazgos"] if h.startswith("Tu web"))
+        assert (f"en {n_web} de 60" in web_finding) if n_web else ("ninguna" in web_finding)
+        for r in new["plan"]:
+            assert fix_allowed(r["id"], levels), (r["id"], levels)  # never fix what is "Bien"
+            if r["id"] == "web":
+                assert (f"en {n_web} de 60" in r["texto"]) if n_web else "en ninguna" in r["texto"]
+        if levels["directorios"] == "Bien":
+            assert "doctoralia" not in [r["id"] for r in new["plan"]]
+        assert [r["respuestas"] for r in new["plan"]] == sorted(
+            (r["respuestas"] for r in new["plan"]), reverse=True
+        )
+        # Other clinics' Instagram is a line apart, never a "missing page".
+        assert all("instagram" not in p["url"] for p in deep["faltantes"])
+        assert deep["instagram"] == {"otras": 60, "tuya": 0}
 
 
 def _a(rid, qid, form, surface, clinics):
