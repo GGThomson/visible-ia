@@ -38,8 +38,16 @@
 - **Reorganización del repo:** por módulo y capa, sin empezar de cero y sin cambiar lo que hace hoy. Primero solo propuesta. No se mueve código hasta que el Director apruebe, y nada antes de que termine la corrida del 01/10.
 
 ## Tareas que salen de aquí
-- [ ] Propuesta de reorganización de `src/` (estructura, tabla de archivos, orden de mudanza y riesgos). Presentada el 29/09, espera aprobación.
-- [ ] Mudanza en PRs pequeños después de la corrida del 01/10, cada uno con las pruebas en verde.
+- [x] Propuesta de reorganización de `src/` (estructura, tabla de archivos, orden de mudanza en 8 pasos y riesgos). **Aprobada por el Director el 29/09 tal como está, con esos nombres de carpeta.**
+- [ ] **Por ahora solo los pasos 1, 2 y 3**, cada uno en su PR:
+  1. Red de seguridad del CLI.
+  2. Carpetas vacías con su README.
+  3. Configuración del nicho en `config/nichos/dental/` con el cargador único de rutas.
+- [ ] Condiciones del Director:
+  - Empezar **después de que termine la corrida del 01/10 y el Director la revise**.
+  - Fusionar cuando la CI esté en verde y **fuera del horario de los workflows**. La corrida mensual es el día 1 a las 06:00 de Lima y el diario todos los días a las 07:17, así que no se fusiona entre las 06:00 y las 08:00.
+  - **Nada en prod ni en la base de datos.**
+  - Al terminar el paso 3, **parar y dar un resumen corto** antes del paso 4.
 
 ## Preguntas que quedan abiertas (del Director)
 - Acceso a la API de Google Business Profile (requiere aprobación de Google).
