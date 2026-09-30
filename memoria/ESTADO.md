@@ -26,9 +26,9 @@
 <!-- ⚪ pendiente · 🟡 en curso · ✅ completa · ⏭️ omitida (explicar por qué en el brief) -->
 
 ## Próximos 3 pasos
-1. **Director:** revisar y enviar los 4 diagnósticos y mensajes listos en `salida/diagnosticos/2026-09/` (NEODENTIS, Virtual Dent, Dental Cano, The Dental Clinic)
-2. El **1/10**, aprobar la corrida de octubre (issue) lanzando *Corrida mensual* en modo `correr`
-3. Ventas desde el 05/10 con el guion y los planes; luego **C10** (agencias) y planificar **C-009** (ADR-006, 120 respuestas en pagados)
+1. **Director:** el **1/10**, aprobar la corrida de octubre (issue) lanzando *Corrida mensual* en modo `correr`, y **revisarla**
+2. **Claude Code:** después de esa revisión, **pasos 1–3 de la reorganización del repo** (un PR cada uno, sin prod ni base de datos; fusionar fuera de 06:00–08:00 de Lima) y parar con un resumen antes del paso 4 (acta `2026-09-29-mapa-del-sistema.md`)
+3. **Motor GEO (ADR-007):** diseño del sistema (3 capas, 7 módulos) → producto con panel → clientes. **Ventas postergadas.** Decidir si los 4 diagnósticos de `salida/diagnosticos/2026-09/` se envían o esperan
 
 ## Bloqueos / esperando decisión
 - ⏳ **Director:** revisar INDECOPI (clases 35 y 42) y eminia.pe antes de comprar o registrar (si no están libres → Prominia). Libro de Reclamaciones publicado sin domicilio del proveedor, correlativo ni copia por correo (revisión legal)
@@ -37,10 +37,10 @@
 - 🔽 Prueba API Gemini (informativa, baja prioridad): config. B, 1 de 10 hecha (rama `chore/prueba-api-gemini`)
 
 ## Decisiones recientes (últimas 5)
+- 2026-09-29 · **El motor GEO es la empresa; Eminia es su primera vertical** (ADR-007): opción 4 (interno, diseñado para abrirse); todas las entidades, global y multi-idioma; diseño → producto con panel → clientes. Mapa en 3 capas y 7 módulos; reorganización de `src/` aprobada
 - 2026-09-29 · **Diagnósticos en lote (C-010)**: comando con PDF + primer mensaje de WhatsApp; vocabulario del nicho en `nicho.toml`; diagnóstico ≤ 8 páginas (2 frases por competidor, versión compacta automática); el plan no repite acciones con la misma medida
 - 2026-09-29 · **C9b publicada** con el OK escrito del Director: PR #67 fusionado y migración 0011 (`consent_version` obligatoria) aplicada en prod por el Director tras publicar la landing
 - 2026-09-28 · **Semáforo del diagnóstico frente al líder**: tu cifra ÷ la del líder; Bien ≥ 80 %, Regular 40–80 %, Bajo < 40 %, «Sin datos» si el líder está en 0 (Maps: reseñas). Plan de acción: siempre las 3 acciones de mayor impacto (respuestas de diferencia con el líder). RUC 10707993435 en el pie
-- 2026-09-28 · **Diagnóstico rediseñado (C-008)**: resumen con semáforo de 4 áreas (criterio Eminia), frases literales de la competencia (gpt-5-nano solo elige, costo en el presupuesto vía 0010), dónde te falta estar, plan de acción; 7 páginas. Landing: ilustraciones propias, 6 cifras verificadas, tabla de planes, pedido por WhatsApp; efectos inspirados en trendos.com
 - 2026-09-28 · **ADR-006**: los planes pagados medirán **120 respuestas/mes** por mercado (20 preguntas × 3 × ChatGPT y Google), el diagnóstico gratis sigue en 60; presupuesto +US$2.50 por mercado de cliente que pagó; Gemini manual; investigar Vertex AI. Sin construir (C-009). PRD HU-14: diagnóstico ≤ 8 páginas
 
 ## Bandeja de pendientes
