@@ -10,7 +10,9 @@ from pathlib import Path
 
 import psycopg
 
-TEMPLATES_CSV = Path(__file__).resolve().parents[3] / "data" / "plantillas-preguntas.csv"
+from visible_ia.config.rutas import niche_file
+
+TEMPLATES_CSV = niche_file("preguntas.csv")
 CATEGORIES = ("IMP", "EDE", "MES", "DER")
 FORMS = ("M", "R", "C", "P")
 PER_CATEGORY = 10

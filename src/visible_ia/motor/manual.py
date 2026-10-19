@@ -14,11 +14,12 @@ from typing import Any
 
 import psycopg
 
+from visible_ia.config.rutas import DATA_DIR
 from visible_ia.mercados.mercado import create_market, list_questions
 from visible_ia.motor.corrida import Call, save_response
 from visible_ia.motor.modelos import MANUAL_SURFACES, Citation, EngineResponse
 
-PHASE1_QUESTIONS_CSV = Path(__file__).resolve().parents[3] / "data" / "fase1-preguntas.csv"
+PHASE1_QUESTIONS_CSV = DATA_DIR / "fase1-preguntas.csv"
 SURFACE_BY_AI = {
     "ChatGPT": "chatgpt_app_manual",
     "Gemini": "gemini_app_manual",

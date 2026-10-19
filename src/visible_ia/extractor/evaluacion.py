@@ -17,12 +17,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from visible_ia.config.rutas import DATA_DIR
 from visible_ia.extractor import llm
 from visible_ia.extractor.matching import ClinicCandidate, match
 from visible_ia.mercados.alias import fold
 from visible_ia.motor.corrida import domain_of
 
-EVAL_DIR = Path(__file__).resolve().parents[3] / "data" / "eval"
+EVAL_DIR = DATA_DIR / "eval"
 GOLD = EVAL_DIR / "extractor-gold.jsonl"
 OUTPUTS = EVAL_DIR / "extractor-salidas.jsonl"
 CLINIC_LISTS = {"corrida1-": EVAL_DIR / "clinicas-IMP-Miraflores.json"}

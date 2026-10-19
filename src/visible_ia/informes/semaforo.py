@@ -13,8 +13,9 @@ import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-RULES_TOML = HERE / "semaforo.toml"
+from visible_ia.config.rutas import niche_file
+
+RULES_TOML = niche_file("semaforo.toml")
 LEVELS = ("Bien", "Regular", "Bajo", "Sin datos")
 
 
