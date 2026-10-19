@@ -1,0 +1,51 @@
+atribucion registrar | arg:sede* opt:--mes* opt:--pacientes* opt:--env
+checklist generar | arg:sede opt:--env
+cliente crear | opt:--nombre* opt:--tipo opt:--correo opt:--telefono opt:--agencia opt:--env
+cliente listar | opt:--env
+clinicas alias agregar | arg:clinica* arg:alias* opt:--env
+clinicas alias listar | arg:clinica* opt:--env
+clinicas alias quitar | arg:clinica* arg:alias* opt:--env
+clinicas importar | arg:archivo* opt:--mercado* opt:--fecha-dato opt:--env
+clinicas listar | opt:--mercado* opt:--env
+config check | opt:--env
+corrida lanzar | opt:--mercado* opt:--superficies opt:--reps opt:--forzar opt:--env
+corrida reanudar | arg:corrida* opt:--forzar opt:--env
+corrida ver | arg:corrida* opt:--env
+db migrate | opt:--env opt:--dry-run
+db status | opt:--env
+diagnostico lote | arg:archivo* opt:--mercado* opt:--mes opt:--ia/--sin-ia opt:--env
+extraer | arg:corrida* opt:--forzar opt:--env
+heartbeat | opt:--env
+informe crear-bucket | opt:--env
+informe diagnostico | opt:--clinica* opt:--mercado* opt:--competidores opt:--mes opt:--subir/--sin-subir opt:--ia/--sin-ia opt:--env
+informe kit | opt:--sede* opt:--env
+informe mensual | opt:--sede* opt:--mes* opt:--subir/--sin-subir opt:--env
+mensual correr | opt:--issue opt:--env
+mensual estimar | opt:--issue opt:--env
+mercado crear | opt:--rubro* opt:--distrito* opt:--env
+mercado editar-pregunta | arg:market_id* opt:--plantilla* opt:--texto* opt:--env
+mercado listar | opt:--env
+mercado preguntas | arg:market_id* opt:--version opt:--env
+muestra cargar | opt:--mercado* opt:--pregunta* opt:--superficie* opt:--archivo opt:--fuentes opt:--fecha opt:--env
+muestra importar | arg:archivo* opt:--crear-mercados opt:--env
+pago registrar | arg:cliente* opt:--monto* opt:--medio* opt:--periodo* opt:--ref opt:--fecha opt:--env
+pagos aviso | opt:--env
+pagos estado | opt:--fecha opt:--env
+plantillas cargar | opt:--env
+presupuesto ver | opt:--preguntas opt:--reps opt:--superficies opt:--env
+prospectos aviso | opt:--env
+prospectos nuevos | opt:--marcar/--no-marcar opt:--env
+puntaje brecha | arg:mercado* opt:--mes opt:--min-rating opt:--min-resenas opt:--max-indice opt:--env
+puntaje calcular | arg:corrida* opt:--env
+puntaje fuentes | arg:mercado* opt:--mes opt:--top opt:--env
+puntaje ranking | arg:mercado* opt:--mes opt:--env
+revisar cerrar | arg:corrida* opt:--env
+revisar corrida | arg:corrida* opt:--todas opt:--env
+revisar exportar | arg:corrida* opt:--archivo opt:--env
+revisar importar | arg:corrida* arg:archivo* opt:--env
+revisar nuevas | arg:mercado* opt:--env
+revisar reasociar | arg:corrida* opt:--env
+sede agregar | arg:cliente* opt:--clinica* opt:--mercado* opt:--env
+sede schema | arg:sede* opt:--telefono opt:--horario opt:--otra-url opt:--env
+usuario invitar | arg:cliente* arg:correo* opt:--enlace opt:--env
+version | 
