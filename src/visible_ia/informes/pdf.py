@@ -13,7 +13,9 @@ from pathlib import Path
 import httpx
 import psycopg
 
-OUTPUT_DIR = Path(__file__).resolve().parents[3] / "salida"
+from visible_ia.config import rutas
+
+OUTPUT_DIR = rutas.OUTPUT_DIR
 BUCKET = "informes"
 
 

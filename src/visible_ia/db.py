@@ -9,9 +9,9 @@ from pathlib import Path
 
 import psycopg
 
-from visible_ia.config import Env, Settings
+from visible_ia.config import Env, Settings, rutas
 
-MIGRATIONS_DIR = Path(__file__).resolve().parents[2] / "supabase" / "migrations"
+MIGRATIONS_DIR = rutas.MIGRATIONS_DIR
 
 BOOTSTRAP = """
 create schema if not exists ops;

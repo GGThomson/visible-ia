@@ -1,6 +1,6 @@
 """Prioritized checklist of a site (C8-T03, HU-17).
 
-From data/checklist.toml: keep the tasks whose condition applies to the site and raise the
+From the niche's checklist.toml: keep the tasks whose condition applies to the site and raise the
 ones whose sources the AI cites most in its market. Tasks already done stay done; pending
 tasks that no longer apply are removed; the order is stored in tasks.priority.
 """
@@ -11,10 +11,11 @@ from pathlib import Path
 
 import psycopg
 
+from visible_ia.config.rutas import niche_file
 from visible_ia.informes.contexto import TREATMENT
 from visible_ia.motor.corrida import domain_of
 
-CATALOG = Path(__file__).resolve().parents[2] / "data" / "checklist.toml"
+CATALOG = niche_file("checklist.toml")
 MIN_REVIEWS = 100
 DOCTORALIA_SHARE = 10.0  # % of the market's answers citing Doctoralia
 

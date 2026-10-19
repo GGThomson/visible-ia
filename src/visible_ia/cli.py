@@ -159,7 +159,7 @@ def db_migrate(
 
 @plantillas_app.command("cargar")
 def plantillas_cargar(env: str = typer.Option(None, help="dev o prod.")) -> None:
-    """Carga (o actualiza) las 40 plantillas aprobadas desde data/plantillas-preguntas.csv."""
+    """Carga (o actualiza) las 40 plantillas aprobadas desde preguntas.csv del nicho."""
     from visible_ia.mercados.plantillas import InvalidTemplates, read_templates, upsert_templates
 
     target = _resolve_env(env)

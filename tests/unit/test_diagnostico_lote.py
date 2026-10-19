@@ -91,7 +91,7 @@ def test_message_is_short_plain_and_signed_by_the_brand():
 def test_new_code_takes_the_niche_words_from_the_configuration():
     niche = load_niche()
     words = [niche.business, niche.businesses, niche.customer, niche.customers]
-    for path in (Path(lote.__file__), Path(lote.__file__).parents[1] / "nicho.py"):
+    for path in (Path(lote.__file__), Path(lote.__file__).parents[1] / "config" / "nichos.py"):
         # Comments (whole-line or trailing) and docstrings may name the niche; the code may not.
         lines = path.read_text(encoding="utf-8").splitlines()
         code = "\n".join(re.sub(r"#.*", "", line) for line in lines)

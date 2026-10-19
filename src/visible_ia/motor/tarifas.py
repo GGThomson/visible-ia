@@ -6,9 +6,10 @@ from datetime import date
 from functools import cache
 from pathlib import Path
 
+from visible_ia.config.rutas import DATA_DIR
 from visible_ia.motor.modelos import Usage
 
-RATES_TOML = Path(__file__).resolve().parents[3] / "data" / "tarifas.toml"
+RATES_TOML = DATA_DIR / "tarifas.toml"
 
 
 @dataclass(frozen=True)

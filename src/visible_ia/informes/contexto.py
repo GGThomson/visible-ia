@@ -16,6 +16,7 @@ from typing import Any
 
 import psycopg
 
+from visible_ia.config.rutas import niche_file
 from visible_ia.informes.profundo import (
     SURFACE_LABELS,
     Answer,
@@ -46,7 +47,7 @@ from visible_ia.puntaje.indice import RankingRow, ScoreError, ranking
 HERE = Path(__file__).resolve().parent
 MAX_PAGES = 8  # PRD HU-14: the free diagnostic fits in 8 pages
 BRAND_TOML = HERE / "marca.toml"
-RECOMMENDATIONS_TOML = HERE / "recomendaciones.toml"
+RECOMMENDATIONS_TOML = niche_file("recomendaciones.toml")
 
 TREATMENT = {
     "IMP": "implantes dentales",

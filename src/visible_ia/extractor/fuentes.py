@@ -2,7 +2,7 @@
 
 Order of the rules:
 1. The exact host of a market clinic's website -> own website (unless it is a known platform).
-2. The known-domains table (data/dominios.csv); the longest matching suffix wins, so
+2. The known-domains table (the niche's dominios.csv); the longest matching suffix wins, so
    sites.google.com is not taken for google.com.
 3. Institutional sites (.gob, .gov, .edu, guilds, academic) -> other.
 4. A domain made of clinic words (dental, clínica, derma...) -> own website: it is the web of
@@ -15,9 +15,10 @@ from functools import cache
 from pathlib import Path
 from typing import Literal
 
+from visible_ia.config.rutas import niche_file
 from visible_ia.motor.corrida import domain_of
 
-DOMAINS_CSV = Path(__file__).resolve().parents[3] / "data" / "dominios.csv"
+DOMAINS_CSV = niche_file("dominios.csv")
 
 SourceType = Literal[
     "google_profile", "doctoralia", "own_website", "social", "directory", "press", "other"
